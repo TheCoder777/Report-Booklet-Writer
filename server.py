@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 
-import pdfhandler, io, time
+import pdfhandler, io, time, sys
 from gevent.pywsgi import WSGIServer
 from flask import Flask, render_template, request, redirect, send_file
 
@@ -58,6 +58,10 @@ def get_and_return():
 
 
 if __name__ == "__main__":
-    # app.run(host="0.0.0.0", port=8000, debug=True)  # for debugging
-    server = WSGIServer(('localhost', 8000), app)
-    server.serve_forever()
+    if len(sys.argv) > 1:
+        if sys.argv[1] in ["--debug", "debug", "-d", "d"]:
+            app.run(host="0.0.0.0", port=8000, debug=True)  # for debugging
+    else:
+        print("\nRunning on http://localhost:8000/\n")
+        server = WSGIServer(('localhost', 8000), app)
+        server.serve_forever()
