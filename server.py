@@ -27,6 +27,8 @@ from flask import Flask, render_template, request, redirect, send_file
 
 app = Flask(__name__)
 
+pdfhandler.checkup()
+
 def writepdf(data, uinput):
     packet = io.BytesIO()
     packet = pdfhandler.draw(data, uinput, packet)

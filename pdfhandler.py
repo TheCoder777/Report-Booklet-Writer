@@ -21,14 +21,24 @@
 # SOFTWARE.
 
 
-import io, time, configparser
+import io, os, time, configparser
 from datetime import date
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from textwrap import wrap
+from colored import attr, fg
 
 CONFIG_PATH = "./config.ini"
+TMP_PATH = "./tmp/"
+TEMPLATE_PATH = "Berichtsheft_template.pdf"
+
+# colors
+RESET = attr("reset")
+BOLD = attr(1)
+ERROR = fg(1)
+WARNING = fg(214)
+SUCCESS = fg(2)
 
 def draw(data, uinput, packet):
     LINE_DISTANCE = 30
@@ -117,7 +127,6 @@ def add_config_nr():
 
 
 def compile(packet):
-    TEMPLATE_PATH="Berichtsheft_template.pdf"
     new_pdf = PdfFileReader(packet)
     template = PdfFileReader(open(TEMPLATE_PATH, "rb"))
     out = PdfFileWriter()
@@ -125,8 +134,41 @@ def compile(packet):
     page.mergePage(new_pdf.getPage(0))
     out.addPage(page)
     # filename = "./tmp/" + str(time.strftime("%H-%M_%d%m%Y")) + ".pdf"  # for unique filenames
-    filename = "./tmp/save.pdf"
+    filename = TMP_PATH + "save.pdf"
     out_stream = open(filename, "wb")
     out.write(out_stream)
     out_stream.close()
     return filename
+
+
+def checkup():
+    start_time = time.time()
+    console = BOLD + "[CHECKUP] " + RESET
+    print()
+
+    if not os.path.isdir(TMP_PATH):
+        print(console + f"Temporary save directory {TMP_PATH} doesn't exist...", end="")
+        os.mkdir(TMP_PATH)
+        print(SUCCESS + "created!" + RESET)
+    else:
+        print(console + SUCCESS + "Temporary directory found!" + RESET)
+
+    if not os.path.exists(TEMPLATE_PATH):
+        print(console + ERROR + "Template not found! Please add a template!" + RESET)
+        sys.exit(1)
+    else:
+        print(console + SUCCESS + "Template found!" + RESET)
+
+    # garbadge cleaning
+    filelist = [f for f in os.listdir(TMP_PATH) if f.endswith(".pdf")]
+    if filelist:
+        print(console + "Cleaning cache...")
+        for f in filelist:
+            print(WARNING + "\tremoving: " + os.path.join(TMP_PATH, f) + "..." + RESET, end="")
+            os.remove(os.path.join(TMP_PATH, f))
+            print(SUCCESS + "done!" + RESET)
+    else:
+        print(console + SUCCESS +  "Cache is clean!" + RESET)
+    diff = time.time() - start_time
+
+    print(console + BOLD + SUCCESS + f"Checkup finished succuessfully in {diff:.4f} seconds!\n" + RESET)
