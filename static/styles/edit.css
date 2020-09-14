@@ -1,0 +1,31 @@
+
+textarea {
+    background-color: var(--lighter-background);
+    width: 70%;
+    margin: 2rem;
+    padding: 1rem;
+    color: var(--text-color);
+    font-family: var(--text-font);
+    border: 0.2rem solid var(--accent-color);
+    border-radius: 1rem;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+.form_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.simple_header {
+    margin-bottom: 6rem;
+}
+
+.button {
+    font-size: 2rem;
+    margin: 1.5rem;
+    border: none;
+}

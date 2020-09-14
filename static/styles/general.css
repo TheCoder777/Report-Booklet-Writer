@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata&family=Poppins&family=Red+Hat+Display:wght@900&display=swap');
+
+:root {
+    --heading-font: 'Red Hat Display', sans-serif;
+    --text-font: 'Poppins', sans-serif;
+    --monospace-font: 'Inconsolata', monospace;
+    --text-color: #eee;
+    --text-color-inv: #111;
+    --background-color: #181a1b;
+    --lighter-background: #202324;
+    --background-color-inv: #eee;
+    --accent-color: #1abc9c;
+    --accent-color-bright: #1dd1ad;
+}
+
+html {
+    text-align: center;
+    font-size: 16px;
+    color: var(--text-color);
+    background-color: var(--background-color)
+}
+
+.header {
+    font-family: var(--heading-font);
+    font-size: 4rem;
+    padding: 2rem;
+}
+
+.simple_header {
+    font-family: var(--text-font);
+    font-size: 2rem;
+    padding: 2rem;
+    padding-bottom: 0;
+    margin-bottom: 8rem;
+}
+
+.button {
+    color: var(--text-color);
+    background-color: var(--accent-color);
+    font-family: var(--heading-font);
+    font-size: 4rem;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    text-decoration: none;
+    transition: all 0.5s ease-in-out;
+}
+
+.button:hover {
+    background-color: var(--accent-color-bright);
+}

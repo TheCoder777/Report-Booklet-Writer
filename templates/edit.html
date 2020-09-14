@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/edit.css') }}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <title>Edit Berichtsheft</title>
+    </head>
+    <body>
+        <h1 class="header">Python Berichtsheft Auto Writer</h1>
+        <p class="simple_header">Fill out the form below:</p>
+        <form class="form" action="" method="post" id="editform">
+            <div class="form_wrapper">
+                <textarea name="Bcontent" placeholder="What did you do at the company?" rows="8" cols="100" form="editform"></textarea>
+                <textarea name="Scontent" placeholder="Got some further education?" rows="8" cols="100" form="editform"></textarea>
+                <textarea name="BScontent" placeholder="What did you do at school?" rows="8" cols="100" form="editform"></textarea>
+                <input class="button" type="submit" name="submit" value="Download" form=editform>
+            </div>
+        </form>
+    </body>
+</html>

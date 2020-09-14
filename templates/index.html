@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/index.css') }}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <title>Berichtsheft Auto Writer</title>
+    </head>
+    <body>
+        <h1 class="header">Python Berichtsheft Auto Writer</h1>
+        <p class="simple_header">Simpler then ever before!</p>
+        <a class="button" href="{{ url_for('edit') }}">Start Now!</a>
+    </body>
+    <a href="https://github.com/thecoder777" class="watermark">Design by @Thecoder777</a>
+</html>

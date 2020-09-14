@@ -1,0 +1,10 @@
+.watermark {
+    font-family: var(--monospace-font);
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 4px;
+    display: block;
+    margin: 10rem;
+    text-decoration: none;
+}
