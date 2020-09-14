@@ -48,3 +48,7 @@ html {
 .button:hover {
     background-color: var(--accent-color-bright);
 }
+
+.button:focus {
+    outline: none;
+}

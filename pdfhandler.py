@@ -28,6 +28,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from textwrap import wrap
 
+CONFIG_PATH = "./config.ini"
 
 def draw(data, uinput, packet):
     LINE_DISTANCE = 30
@@ -94,9 +95,8 @@ def draw(data, uinput, packet):
 
 
 def parse_config():
-    config_path = "./config.ini"
     config = configparser.ConfigParser()
-    config.read(config_path)
+    config.read(CONFIG_PATH)
 
     try:
         data = {}
@@ -106,6 +106,14 @@ def parse_config():
         return data
     except:
         pass
+
+
+def add_config_nr():
+    config = configparser.ConfigParser()
+    config.read(CONFIG_PATH)
+    config["date"]["nr"] = str(int(config["date"]["nr"]) + 1)
+    with open(CONFIG_PATH, "w") as configfile:
+        config.write(configfile)
 
 
 def compile(packet):
