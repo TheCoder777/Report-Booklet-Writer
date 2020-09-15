@@ -17,7 +17,7 @@ git clone https://github.com/TheCoder777/Python-Berichtsheft-Auto-Writer.git
 Then you need to install the dependencies, for example like this:
 
 ```bash
-pip install pdfrw PyPDF2 flask gevent reportlab 
+pip install pdfrw PyPDF2 flask gevent reportlab colored
 ```
 
 Maybe you want to customize your config.ini file to your needs. You can find it in the root directory of the Project!
