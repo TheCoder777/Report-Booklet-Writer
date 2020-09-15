@@ -8,6 +8,8 @@ Start using Python Berichtsheft Auto Writer now!
 
 ## Installation
 
+**Disclaimer: You need to have python 3.8 installed, otherwise it will not work!**
+
 To use this tool, you first have to clone the Project:
 
 ```bash
@@ -92,6 +94,8 @@ The rest is pretty much self explanatory!
 
 - manual mode
 - graphical config editor
+- Overview plan
+- More detailed view over autoset values
 
 ------
 
