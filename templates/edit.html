@@ -10,8 +10,46 @@
     </head>
     <body>
         <h1 class="header">Python Berichtsheft Auto Writer</h1>
-        <p class="simple_header">Fill out the form below:</p>
+        <p class="simple_header">Fill out the form below, and doublecheck if everything is correct:</p>
         <form class="form" action="" method="post" id="editform">
+            <div class"form_head_wrapper">
+                <div class="first_line">
+                    <div class="manual_input">
+                        <p class="input_hint">Name:</p>
+                        <input type="text" name="name" value="{{ data['name'] }}">
+                    </div>
+                    <div class="manual_input">
+                        <p class="input_hint">Surname:</p>
+                        <input type="text" name="surname" value="{{ data['surname'] }}">
+                    </div>
+                    <div class="manual_input">
+                        <p class="input_hint">Start date:</p>
+                        <input type="date" name="start_date" value="{{ start_date }}">
+                    </div>
+                    <div class="manual_input">
+                        <p class="input_hint">End date:</p>
+                        <input type="date" name="end_date" value="{{ end_date }}">
+                    </div>
+                </div>
+                <div class="second_line">
+                    <div class="manual_input">
+                        <p class="input_hint">Number:</p>
+                        <input type="number" name="nr" value="{{ data['nr'] }}">
+                    </div>
+                    <div class="manual_input">
+                        <p class="input_hint">Year:</p>
+                        <input type="number" name="year" value="{{ data['year'] }}">
+                    </div>
+                    <div class="manual_input">
+                        <p class="input_hint">Unit:</p>
+                        <input type="text" name="unit" value="{{ data['unit'] }}">
+                    </div>
+                    <div class="manual_input">
+                        <p class="input_hint">Sign date:</p>
+                        <input type="date" name="sign_date" value="{{ data['sign_date'] }}">
+                    </div>
+                </div>
+            </div>
             <div class="form_wrapper">
                 <textarea name="Bcontent" placeholder="What did you do at the company?" rows="8" cols="100" form="editform"></textarea>
                 <textarea name="Scontent" placeholder="Got some further education?" rows="8" cols="100" form="editform"></textarea>

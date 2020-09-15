@@ -1,12 +1,14 @@
 
 textarea {
+    font-family: var(--text-font);
+    font-size: 1.2rem;
     background-color: var(--lighter-background);
     width: 70%;
     margin: 2rem;
     padding: 1rem;
     color: var(--text-color);
-    font-family: var(--text-font);
-    border: 0.2rem solid var(--accent-color);
+    border: 0 none;
+    border-bottom: 0.2rem solid var(--accent-color);
     border-radius: 1rem;
 }
 
@@ -14,10 +16,50 @@ textarea:focus {
     outline: none;
 }
 
+input {
+    font-size: 1.2rem;
+    background-color: var(--lighter-background);
+    color: var(--text-color);
+    padding: 1rem;
+    border: 0 none;
+    border-bottom: 0.2rem solid var(--accent-color);
+    border-radius: 1rem;
+}
+
+input:focus {
+    outline: none;
+}
+
+.first_line  {
+    margin: 1rem;
+}
+
+.second_line  {
+    margin: 1rem;
+}
+
 .form_wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.manual_input {
+    display: inline-block;
+    text-align: left;
+    font-family: var(--text-font);
+    font-size: 1.2rem;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    margin: 2rem;
+    padding: 1rem;
+}
+
+.input_hint {
+    margin: 0;
+    padding: 0;
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .simple_header {

@@ -40,31 +40,80 @@ ERROR = fg(1)
 WARNING = fg(214)
 SUCCESS = fg(2)
 
-def draw(data, uinput, packet):
-    LINE_DISTANCE = 30
-    nr = int(data["nr"])
-    nr -= 1
-    kw = data["beginn"]
-    kw = int(kw)
-    kw = (kw + nr) % 52
-    fullname = data["surname"] + " " + data["name"]
 
+def check_start_date(date):
+    day, month, year = date.split(".")
+    date = ".".join([day, month])
+    if date == "31.08":
+        return "01.09." + year
+    else:
+        return date
+
+
+def reformat_date(date):
+    try:
+        year, month, day = date.split("-")
+        print(".".join([day, month, year]))
+        return ".".join([day, month, year])
+    except:
+        return date
+
+
+def get_a_date(type=""):
+    if type == "html":
+        return time.strftime("%Y-%m-%d")
+    else:
+        return time.strftime("%d.%m.%Y")
+
+
+def get_date(kw, type="client"):
+    kw = int(kw)
     a_year = int(time.strftime("%Y"))
     start_date = date.fromisocalendar(a_year, kw, 1)
-    start_date = start_date.strftime("%d.%m.%Y")
     end_date = date.fromisocalendar(a_year, kw, 5)
-    end_date = end_date.strftime("%d.%m.%Y")
 
-    a_date = time.strftime("%d.%m.%Y")
+    if type == "client":
+        start_date = start_date.strftime("%d.%m.%Y")
+        end_date = end_date.strftime("%d.%m.%Y")
+
+    elif type == "raw":
+        return start_date, end_date
+
+    else:
+        start_date = start_date.strftime("%Y-%m-%d")
+        end_date = end_date.strftime("%Y-%m-%d")
+
+    return start_date, end_date
+
+
+def draw(data, uinput, packet):
+    LINE_DISTANCE = 30
+    nr = int(uinput["nr"])
+    nr -= 1
+    kw = data["kw"]
+    kw = int(kw)
+    kw = (kw + nr) % 52
+    fullname = uinput["surname"] + " " + uinput["name"]
+
+    # start_date, end_date = get_date(kw, type="raw")
+
+    start_date = reformat_date(uinput["start_date"])
+
+    start_date = check_start_date(start_date)
+    
+    end_date = reformat_date(uinput["end_date"])
+    sign_date = reformat_date(uinput["sign_date"])
+
+
 
     c = canvas.Canvas(packet, pagesize=A4)
 
     c.drawString(313, 795, fullname)
-    c.drawString(386, 778, data["unit"])
+    c.drawString(386, 778, uinput["unit"])
     c.drawString(231, 748, str(nr + 1))
     c.drawString(260, 748, start_date)
     c.drawString(365, 748, end_date)
-    c.drawString(530, 748, data["year"])
+    c.drawString(530, 748, uinput["year"])
 
     # Betrieblich
     height = 680
@@ -99,9 +148,9 @@ def draw(data, uinput, packet):
         c.drawText(bt)
         height -= LINE_DISTANCE
 
-    c.drawString(95, 148, a_date)
-    c.drawString(260, 148, a_date)
-    c.drawString(430, 148, a_date)
+    c.drawString(95, 148, sign_date)
+    c.drawString(260, 148, sign_date)
+    c.drawString(430, 148, sign_date)
     c.save()
     return packet
 

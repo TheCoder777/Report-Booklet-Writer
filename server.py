@@ -44,7 +44,10 @@ def index():
 
 @app.route("/edit")
 def edit():
-    return render_template("edit.html")
+    data = pdfhandler.parse_config()
+    data["sign_date"] = pdfhandler.get_a_date(type="html")
+    start_date, end_date = pdfhandler.get_date(data["kw"], type="server")
+    return render_template("edit.html", data=data, start_date=start_date, end_date=end_date)
 
 
 @app.route("/edit", methods=["POST"])
