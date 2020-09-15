@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.8
 # MIT License
 #
 # Copyright (c) 2020 TheCoder777
