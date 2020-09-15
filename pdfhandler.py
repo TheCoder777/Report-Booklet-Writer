@@ -42,9 +42,11 @@ SUCCESS = fg(2)
 
 def draw(data, uinput, packet):
     LINE_DISTANCE = 30
+    nr = int(data["nr"])
+    nr -= 1
     kw = data["beginn"]
     kw = int(kw)
-    kw = (kw + int(data["nr"])) % 52
+    kw = (kw + nr) % 52
     fullname = data["surname"] + " " + data["name"]
 
     a_year = int(time.strftime("%Y"))
@@ -59,7 +61,7 @@ def draw(data, uinput, packet):
 
     c.drawString(313, 795, fullname)
     c.drawString(386, 778, data["unit"])
-    c.drawString(231, 748, data["nr"])
+    c.drawString(231, 748, str(nr + 1))
     c.drawString(260, 748, start_date)
     c.drawString(365, 748, end_date)
     c.drawString(530, 748, data["year"])
