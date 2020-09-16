@@ -100,7 +100,7 @@ def draw(data, uinput, packet):
     start_date = reformat_date(uinput["start_date"])
 
     start_date = check_start_date(start_date)
-    
+
     end_date = reformat_date(uinput["end_date"])
     sign_date = reformat_date(uinput["sign_date"])
 
@@ -153,6 +153,21 @@ def draw(data, uinput, packet):
     c.drawString(430, 148, sign_date)
     c.save()
     return packet
+
+
+def update_config(data):
+    config = configparser.ConfigParser()
+    config.read(CONFIG_PATH)
+
+    config["date"]["kw"] = data["kw"]
+    config["date"]["nr"] = data["nr"]
+    config["date"]["year"] = data["year"]
+    config["user"]["surname"] = data["surname"]
+    config["user"]["name"] = data["name"]
+    config["user"]["unit"] = data["unit"]
+
+    with open(CONFIG_PATH, "w") as configfile:
+        config.write(configfile)
 
 
 def parse_config():

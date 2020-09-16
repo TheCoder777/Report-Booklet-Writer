@@ -19,7 +19,7 @@
                 <h1 class="header">Python Berichtsheft Auto Writer</h1>
             </div>
             <div class="headline settings">
-                <a href="">
+                <a href="{{ url_for('settings') }}">
                     <img class="icon" src="{{ url_for('static', filename='settings.svg') }}" alt="settings">
                 </a>
             </div>
@@ -32,35 +32,35 @@
                 <div class="input_container">
                     <div class="manual_input">
                         <p class="input_hint">Name:</p>
-                        <input type="text" name="name" value="{{ data['name'] }}">
+                        <input class="input_field" type="text" name="name" value="{{ data['name'] }}">
                     </div>
                     <div class="manual_input">
                         <p class="input_hint">Surname:</p>
-                        <input type="text" name="surname" value="{{ data['surname'] }}">
+                        <input class="input_field" type="text" name="surname" value="{{ data['surname'] }}">
                     </div>
                     <div class="manual_input">
                         <p class="input_hint">Start date:</p>
-                        <input type="date" name="start_date" value="{{ start_date }}">
+                        <input class="input_field" type="date" name="start_date" value="{{ start_date }}">
                     </div>
                     <div class="manual_input">
                         <p class="input_hint">End date:</p>
-                        <input type="date" name="end_date" value="{{ end_date }}">
+                        <input class="input_field" type="date" name="end_date" value="{{ end_date }}">
                     </div>
                     <div class="manual_input">
                         <p class="input_hint">Number:</p>
-                        <input type="number" name="nr" value="{{ data['nr'] }}">
+                        <input class="input_field" type="number" name="nr" value="{{ data['nr'] }}">
                     </div>
                     <div class="manual_input">
                         <p class="input_hint">Year:</p>
-                        <input type="number" name="year" value="{{ data['year'] }}">
+                        <input class="input_field" type="number" name="year" value="{{ data['year'] }}">
                     </div>
                     <div class="manual_input">
                         <p class="input_hint">Unit:</p>
-                        <input type="text" name="unit" value="{{ data['unit'] }}">
+                        <input class="input_field" type="text" name="unit" value="{{ data['unit'] }}">
                     </div>
                     <div class="manual_input">
                         <p class="input_hint">Sign date:</p>
-                        <input type="date" name="sign_date" value="{{ data['sign_date'] }}">
+                        <input class="input_field" type="date" name="sign_date" value="{{ data['sign_date'] }}">
                     </div>
                 </div>
                 <div class="textarea_container">

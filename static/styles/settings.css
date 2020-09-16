@@ -1,0 +1,60 @@
+
+.form_wrapper {
+    display: flex;
+    flex: 0 0 auto;
+    flex-grow: 1;
+    flex-flow: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    border: 0.2rem solid rgba(255, 255, 255, 0);
+    font-size: 1.2rem;
+    margin: 2rem;
+    padding: 1rem;
+}
+
+.button:hover {
+    background-color: var(--lighter-background);
+    border: 0.2rem solid var(--accent-color);
+    font-size: 1.2rem;
+    margin: 2rem;
+    padding: 1rem;
+}
+
+.secondary_button {
+    background-color: var(--warning-color);
+    border: 0.2rem solid rgba(255, 255, 255, 0);
+    font-size: 1.2rem;
+    margin: 2rem;
+    padding: 1rem;
+}
+
+.secondary_button:hover {
+    background-color: var(--lighter-background);
+    border: 0.2rem solid var(--warning-color);
+    font-size: 1.2rem;
+    margin: 2rem;
+    padding: 1rem;
+}
+
+@media only screen and (max-width: 768px) {
+    html {
+        font-size: 10px;
+    }
+
+    .input_field {
+        font-size: 2rem;
+    }
+
+    .manual_input {
+        font-size: 2rem;
+    }
+
+    .form_wrapper {
+      flex-flow: column;
+      width: 90%;
+  }
+}

@@ -11,6 +11,7 @@
     --background-color-inv: #eee;
     --accent-color: #1abc9c;
     --accent-color-bright: #1dd1ad;
+    --warning-color: #ff202f;
 }
 
 html {
@@ -26,6 +27,47 @@ html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+}
+
+.input_field {
+    font-size: 1.2rem;
+    background-color: var(--lighter-background);
+    color: var(--text-color);
+    padding: 1rem;
+    border: 0 none;
+    border-bottom: 0.2rem solid var(--accent-color);
+    border-radius: 1rem;
+    width: auto;
+}
+
+.input_field:focus {
+    outline: none;
+}
+
+.input_hint {
+    margin: 0;
+    padding: 0;
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.manual_input {
+    display: inline-block;
+    text-align: left;
+    font-family: var(--text-font);
+    font-size: 1.2rem;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    margin: 2rem;
+    padding: 1rem;
+}
+
+.form_wrapper {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    width: 70%;
+    margin: auto;
 }
 
 .icon {
@@ -74,7 +116,7 @@ html, body {
     transition: all 0.2s ease-in-out;
     white-space: nowrap;
     width: fit-content;
-    align-self: center
+    align-self: center;
 }
 
 .button:hover {
@@ -84,6 +126,30 @@ html, body {
 }
 
 .button:focus {
+    outline: none;
+}
+
+.secondary_button {
+    color: var(--text-color);
+    background-color: var(--background-color);
+    font-family: var(--heading-font);
+    font-size: 4rem;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    white-space: nowrap;
+    width: fit-content;
+    align-self: center;
+}
+
+.secondary_button:hover {
+    background-color: var(--lighter-background);
+    padding: 2.2rem;
+    font-size: 4.2rem;
+}
+
+.secondary_button:focus {
     outline: none;
 }
 
@@ -98,6 +164,13 @@ html, body {
 @media only screen and (max-width: 768px) {
   html {
     font-size: 10px;
+  }
+
+  .input_field {
+      font-size: 2rem;
+  }
+  .manual_input {
+      font-size: 2rem;
   }
 
   .icon {
@@ -115,6 +188,6 @@ html, body {
   }
 
   .watermark {
-      font-size: 0.5rem;
+      font-size: 1.5rem;
   }
 }

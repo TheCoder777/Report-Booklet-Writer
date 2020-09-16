@@ -61,6 +61,20 @@ def get_and_return():
         return send_file(pdf, as_attachment=True)
 
 
+@app.route("/settings")
+def settings():
+    data = pdfhandler.parse_config()
+    return render_template("settings.html", data=data)
+
+@app.route("/settings", methods=["POST"])
+def get_new_config():
+    if request.method == "POST":
+        data = dict(request.form.copy())
+        del data["submit"]
+        print("raw", data)
+        pdfhandler.update_config(data)
+        return redirect("settings")
+
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         if sys.argv[1] in ["--debug", "debug", "-d", "d"]:
