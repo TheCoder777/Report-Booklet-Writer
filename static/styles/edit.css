@@ -3,13 +3,15 @@ textarea {
     font-family: var(--text-font);
     font-size: 1.2rem;
     background-color: var(--lighter-background);
-    width: 70%;
-    margin: 2rem;
+    width: 100%;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
     padding: 1rem;
     color: var(--text-color);
     border: 0 none;
     border-bottom: 0.2rem solid var(--accent-color);
     border-radius: 1rem;
+    max-width: -webkit-fill-available;
 }
 
 textarea:focus {
@@ -24,24 +26,29 @@ input {
     border: 0 none;
     border-bottom: 0.2rem solid var(--accent-color);
     border-radius: 1rem;
+    width: auto;
 }
 
 input:focus {
     outline: none;
 }
 
-.first_line  {
-    margin: 1rem;
-}
-
-.second_line  {
-    margin: 1rem;
+.input_container {
+    display: flex;
+    flex: 0 0 auto;
+    flex-grow: 1;
+    flex-flow: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }
 
 .form_wrapper {
     display: flex;
-    flex-direction: column;
+    flex-flow: column;
     align-items: center;
+    width: 70%;
+    margin: auto;
 }
 
 .manual_input {
@@ -53,6 +60,21 @@ input:focus {
     background-color: var(--background-color);
     margin: 2rem;
     padding: 1rem;
+}
+
+.form_head_wrapper {
+    display: flex;
+    flex-flow: row;
+}
+
+.textarea_container {
+    display: flex;
+    flex: 0 0 auto;
+    flex-grow: 1;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    width: 100%;
 }
 
 .input_hint {
@@ -70,4 +92,30 @@ input:focus {
     font-size: 2rem;
     margin: 1.5rem;
     border: none;
+}
+
+.button:hover {
+    background-color: var(--accent-color-bright);
+    font-size: 2rem;
+    padding: 2rem;
+}
+
+@media only screen and (max-width: 768px) {
+  input {
+      font-size: 3rem;
+  }
+
+  textarea {
+      font-size: 2rem;
+      width: auto;
+      margin: 1rem;
+  }
+
+  .input_container {
+      flex-direction: column;
+  }
+
+  .form_wrapper {
+      width: 100%;
+  }
 }

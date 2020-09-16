@@ -9,9 +9,25 @@
         <title>Berichtsheft Auto Writer</title>
     </head>
     <body>
-        <h1 class="header">Python Berichtsheft Auto Writer</h1>
-        <p class="simple_header">Simpler then ever before!</p>
-        <a class="button" href="{{ url_for('edit') }}">Start Now!</a>
+        <div class="heading">
+            <div class="headline home">
+                <a href="{{ url_for('index') }}">
+                    <img class="icon" src="{{ url_for('static', filename='home.svg') }}" alt="home">
+                </a>
+            </div>
+            <div class="headline">
+                <h1 class="header">Python Berichtsheft Auto Writer</h1>
+            </div>
+            <div class="headline settings">
+                <a href="">
+                    <img class="icon" src="{{ url_for('static', filename='settings.svg') }}" alt="settings">
+                </a>
+            </div>
+        </div>
+        <div class="bodybody">
+            <p class="simple_header">Simpler then ever before!</p>
+            <a class="button" href="{{ url_for('edit') }}">Start Now!</a>
+        </div>
     </body>
-    <a href="https://github.com/thecoder777" class="watermark">Design by @Thecoder777</a>
+    <a href="https://github.com/thecoder777" class="watermark">Design by @TheCoder777</a>
 </html>

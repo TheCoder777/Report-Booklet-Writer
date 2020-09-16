@@ -17,21 +17,50 @@ html {
     text-align: center;
     font-size: 16px;
     color: var(--text-color);
-    background-color: var(--background-color)
+    background-color: var(--background-color);
+    justify-content: center;
+    width: 100%;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.icon {
+    height: 3rem;
+    margin: 1rem;
+}
+
+.headline {
+    margin: auto;
+}
+
+.heading {
+    /* width: 100%; */
+    display: flex;
+    padding: 2rem;
+    align-items: center;
+    justify-content: center;
 }
 
 .header {
     font-family: var(--heading-font);
     font-size: 4rem;
-    padding: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    margin: auto;
+
 }
 
 .simple_header {
     font-family: var(--text-font);
     font-size: 2rem;
-    padding: 2rem;
-    padding-bottom: 0;
-    margin-bottom: 8rem;
+    margin: 4rem;
+    margin-bottom: 6rem;
+    margin-top: 0;
+    padding: 0;
 }
 
 .button {
@@ -42,13 +71,50 @@ html {
     border-radius: 1.5rem;
     padding: 2rem;
     text-decoration: none;
-    transition: all 0.5s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    white-space: nowrap;
+    width: fit-content;
+    align-self: center
 }
 
 .button:hover {
     background-color: var(--accent-color-bright);
+    padding: 2.2rem;
+    font-size: 4.2rem;
 }
 
 .button:focus {
     outline: none;
+}
+
+.bodybody {
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    width: auto;
+}
+
+@media only screen and (max-width: 768px) {
+  html {
+    font-size: 10px;
+  }
+
+  .icon {
+      height: 2rem;
+  }
+
+  .header {
+      font-size: 2rem;
+  }
+
+  .simple_header {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+      margin-top: 0;
+  }
+
+  .watermark {
+      font-size: 0.5rem;
+  }
 }
