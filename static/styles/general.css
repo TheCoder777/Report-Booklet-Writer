@@ -161,20 +161,6 @@ html, body {
     width: auto;
 }
 
-.notification {
-    display: inline-block;
-    justify-content: center;
-    margin: 3rem;
-    border: 0.5rem solid var(--accent-color);
-    background-color: var(--background-color);
-    border-radius: 1rem;
-    font-family: var(--text-font);
-    font-size: 2rem;
-    margin-top: 10rem;
-    padding: 1rem;
-    max-width: fit-content;
-}
-
 @media only screen and (max-width: 768px) {
   html {
     font-size: 10px;

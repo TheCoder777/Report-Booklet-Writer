@@ -64,19 +64,16 @@ def get_and_return():
 @app.route("/settings")
 def settings():
     data = pdfhandler.parse_config()
-    return render_template("settings.html", data=data, action="none")
+    return render_template("settings.html", data=data)
 
 @app.route("/settings", methods=["POST"])
 def get_new_config():
     if request.method == "POST":
         data = dict(request.form.copy())
         del data["submit"]
-        try:
-            pdfhandler.update_config(data)
-            new_data = pdfhandler.parse_config()
-            return render_template("settings.html", data=new_data, action="success")
-        except:
-            return render_template("settings.html", data=data, action="fail")
+        print("raw", data)
+        pdfhandler.update_config(data)
+        return redirect("settings")
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:

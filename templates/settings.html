@@ -24,19 +24,9 @@
                 </a>
             </div>
         </div>
-        {% if action == "success": %}
-        <div class="bodybody" style="color:var(--accent-color);">
-            <p class="simple_header">Successfully saved config!</p>
-        </div>
-        {% elif action == "fail": %}
-        <div class="bodybody" style="color:var(--warning-color);">
-            <p class="simple_header">Failed to write config!</p>
-        </div>
-        {% else: %}
         <div class="bodybody">
             <p class="simple_header">Here you can edit your config:</p>
         </div>
-        {% endif %}
         <form class="form" action="" method="post" id="configform">
             <div class="form_wrapper">
                 <div class="manual_input">
