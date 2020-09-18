@@ -23,7 +23,7 @@
 # SOFTWARE.
 
 
-import pdfhandler, io, time, sys
+import pdfhandler, confighandler, io, time, sys
 from gevent.pywsgi import WSGIServer
 from flask import Flask, render_template, request, redirect, send_file
 
@@ -45,7 +45,7 @@ def index():
 
 @app.route("/edit")
 def edit():
-    data = pdfhandler.parse_config()
+    data = confighandler.parse_config()
     data["sign_date"] = pdfhandler.get_a_date(type="html")
     start_date, end_date = pdfhandler.get_date(data["kw"], type="server")
     return render_template("edit.html", data=data, start_date=start_date, end_date=end_date)
@@ -56,15 +56,15 @@ def get_and_return():
     if request.method == "POST":
         uinput = dict(request.form.copy())
         del uinput["submit"]
-        data = pdfhandler.parse_config()
+        data = confighandler.parse_config()
         pdf = writepdf(data, uinput)
-        pdfhandler.add_config_nr()
+        confighandler.add_config_nr()
         return send_file(pdf, as_attachment=True)
 
 
 @app.route("/settings")
 def settings():
-    data = pdfhandler.parse_config()
+    data = confighandler.parse_config()
     return render_template("settings.html", data=data, action="none")
 
 
@@ -74,8 +74,8 @@ def get_new_config():
         data = dict(request.form.copy())
         del data["submit"]
         try:
-            pdfhandler.update_config(data)
-            new_data = pdfhandler.parse_config()
+            confighandler.update_config(data)
+            new_data = confighandler.parse_config()
             return render_template("settings.html", data=new_data, action="success")
         except FileNotFoundError as e:
             print(e, "problems occurred while trying to update config")
