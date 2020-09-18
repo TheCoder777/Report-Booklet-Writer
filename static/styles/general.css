@@ -4,6 +4,8 @@
     --heading-font: 'Red Hat Display', sans-serif;
     --text-font: 'Poppins', sans-serif;
     --monospace-font: 'Inconsolata', monospace;
+    --button-font-size: 1.5rem;
+    --button-font-size-mobile: 2rem;
     --text-color: #eee;
     --text-color-inv: #111;
     --background-color: #181a1b;

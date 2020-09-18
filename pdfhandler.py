@@ -30,8 +30,10 @@ from reportlab.lib.pagesizes import A4
 from textwrap import wrap
 from colored import attr, fg
 
+
 TMP_PATH = "./tmp/"
 TEMPLATE_PATH = "Berichtsheft_template.pdf"
+
 
 # colors
 RESET = attr("reset")

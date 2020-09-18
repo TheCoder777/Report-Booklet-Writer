@@ -42,6 +42,7 @@ def write_config(config):
     except:
         print(Error_msg.UNKNOWN_ERR)
 
+
 def update_config(data):
     config = get_config()
 
