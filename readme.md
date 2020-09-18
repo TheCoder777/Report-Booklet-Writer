@@ -22,30 +22,6 @@ Then you need to install the dependencies, for example like this:
 pip install pdfrw PyPDF2 flask gevent reportlab colored
 ```
 
-Maybe you want to customize your config.ini file to your needs. You can find it in the root directory of the Project!
-
-```bash
-.
-├── Berichtsheft_template.pdf
-├── config.ini	<------------- There is it!
-├── LICENSE
-├── pdfhandler.py
-├── readme.md
-├── server.py
-├── static
-│   ├── favicon.ico
-│   └── styles
-│       ├── edit.css
-│       ├── general.css
-│       └── index.css
-├── templates
-│   ├── edit.html
-│   └── index.html
-└── tmp
-```
-
-
-
 Finally, you can just run it:
 
 ```bash
@@ -54,11 +30,32 @@ python server.py
 
 The program will mostly take care of itself during the checkup, so no need to worry!
 
+If you want to configure your name and personal info, checkout  [`configuration`](#configuration).
+
+
+
+## Usage 
+
+1. If you load it up, go to [localhost:8000](localhost:8000) (current default) and click on the start button!
+2. You can enter as much information as you want, and finally click on download!
+3. Your browser can/will now download a perfectly filled out pdf!
+4. It's as easy as that!
+
+
+
+## Configuration
+
+You can configure all settings via the web interface  on [Domain]/settings or by clicking on the settings icon in the top right of the start page!
+
+You'll be notified if everything went correctly when you click the save button!
+
+To reset the configuration, just click the reset button!
+
 
 
 ## Debugging
 
-You can easily debug the while project by using a --debug/-d flag when running:
+You can easily debug the project by using a --debug/-d flag when running:
 
 ```bash
 python server.py --debug
@@ -66,36 +63,11 @@ python server.py --debug
 
 
 
-## Configuration
-
-Example config.ini file:
-
-```bash
-# config.ini
-
-[date]
-beginn=36
-nr=1
-year=1
-
-[user]
-surname=Musterman
-name=Max
-unit=Ausbildung
-```
-
-- 'beginn' is the first calender week of whatever you're doing right now
-
-- 'nr' is the current number of your Berichtsheft, it will go up by itself!
-
-The rest is pretty much self explanatory!
-
 ## Todo
 
-- manual mode
-- graphical config editor
 - Overview plan
-- More detailed view over autoset values
+- User Management System (UMS)
+- Mail server (just wait for it, you'll see)
 
 ------
 
@@ -103,4 +75,5 @@ Have fun!
 
 Support is always appreciated!
 
-@TheCoder777
+[@TheCoder777](https://github.com/thecoder777)
+
