@@ -40,8 +40,10 @@ ERROR = fg(1)
 WARNING = fg(214)
 SUCCESS = fg(2)
 
+
 class Error_msg():
     UNKNOWN_ERR = "Unknow error occurred!"
+
 
 def check_start_date(date):
     day, month, year = date.split(".")
@@ -55,7 +57,6 @@ def check_start_date(date):
 def reformat_date(date):
     try:
         year, month, day = date.split("-")
-        print(".".join([day, month, year]))
         return ".".join([day, month, year])
     except:
         return date
