@@ -1,3 +1,8 @@
+.watermark_container {
+    align-items: center;
+    justify-content: center;
+}
+
 .watermark {
     font-family: var(--monospace-font);
     color: var(--text-color);
@@ -9,6 +14,13 @@
     margin-bottom: 2rem;
     text-decoration: none;
     white-space: nowrap;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.simple_header {
+    margin-bottom: 6rem;
 }
 
 @media only screen and (max-width: 768px) {
