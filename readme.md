@@ -34,7 +34,7 @@ If you want to configure your name and personal info, checkout  [`configuration`
 
 
 
-## Usage 
+## Usage
 
 1. If you load it up, go to [localhost:8000](localhost:8000) (current default) and click on the start button!
 2. You can enter as much information as you want, and finally click on download!
@@ -50,6 +50,10 @@ You can configure all settings via the web interface  on [Domain]/settings or by
 You'll be notified if everything went correctly when you click the save button!
 
 To reset the configuration, just click the reset button!
+
+The 'reset to default button' will hard reset your configuration to absolute defaults!
+
+**Be careful with that!**
 
 
 
@@ -76,4 +80,3 @@ Have fun!
 Support is always appreciated!
 
 [@TheCoder777](https://github.com/thecoder777)
-

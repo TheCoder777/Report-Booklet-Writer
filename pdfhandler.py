@@ -21,7 +21,8 @@
 # SOFTWARE.
 
 
-import io, os, time, configparser
+import io, os, time
+import confighandler
 from datetime import date
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from reportlab.pdfgen import canvas
@@ -29,9 +30,10 @@ from reportlab.lib.pagesizes import A4
 from textwrap import wrap
 from colored import attr, fg
 
-CONFIG_PATH = "./config.ini"
+
 TMP_PATH = "./tmp/"
 TEMPLATE_PATH = "Berichtsheft_template.pdf"
+
 
 # colors
 RESET = attr("reset")
@@ -40,8 +42,10 @@ ERROR = fg(1)
 WARNING = fg(214)
 SUCCESS = fg(2)
 
+
 class Error_msg():
     UNKNOWN_ERR = "Unknow error occurred!"
+
 
 def check_start_date(date):
     day, month, year = date.split(".")
@@ -55,7 +59,6 @@ def check_start_date(date):
 def reformat_date(date):
     try:
         year, month, day = date.split("-")
-        print(".".join([day, month, year]))
         return ".".join([day, month, year])
     except:
         return date
@@ -150,48 +153,6 @@ def draw(data, uinput, packet):
     c.drawString(430, 148, sign_date)
     c.save()
     return packet
-
-
-def update_config(data):
-    config = configparser.ConfigParser()
-    config.read(CONFIG_PATH)
-
-    config["date"]["kw"] = data["kw"]
-    config["date"]["nr"] = data["nr"]
-    config["date"]["year"] = data["year"]
-    config["user"]["surname"] = data["surname"]
-    config["user"]["name"] = data["name"]
-    config["user"]["unit"] = data["unit"]
-
-    try:
-        with open(CONFIG_PATH, "w") as configfile:
-            config.write(configfile)
-    except FileNotFoundError:
-        print(e, "problems occurred while trying to update config!\nThe file doesn't exist!")
-    except:
-        print(Error_msg.UNKNOWN_ERR)
-
-
-def parse_config():
-    config = configparser.ConfigParser()
-    config.read(CONFIG_PATH)
-
-    try:
-        data = {}
-        for c in config.sections():
-            for v in config[c].items():
-                data[v[0]] = v[1]
-        return data
-    except:
-        pass
-
-
-def add_config_nr():
-    config = configparser.ConfigParser()
-    config.read(CONFIG_PATH)
-    config["date"]["nr"] = str(int(config["date"]["nr"]) + 1)
-    with open(CONFIG_PATH, "w") as configfile:
-        config.write(configfile)
 
 
 def compile(packet):

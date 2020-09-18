@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
-        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/index.css') }}">
+        <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
+        <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/index.css') }}">
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <title>Berichtsheft Auto Writer</title>
     </head>
@@ -29,5 +29,7 @@
             <a class="button" href="{{ url_for('edit') }}">Start Now!</a>
         </div>
     </body>
-    <a href="https://github.com/thecoder777" class="watermark">Design by @TheCoder777</a>
+    <div class="watermark_container">
+        <a href="https://github.com/thecoder777" class="watermark">Design by @TheCoder777</a>
+    </div>
 </html>

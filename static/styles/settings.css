@@ -10,34 +10,40 @@
 }
 
 .button {
+    font-size: var(--button-font-size);
     border: 0.2rem solid rgba(255, 255, 255, 0);
-    font-size: 1.2rem;
     margin: 2rem;
     padding: 1rem;
 }
 
 .button:hover {
+    font-size: var(--button-font-size);
     background-color: var(--lighter-background);
     border: 0.2rem solid var(--accent-color);
-    font-size: 1.2rem;
     margin: 2rem;
     padding: 1rem;
 }
 
 .secondary_button {
+    font-size: var(--button-font-size);
     background-color: var(--warning-color);
     border: 0.2rem solid rgba(255, 255, 255, 0);
-    font-size: 1.2rem;
     margin: 2rem;
     padding: 1rem;
 }
 
 .secondary_button:hover {
+    font-size: var(--button-font-size);
     background-color: var(--lighter-background);
     border: 0.2rem solid var(--warning-color);
-    font-size: 1.2rem;
     margin: 2rem;
     padding: 1rem;
+}
+
+.buttons {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
 }
 
 @media only screen and (max-width: 768px) {
@@ -56,5 +62,21 @@
     .form_wrapper {
       flex-flow: column;
       width: 90%;
-  }
+    }
+
+    .buttons {
+        display: flex;
+        flex-flow: column;
+    }
+
+    .button {
+        font-size: var(--button-font-size-mobile);
+        width: -webkit-fill-available;
+    }
+
+    .secondary_button {
+        font-size: var(--button-font-size-mobile);
+        width: -webkit-fill-available;
+    }
+
 }

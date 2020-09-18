@@ -4,6 +4,8 @@
     --heading-font: 'Red Hat Display', sans-serif;
     --text-font: 'Poppins', sans-serif;
     --monospace-font: 'Inconsolata', monospace;
+    --button-font-size: 1.5rem;
+    --button-font-size-mobile: 2rem;
     --text-color: #eee;
     --text-color-inv: #111;
     --background-color: #181a1b;
@@ -58,7 +60,9 @@ html, body {
     font-size: 1.2rem;
     color: var(--text-color);
     background-color: var(--background-color);
-    margin: 2rem;
+    margin: 0;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
     padding: 1rem;
 }
 
@@ -68,6 +72,7 @@ html, body {
     align-items: center;
     width: 70%;
     margin: auto;
+    padding: 0;
 }
 
 .icon {
@@ -100,7 +105,7 @@ html, body {
     font-family: var(--text-font);
     font-size: 2rem;
     margin: 4rem;
-    margin-bottom: 6rem;
+    margin-bottom: 4rem;
     margin-top: 0;
     padding: 0;
 }
