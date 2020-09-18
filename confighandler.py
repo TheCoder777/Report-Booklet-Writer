@@ -20,20 +20,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
 import configparser
+
+
 CONFIG_PATH = "./config.ini"
 
-def update_config(data):
+
+def get_config():
     config = configparser.ConfigParser()
     config.read(CONFIG_PATH)
+    return config
 
-    config["date"]["kw"] = data["kw"]
-    config["date"]["nr"] = data["nr"]
-    config["date"]["year"] = data["year"]
-    config["user"]["surname"] = data["surname"]
-    config["user"]["name"] = data["name"]
-    config["user"]["unit"] = data["unit"]
 
+def write_config(config):
     try:
         with open(CONFIG_PATH, "w") as configfile:
             config.write(configfile)
@@ -42,10 +42,20 @@ def update_config(data):
     except:
         print(Error_msg.UNKNOWN_ERR)
 
+def update_config(data):
+    config = get_config()
+
+    config["date"]["kw"] = data["kw"]
+    config["date"]["nr"] = data["nr"]
+    config["date"]["year"] = data["year"]
+    config["user"]["surname"] = data["surname"]
+    config["user"]["name"] = data["name"]
+    config["user"]["unit"] = data["unit"]
+    write_config(config)
+
 
 def parse_config():
-    config = configparser.ConfigParser()
-    config.read(CONFIG_PATH)
+    config = get_config()
 
     try:
         data = {}
@@ -58,8 +68,26 @@ def parse_config():
 
 
 def add_config_nr():
-    config = configparser.ConfigParser()
-    config.read(CONFIG_PATH)
+    config = get_config()
     config["date"]["nr"] = str(int(config["date"]["nr"]) + 1)
-    with open(CONFIG_PATH, "w") as configfile:
-        config.write(configfile)
+    write_config(config
+
+
+def reset_config():
+    # default values
+    kw = 36
+    nr = 1
+    year = 1
+    surname = "Musterman"
+    name = "Max"
+    unit = "Ausbildung"
+
+    config = get_config()
+
+    config["date"]["kw"] = kw
+    config["date"]["nr"] = nr
+    config["date"]["year"] = year
+    config["user"]["surname"] = surname
+    config["user"]["name"] = name
+    config["user"]["unit"] = unit
+    write_config(config)
