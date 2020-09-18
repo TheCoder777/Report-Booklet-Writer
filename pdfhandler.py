@@ -40,6 +40,8 @@ ERROR = fg(1)
 WARNING = fg(214)
 SUCCESS = fg(2)
 
+class Error_msg():
+    UNKNOWN_ERR = "Unknow error occurred!"
 
 def check_start_date(date):
     day, month, year = date.split(".")
@@ -95,16 +97,11 @@ def draw(data, uinput, packet):
     kw = (kw + nr) % 52
     fullname = uinput["surname"] + " " + uinput["name"]
 
-    # start_date, end_date = get_date(kw, type="raw")
-
     start_date = reformat_date(uinput["start_date"])
-
     start_date = check_start_date(start_date)
 
     end_date = reformat_date(uinput["end_date"])
     sign_date = reformat_date(uinput["sign_date"])
-
-
 
     c = canvas.Canvas(packet, pagesize=A4)
 
@@ -166,8 +163,13 @@ def update_config(data):
     config["user"]["name"] = data["name"]
     config["user"]["unit"] = data["unit"]
 
-    with open(CONFIG_PATH, "w") as configfile:
-        config.write(configfile)
+    try:
+        with open(CONFIG_PATH, "w") as configfile:
+            config.write(configfile)
+    except FileNotFoundError:
+        print(e, "problems occurred while trying to update config!\nThe file doesn't exist!")
+    except:
+        print(Error_msg.UNKNOWN_ERR)
 
 
 def parse_config():

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3.8
+
 # MIT License
 #
 # Copyright (c) 2020 TheCoder777
@@ -26,9 +27,9 @@ import pdfhandler, io, time, sys
 from gevent.pywsgi import WSGIServer
 from flask import Flask, render_template, request, redirect, send_file
 
+
 app = Flask(__name__)
 
-pdfhandler.checkup()
 
 def writepdf(data, uinput):
     packet = io.BytesIO()
@@ -66,6 +67,7 @@ def settings():
     data = pdfhandler.parse_config()
     return render_template("settings.html", data=data, action="none")
 
+
 @app.route("/settings", methods=["POST"])
 def get_new_config():
     if request.method == "POST":
@@ -75,14 +77,23 @@ def get_new_config():
             pdfhandler.update_config(data)
             new_data = pdfhandler.parse_config()
             return render_template("settings.html", data=new_data, action="success")
-        except:
+        except FileNotFoundError as e:
+            print(e, "problems occurred while trying to update config")
             return render_template("settings.html", data=data, action="fail")
+        except:
+            print(pdfhandler.Error_msg.UNKNOWN_ERR)
+
 
 if __name__ == "__main__":
+    HOST='localhost'
+    PORT=8000
+    
+    pdfhandler.checkup()
+
     if len(sys.argv) > 1:
         if sys.argv[1] in ["--debug", "debug", "-d", "d"]:
-            app.run(host="0.0.0.0", port=8000, debug=True)  # for debugging
+            app.run(host=HOST, port=PORT, debug=True)  # for debugging
     else:
-        print("\nRunning on http://localhost:8000/\n")
-        server = WSGIServer(('localhost', 8000), app)
+        print(f"\nRunning on http://{HOST}:{PORT}/\n")
+        server = WSGIServer((HOST, PORT), app)
         server.serve_forever()
