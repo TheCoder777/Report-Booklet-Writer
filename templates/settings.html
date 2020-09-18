@@ -32,6 +32,10 @@
         <div class="bodybody" style="color:var(--warning-color);">
             <p class="simple_header">Failed to write config!</p>
         </div>
+        {% elif action == "success_reset": %}
+        <div class="bodybody" style="color:var(--accent-color);">
+            <p class="simple_header">Successfully reseted config to default!</p>
+        </div>
         {% else: %}
         <div class="bodybody">
             <p class="simple_header">Here you can edit your config:</p>
@@ -65,6 +69,7 @@
                 </div>
             </div>
             <div class="buttons">
+                <input class="secondary_button" type="submit" name="hard_reset" value="Reset to default">
                 <input class="secondary_button" type="reset" name="reset" value="Reset changed values" form=configform>
                 <input class="button" type="submit" name="submit" value="Save changes" form=configform>
             </div>

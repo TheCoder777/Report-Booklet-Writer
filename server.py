@@ -72,7 +72,16 @@ def settings():
 def get_new_config():
     if request.method == "POST":
         data = dict(request.form.copy())
-        del data["submit"]
+
+        try:
+            if data["hard_reset"]:
+                confighandler.reset_config()
+                new_data = confighandler.parse_config()
+                return render_template("settings.html", data=new_data, action="success_reset")
+        except KeyError:
+            del data["submit"]
+        except:
+            print(pdfhandler.Error_msg.UNKNOWN_ERR)
         try:
             confighandler.update_config(data)
             new_data = confighandler.parse_config()
@@ -82,12 +91,12 @@ def get_new_config():
             return render_template("settings.html", data=data, action="fail")
         except:
             print(pdfhandler.Error_msg.UNKNOWN_ERR)
-
+            return render_template("settings.html", data=data, action="fail")
 
 if __name__ == "__main__":
     HOST='localhost'
     PORT=8000
-    
+
     pdfhandler.checkup()
 
     if len(sys.argv) > 1:

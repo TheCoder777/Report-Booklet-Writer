@@ -75,9 +75,9 @@ def add_config_nr():
 
 def reset_config():
     # default values
-    kw = 36
-    nr = 1
-    year = 1
+    kw = "36"
+    nr = "1"
+    year = "1"
     surname = "Musterman"
     name = "Max"
     unit = "Ausbildung"
