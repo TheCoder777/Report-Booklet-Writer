@@ -70,7 +70,7 @@ def parse_config():
 def add_config_nr():
     config = get_config()
     config["date"]["nr"] = str(int(config["date"]["nr"]) + 1)
-    write_config(config
+    write_config(config)
 
 
 def reset_config():
