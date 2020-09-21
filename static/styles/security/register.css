@@ -1,0 +1,27 @@
+.form_wrapper {
+    display: flex;
+    flex-flow: row;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.credentials {
+    display: flex;
+    flex-flow: column;
+    border: 0.2rem solid var(--accent-color);
+    border-radius: 1rem;
+    margin: 2rem;
+    padding: 1rem;
+}
+.password {
+    display: flex;
+    flex-flow: column;
+    border: 0.2rem solid var(--accent-color);
+    border-radius: 1rem;
+    margin: 2rem;
+    padding: 1rem;
+}
+
+.manual_input {
+    margin: 0.5rem;
+}

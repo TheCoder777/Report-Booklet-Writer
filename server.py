@@ -102,6 +102,14 @@ def login():
 def register():
     return render_template("security/register.html")
 
+@app.route("/forgot-password")
+def forgot_password():
+    return render_template("security/forgot_password.html")
+
+@app.route("/change-password")
+def change_password():
+    return render_template("security/change_password.html")
+
 if __name__ == "__main__":
     HOST='localhost'
     PORT=8000

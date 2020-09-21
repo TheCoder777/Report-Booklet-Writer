@@ -12,21 +12,28 @@
 {% block content %}
     <form class="form" action="" method="post" id="loginform">
         <div class="form_wrapper">
-            <div class="manual_input">
-                <p class="input_hint">Name or Email:</p>
-                <input class="input_field" type="text" name="name" placeholder="name@example.com">
-            </div>
-            <div class="manual_input">
-                <p class="input_hint">Password:</p>
-                <input class="input_field" type="password" name="password">
+            <div class="form_fields">
+                <div class="manual_input">
+                    <p class="input_hint">Name or Email:</p>
+                    <input class="input_field" type="text" name="name" placeholder="name@example.com">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Password:</p>
+                    <input class="input_field" type="password" name="password">
+                </div>
             </div>
         </div>
         <div class="text_links">
-            Don't have an account? <a class="text_link" href="{{ url_for('register') }}">Create one!</a>
+            <div class="text_link_container">
+                <p>Don't have an account? </p><a class="text_link" href="{{ url_for('register')}}">Create one!</a>
+            </div>
+            <div>
+                <br><p>Forgot your Password?</p> <a class="text_link" href="{{ url_for('forgot_password')}}">Recover it!</a>
+            </div class="text_link_container">
         </div>
         <div class="buttons">
             <input class="secondary_button" type="submit" name="forgot_password" value="Forgot Password" form=loginform>
-            <input class="secondary_button" type="reset" name="use_as_guest" value="Use as Guest" form=loginform>
+            <input class="secondary_button" type="submit" name="use_as_guest" value="Use as Guest" form=loginform>
             <input class="button" type="submit" name="login" value="Login" form=loginform>
         </div>
     </form>

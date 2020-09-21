@@ -177,6 +177,13 @@ html, body {
     font-family: var(--text-font);
     font-size: 1rem;
     color: var(--text-color);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.text_links p {
+    display: inline;
+    margin-bottom: 2rem;
 }
 
 .text_link {
@@ -184,6 +191,19 @@ html, body {
     font-size: 1rem;
     color: var(--text-color);
     text-decoration: underline;
+}
+
+.text_link_container {
+    margin: 0.4rem;
+}
+
+.form_fields {
+    display: flex;
+    flex-flow: column;
+    border: 0.2rem solid var(--accent-color);
+    border-radius: 1rem;
+    margin: 2rem;
+    padding: 1rem;
 }
 
 @media only screen and (max-width: 768px) {

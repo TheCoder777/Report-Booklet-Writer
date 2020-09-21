@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/security/register.css') }}">
+{% endblock %}
+{% block title %}Register{% endblock %}
+
+{% block headline %}Register{% endblock %}
+{% block statusmessage %}Fill out the form below to register!{% endblock %}
+{% block content %}
+    <form class="form" action="" method="post" id="registerform">
+        <div class="form_wrapper">
+            <div class="credentials">
+                <div class="manual_input">
+                    <p class="input_hint">Name:</p>
+                    <input class="input_field" type="text" name="name">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Surname:</p>
+                    <input class="input_field" type="text" name="name">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Email:</p>
+                    <input class="input_field" type="text" name="name" placeholder="name@example.com">
+                </div>
+            </div>
+            <div class="password">
+                <div class="manual_input">
+                    <p class="input_hint">Password:</p>
+                    <input class="input_field" type="password" name="password">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Retype Password:</p>
+                    <input class="input_field" type="password" name="password_re">
+                </div>
+            </div>
+        </div>
+        <div class="text_links">
+            <p>Allready have an account? </p><a class="text_link" href="{{ url_for('login') }}">Login!</a>
+        </div>
+        <div class="buttons">
+            <input class="secondary_button" type="submit" name="use_as_guest" value="Use as Guest" form=registerform>
+            <input class="button" type="submit" name="register" value="Register" form=registerform>
+        </div>
+    </form>
+
+{% endblock %}
