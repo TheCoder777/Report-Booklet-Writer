@@ -24,7 +24,7 @@
 import configparser
 
 
-CONFIG_PATH = "./config.ini"
+CONFIG_PATH = "./default_config.ini"
 
 
 def get_config():

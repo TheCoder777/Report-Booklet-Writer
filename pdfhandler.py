@@ -22,17 +22,13 @@
 
 
 import io, os, time
-import confighandler
+import confighandler, paths
 from datetime import date
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from textwrap import wrap
 from colored import attr, fg
-
-
-TMP_PATH = "./tmp/"
-TEMPLATE_PATH = "Berichtsheft_template.pdf"
 
 
 # colors
@@ -157,13 +153,13 @@ def draw(data, uinput, packet):
 
 def compile(packet):
     new_pdf = PdfFileReader(packet)
-    template = PdfFileReader(open(TEMPLATE_PATH, "rb"))
+    template = PdfFileReader(open(paths.TEMPLATE_PATH, "rb"))
     out = PdfFileWriter()
     page = template.getPage(0)
     page.mergePage(new_pdf.getPage(0))
     out.addPage(page)
     # filename = "./tmp/" + str(time.strftime("%H-%M_%d%m%Y")) + ".pdf"  # for unique filenames
-    filename = TMP_PATH + "save.pdf"
+    filename = paths.TMP_PATH + "save.pdf"
     out_stream = open(filename, "wb")
     out.write(out_stream)
     out_stream.close()
@@ -175,26 +171,40 @@ def checkup():
     console = BOLD + "[CHECKUP] " + RESET
     print()
 
-    if not os.path.isdir(TMP_PATH):
-        print(console + f"Temporary save directory {TMP_PATH} doesn't exist...", end="")
-        os.mkdir(TMP_PATH)
+    if not os.path.isdir(paths.TMP_PATH):
+        print(console + f"Temporary save directory {paths.TMP_PATH} doesn't exist...", end="")
+        os.mkdir(paths.TMP_PATH)
         print(SUCCESS + "created!" + RESET)
     else:
         print(console + SUCCESS + "Temporary directory found!" + RESET)
 
-    if not os.path.exists(TEMPLATE_PATH):
+    if not os.path.isdir(paths.COOKIE_PATH):
+        print(console + f"Cookie directory {paths.COOKIE_PATH} doesn't exist...", end="")
+        os.mkdir(paths.COOKIE_PATH)
+        print(SUCCESS + "created!" + RESET)
+    else:
+        print(console + SUCCESS + "Cookie directory found!" + RESET)
+
+    if not os.path.isdir(paths.DB_PATH):
+        print(console + f"DB directory {paths.DB_PATH} doesn't exist...", end="")
+        os.mkdir(paths.DB_PATH)
+        print(SUCCESS + "created!" + RESET)
+    else:
+        print(console + SUCCESS + "DB directory found!" + RESET)
+
+    if not os.path.exists(paths.TEMPLATE_PATH):
         print(console + ERROR + "Template not found! Please add a template!" + RESET)
         sys.exit(1)
     else:
         print(console + SUCCESS + "Template found!" + RESET)
 
     # garbadge cleaning
-    filelist = [f for f in os.listdir(TMP_PATH) if f.endswith(".pdf")]
+    filelist = [f for f in os.listdir(paths.TMP_PATH) if f.endswith(".pdf")]
     if filelist:
         print(console + "Cleaning cache...")
         for f in filelist:
-            print(WARNING + "\tremoving: " + os.path.join(TMP_PATH, f) + "..." + RESET, end="")
-            os.remove(os.path.join(TMP_PATH, f))
+            print(WARNING + "\tremoving: " + os.path.join(paths.TMP_PATH, f) + "..." + RESET, end="")
+            os.remove(os.path.join(paths.TMP_PATH, f))
             print(SUCCESS + "done!" + RESET)
     else:
         print(console + SUCCESS +  "Cache is clean!" + RESET)

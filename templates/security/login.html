@@ -8,7 +8,19 @@
 {% block title %}Login{% endblock %}
 
 {% block headline %}Login{% endblock %}
-{% block statusmessage %}Enter your name or email and password to login!{% endblock %}
+{% block statusstyle %}
+    {% if notify == "success" %}color: var(--accent-color);
+    {% elif (notify == "fail" or notify == "nouser") %}color: var(--warn-color);
+    {% endif %}
+{% endblock %}
+
+{% block statusmessage %}
+    {% if notify == "failed" %}Failed to login!<br>Wrong username or password!
+    {% elif notify == "nouser" %}Failed to login!<br>User doesn't exist!
+    {% else: %}Enter your nickname or email and password to login!
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     <form class="form" action="" method="post" id="loginform">
         <div class="form_wrapper">
@@ -37,5 +49,4 @@
             <input class="button" type="submit" name="login" value="Login" form=loginform>
         </div>
     </form>
-
 {% endblock %}

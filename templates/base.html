@@ -11,18 +11,29 @@
     </head>
     <body>
         <div class="heading">
-            <div class="headline home">
-                <a href="{{ url_for('index') }}">
-                    <img class="icon" src="{{ url_for('static', filename='home.svg') }}" alt="home">
-                </a>
+            <div class="heading">
+                <div class="headline home">
+                    <a href="{{ url_for('index') }}">
+                        <img class="icon" src="{{ url_for('static', filename='home.svg') }}" alt="home">
+                    </a>
+                </div>
+                <div class="headline username">
+                    {% if not session["user"]: %}
+                        <a class="username" href="{{ url_for('login') }}">Login</a>
+                    {% else: %}
+                    <a class="username" href="{{ url_for('logout') }}">{{ session["user"].name }}</a>
+                    {% endif %}
+                </div>
             </div>
             <div class="headline">
                 <h1 class="header">{% block headline %}{% endblock %}</h1>
             </div>
-            <div class="headline settings">
-                <a href="{{ url_for('settings') }}">
-                    <img class="icon" src="{{ url_for('static', filename='settings.svg') }}" alt="settings">
-                </a>
+            <div class="heading">
+                <div class="headline settings">
+                    <a href="{{ url_for('settings') }}">
+                        <img class="icon" src="{{ url_for('static', filename='settings.svg') }}" alt="settings">
+                    </a>
+                </div>
             </div>
         </div>
         <div class="bodybody">

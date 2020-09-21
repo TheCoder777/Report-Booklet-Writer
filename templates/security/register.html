@@ -8,7 +8,17 @@
 {% block title %}Register{% endblock %}
 
 {% block headline %}Register{% endblock %}
-{% block statusmessage %}Fill out the form below to register!{% endblock %}
+
+{% block statusstyle %}
+    {% if notify == "success" %}color: var(--accent-color);
+    {% endif %}
+{% endblock %}
+
+{% block statusmessage %}
+    {% if notify == "success" %}Sucessfully registered!
+    {% else: %}Fill out the form below to register!
+    {% endif %}
+{% endblock %}
 {% block content %}
     <form class="form" action="" method="post" id="registerform">
         <div class="form_wrapper">
@@ -19,11 +29,11 @@
                 </div>
                 <div class="manual_input">
                     <p class="input_hint">Surname:</p>
-                    <input class="input_field" type="text" name="name">
+                    <input class="input_field" type="text" name="surname">
                 </div>
                 <div class="manual_input">
                     <p class="input_hint">Email:</p>
-                    <input class="input_field" type="text" name="name" placeholder="name@example.com">
+                    <input class="input_field" type="text" name="email" placeholder="name@example.com">
                 </div>
             </div>
             <div class="password">
@@ -45,5 +55,4 @@
             <input class="button" type="submit" name="register" value="Register" form=registerform>
         </div>
     </form>
-
 {% endblock %}

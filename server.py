@@ -23,12 +23,31 @@
 # SOFTWARE.
 
 
-import pdfhandler, confighandler, io, time, sys
+import pdfhandler, confighandler, dbhandler, paths, io, time, sys, bcrypt
 from gevent.pywsgi import WSGIServer
-from flask import Flask, render_template, request, redirect, send_file
-
+from flask import Flask, render_template, request, redirect, send_file, session, url_for
+from flask_session import Session
+from user import User
 
 app = Flask(__name__)
+
+
+def validate_pw(pw,hashandsalt):
+    print(pw)
+    print(pw.encode())
+    print(hashandsalt)
+    return bcrypt.checkpw(pw.encode(), hashandsalt)
+
+
+def hashpw(pw):
+    return bcrypt.hashpw(pw.encode(), bcrypt.gensalt())
+
+
+def pws_equal(pw1, pw2):
+    if pw1 == pw2:
+        return True
+    else:
+        return False
 
 
 def writepdf(data, uinput):
@@ -40,6 +59,12 @@ def writepdf(data, uinput):
 
 @app.route("/")
 def index():
+    # try:
+    #     if session["user"]:
+    #         return render_template("index.html", login=True)
+    #     else:
+    #         return render_template("index.html", login=False)
+    # except KeyError:
     return render_template("index.html")
 
 
@@ -98,23 +123,78 @@ def get_new_config():
 def login():
     return render_template("security/login.html")
 
+
+@app.route("/login", methods=["POST"])
+def user_login():
+    if request.method == "POST":
+        try:
+            if request.form["login"]:
+                email = request.form["name"]
+                hashandsalt = UserDB.getpw(email)
+                if not hashandsalt:
+                    return render_template("security/login.html", notify="nouser")
+                if validate_pw(str(request.form["password"]), hashandsalt):
+                    session["user"] = User(email)
+                    return redirect(url_for("index"))
+                else:
+                    return render_template("security/login.html", notify="failed")
+        except KeyError:
+            return render_template("security/login.html", notify="failed")
+
+
 @app.route("/register")
 def register():
     return render_template("security/register.html")
+
+
+@app.route("/register", methods=["POST"])
+def get_user():
+    if request.method == "POST":
+        # try:
+        #     if request.form["use_as_guest"]:
+        #         pass
+        # except KeyError:
+        #     pass
+        try:
+            if request.form["register"]:
+                name = request.form["name"]
+                surname = request.form["surname"]
+                email = request.form["email"]
+                if pws_equal(request.form["password"], request.form["password_re"]):
+                    pwd_and_salt = hashpw(request.form["password"])
+                    UserDB.add_user(name, surname, email, pwd_and_salt)
+                    session["user"] = User(email)
+                    return render_template("security/register.html", notify="success")
+        except KeyError:
+            return render_template("security/register.html", notify="failed")
+
+
+@app.route("/logout")
+def logout():
+    del session["user"]
+    return redirect(url_for("index"))
+
 
 @app.route("/forgot-password")
 def forgot_password():
     return render_template("security/forgot_password.html")
 
+
 @app.route("/change-password")
 def change_password():
     return render_template("security/change_password.html")
 
+
 if __name__ == "__main__":
     HOST='localhost'
     PORT=8000
+    SESSION_TYPE="filesystem"
+    SESSION_FILE_DIR=paths.COOKIE_PATH
+    app.config.from_object(__name__)
+    Session(app)
 
     pdfhandler.checkup()
+    UserDB = dbhandler.UserDB()
 
     if len(sys.argv) > 1:
         if sys.argv[1] in ["--debug", "debug", "-d", "d"]:
