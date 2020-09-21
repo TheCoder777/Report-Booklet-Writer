@@ -93,6 +93,15 @@ def get_new_config():
             print(pdfhandler.Error_msg.UNKNOWN_ERR)
             return render_template("settings.html", data=data, action="fail")
 
+
+@app.route("/login")
+def login():
+    return render_template("security/login.html")
+
+@app.route("/register")
+def register():
+    return render_template("security/register.html")
+
 if __name__ == "__main__":
     HOST='localhost'
     PORT=8000

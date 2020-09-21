@@ -5,7 +5,10 @@
     --text-font: 'Poppins', sans-serif;
     --monospace-font: 'Inconsolata', monospace;
     --button-font-size: 1.5rem;
+    --button-font-size-hover: 1.8rem;
     --button-font-size-mobile: 2rem;
+    --button-font-size-mobile-hover: 2rem;
+    --button-secondary-outline-color: #eee;
     --text-color: #eee;
     --text-color-inv: #111;
     --background-color: #181a1b;
@@ -113,10 +116,12 @@ html, body {
 .button {
     color: var(--text-color);
     background-color: var(--accent-color);
+    border: 0.2rem solid rgba(255, 255, 255, 0);
     font-family: var(--heading-font);
-    font-size: 4rem;
+    font-size: var(--button-font-size);
     border-radius: 1.5rem;
     padding: 2rem;
+    margin: 2rem;
     text-decoration: none;
     transition: all 0.2s ease-in-out;
     white-space: nowrap;
@@ -125,9 +130,9 @@ html, body {
 }
 
 .button:hover {
-    background-color: var(--accent-color-bright);
-    padding: 2.2rem;
-    font-size: 4.2rem;
+    background-color: var(--background-lighter);
+    border: 0.2rem solid var(--accent-color-bright);
+    font-size: var(--button-font-size);
 }
 
 .button:focus {
@@ -136,11 +141,13 @@ html, body {
 
 .secondary_button {
     color: var(--text-color);
-    background-color: var(--background-color);
+    background-color: var(--lighter-background);
+    border: 0.2rem solid var(--button-secondary-outline-color);
     font-family: var(--heading-font);
-    font-size: 4rem;
+    font-size: var(--button-font-size);
     border-radius: 1.5rem;
     padding: 2rem;
+    margin: 2rem;
     text-decoration: none;
     transition: all 0.2s ease-in-out;
     white-space: nowrap;
@@ -150,8 +157,8 @@ html, body {
 
 .secondary_button:hover {
     background-color: var(--lighter-background);
-    padding: 2.2rem;
-    font-size: 4.2rem;
+    border: 0.2rem solid var(--accent-color);
+    font-size: var(--button-font-size);
 }
 
 .secondary_button:focus {
@@ -164,6 +171,19 @@ html, body {
     margin-top: 2rem;
     margin-bottom: 2rem;
     width: auto;
+}
+
+.text_links {
+    font-family: var(--text-font);
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.text_link {
+    font-family: var(--text-font);
+    font-size: 1rem;
+    color: var(--text-color);
+    text-decoration: underline;
 }
 
 @media only screen and (max-width: 768px) {

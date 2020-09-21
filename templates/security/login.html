@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/security/login.css') }}">
+{% endblock %}
+{% block title %}Login{% endblock %}
+
+{% block headline %}Login{% endblock %}
+{% block statusmessage %}Enter your name or email and password to login!{% endblock %}
+{% block content %}
+    <form class="form" action="" method="post" id="loginform">
+        <div class="form_wrapper">
+            <div class="manual_input">
+                <p class="input_hint">Name or Email:</p>
+                <input class="input_field" type="text" name="name" placeholder="name@example.com">
+            </div>
+            <div class="manual_input">
+                <p class="input_hint">Password:</p>
+                <input class="input_field" type="password" name="password">
+            </div>
+        </div>
+        <div class="text_links">
+            Don't have an account? <a class="text_link" href="{{ url_for('register') }}">Create one!</a>
+        </div>
+        <div class="buttons">
+            <input class="secondary_button" type="submit" name="forgot_password" value="Forgot Password" form=loginform>
+            <input class="secondary_button" type="reset" name="use_as_guest" value="Use as Guest" form=loginform>
+            <input class="button" type="submit" name="login" value="Login" form=loginform>
+        </div>
+    </form>
+
+{% endblock %}

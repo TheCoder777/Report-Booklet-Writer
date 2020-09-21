@@ -10,7 +10,6 @@
         {% endblock %}
     </head>
     <body>
-        {% block heading %}
         <div class="heading">
             <div class="headline home">
                 <a href="{{ url_for('index') }}">
@@ -18,7 +17,7 @@
                 </a>
             </div>
             <div class="headline">
-                <h1 class="header">Python Berichtsheft Auto Writer</h1>
+                <h1 class="header">{% block headline %}{% endblock %}</h1>
             </div>
             <div class="headline settings">
                 <a href="{{ url_for('settings') }}">
@@ -26,7 +25,6 @@
                 </a>
             </div>
         </div>
-        {% endblock %}
         <div class="bodybody">
             <p class="simple_header" style="{% block statusstyle %}{% endblock %}">{% block statusmessage %}{% endblock %}</p>
             {% block statuscontent %}

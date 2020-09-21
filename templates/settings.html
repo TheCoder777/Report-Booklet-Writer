@@ -13,6 +13,8 @@
     {% endif %}
 {% endblock %}
 
+{% block headline %}Python Berichtsheft Auto Writer{% endblock %}
+
 {% block statusmessage %}
     {% if action == "success": %}Successfully saved config!
     {% elif action == "fail": %}Failed to write config!
