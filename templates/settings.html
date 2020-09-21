@@ -1,78 +1,58 @@
+{% extends "base.html" %}
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/general.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/settings.css') }}">
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-        <title>Config Berichtsheft</title>
-    </head>
-    <body>
-        <div class="heading">
-            <div class="headline home">
-                <a href="{{ url_for('index') }}">
-                    <img class="icon" src="{{ url_for('static', filename='home.svg') }}" alt="home">
-                </a>
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/general.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/settings.css') }}">
+{% endblock %}
+{% block title %}Config Berichtsheft{% endblock %}
+
+{% block statusstyle %}
+    {% if( action == "success" or action == "success_reset"): %}color:var(--accent-color);
+    {% elif action == "fail": %}color:var(--warning-color);
+    {% endif %}
+{% endblock %}
+
+{% block statusmessage %}
+    {% if action == "success": %}Successfully saved config!
+    {% elif action == "fail": %}Failed to write config!
+    {% elif action == "success_reset": %}Successfully reseted config to default!
+    {% else: %}Here you can edit your config:
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <form class="form" action="" method="post" id="configform">
+        <div class="form_wrapper">
+            <div class="manual_input">
+                <p class="input_hint">Name:</p>
+                <input class="input_field" type="text" name="name" value="{{ data['name'] }}">
             </div>
-            <div class="headline">
-                <h1 class="header">Python Berichtsheft Auto Writer</h1>
+            <div class="manual_input">
+                <p class="input_hint">Surname:</p>
+                <input class="input_field" type="text" name="surname" value="{{ data['surname'] }}">
             </div>
-            <div class="headline settings">
-                <a href="{{ url_for('settings') }}">
-                    <img class="icon" src="{{ url_for('static', filename='settings.svg') }}" alt="settings">
-                </a>
+            <div class="manual_input">
+                <p class="input_hint">Current Number:</p>
+                <input class="input_field" type="number" name="nr" value="{{ data['nr'] }}">
+            </div>
+            <div class="manual_input">
+                <p class="input_hint">Week of first Year:</p>
+                <input class="input_field" type="number" name="kw" value="{{ data['kw'] }}">
+            </div>
+            <div class="manual_input">
+                <p class="input_hint">Year:</p>
+                <input class="input_field" type="number" name="year" value="{{ data['year'] }}">
+            </div>
+            <div class="manual_input">
+                <p class="input_hint">Unit:</p>
+                <input class="input_field" type="text" name="unit" value="{{ data['unit'] }}">
             </div>
         </div>
-        {% if action == "success": %}
-        <div class="bodybody" style="color:var(--accent-color);">
-            <p class="simple_header">Successfully saved config!</p>
+        <div class="buttons">
+            <input class="secondary_button" type="submit" name="hard_reset" value="Reset to default">
+            <input class="secondary_button" type="reset" name="reset" value="Reset changed values" form=configform>
+            <input class="button" type="submit" name="submit" value="Save changes" form=configform>
         </div>
-        {% elif action == "fail": %}
-        <div class="bodybody" style="color:var(--warning-color);">
-            <p class="simple_header">Failed to write config!</p>
-        </div>
-        {% elif action == "success_reset": %}
-        <div class="bodybody" style="color:var(--accent-color);">
-            <p class="simple_header">Successfully reseted config to default!</p>
-        </div>
-        {% else: %}
-        <div class="bodybody">
-            <p class="simple_header">Here you can edit your config:</p>
-        </div>
-        {% endif %}
-        <form class="form" action="" method="post" id="configform">
-            <div class="form_wrapper">
-                <div class="manual_input">
-                    <p class="input_hint">Name:</p>
-                    <input class="input_field" type="text" name="name" value="{{ data['name'] }}">
-                </div>
-                <div class="manual_input">
-                    <p class="input_hint">Surname:</p>
-                    <input class="input_field" type="text" name="surname" value="{{ data['surname'] }}">
-                </div>
-                <div class="manual_input">
-                    <p class="input_hint">Current Number:</p>
-                    <input class="input_field" type="number" name="nr" value="{{ data['nr'] }}">
-                </div>
-                <div class="manual_input">
-                    <p class="input_hint">Week of first Year:</p>
-                    <input class="input_field" type="number" name="kw" value="{{ data['kw'] }}">
-                </div>
-                <div class="manual_input">
-                    <p class="input_hint">Year:</p>
-                    <input class="input_field" type="number" name="year" value="{{ data['year'] }}">
-                </div>
-                <div class="manual_input">
-                    <p class="input_hint">Unit:</p>
-                    <input class="input_field" type="text" name="unit" value="{{ data['unit'] }}">
-                </div>
-            </div>
-            <div class="buttons">
-                <input class="secondary_button" type="submit" name="hard_reset" value="Reset to default">
-                <input class="secondary_button" type="reset" name="reset" value="Reset changed values" form=configform>
-                <input class="button" type="submit" name="submit" value="Save changes" form=configform>
-            </div>
-        </form>
-    </body>
-</html>
+    </form>
+{% endblock %}

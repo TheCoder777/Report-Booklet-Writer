@@ -1,75 +1,61 @@
+{% extends "base.html" %}
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
-        <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/edit.css') }}">
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-        <title>Edit Berichtsheft</title>
-    </head>
-    <body>
-        <div class="heading">
-            <div class="headline home">
-                <a href="{{ url_for('index') }}">
-                    <img class="icon" src="{{ url_for('static', filename='home.svg') }}" alt="home">
-                </a>
-            </div>
-            <div class="headline">
-                <h1 class="header">Python Berichtsheft Auto Writer</h1>
-            </div>
-            <div class="headline settings">
-                <a href="{{ url_for('settings') }}">
-                    <img class="icon" src="{{ url_for('static', filename='settings.svg') }}" alt="settings">
-                </a>
-            </div>
-        </div>
-        <div class="bodybody">
-            <p class="simple_header">Fill out the form below, and doublecheck if everything is correct:</p>
-        </div>
-        <form class="form" action="" method="post" id="editform">
-            <div class="form_wrapper">
-                <div class="input_container">
-                    <div class="manual_input">
-                        <p class="input_hint">Name:</p>
-                        <input class="input_field" type="text" name="name" value="{{ data['name'] }}">
-                    </div>
-                    <div class="manual_input">
-                        <p class="input_hint">Surname:</p>
-                        <input class="input_field" type="text" name="surname" value="{{ data['surname'] }}">
-                    </div>
-                    <div class="manual_input">
-                        <p class="input_hint">Start date:</p>
-                        <input class="input_field" type="date" name="start_date" value="{{ start_date }}">
-                    </div>
-                    <div class="manual_input">
-                        <p class="input_hint">End date:</p>
-                        <input class="input_field" type="date" name="end_date" value="{{ end_date }}">
-                    </div>
-                    <div class="manual_input">
-                        <p class="input_hint">Number:</p>
-                        <input class="input_field" type="number" name="nr" value="{{ data['nr'] }}">
-                    </div>
-                    <div class="manual_input">
-                        <p class="input_hint">Year:</p>
-                        <input class="input_field" type="number" name="year" value="{{ data['year'] }}">
-                    </div>
-                    <div class="manual_input">
-                        <p class="input_hint">Unit:</p>
-                        <input class="input_field" type="text" name="unit" value="{{ data['unit'] }}">
-                    </div>
-                    <div class="manual_input">
-                        <p class="input_hint">Sign date:</p>
-                        <input class="input_field" type="date" name="sign_date" value="{{ data['sign_date'] }}">
-                    </div>
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/edit.css') }}">
+{% endblock %}
+{% block title %}Edit Berichtsheft{% endblock %}
+
+{% block heading %}
+    {{ super() }}
+{% endblock %}
+
+{% block statusmessage %}Fill out the form below, and doublecheck if everything is correct:{% endblock %}
+
+{% block content %}
+    <form class="form" action="" method="post" id="editform">
+        <div class="form_wrapper">
+            <div class="input_container">
+                <div class="manual_input">
+                    <p class="input_hint">Name:</p>
+                    <input class="input_field" type="text" name="name" value="{{ data['name'] }}">
                 </div>
-                <div class="textarea_container">
-                    <textarea name="Bcontent" placeholder="What did you do at the company?" rows="8" cols="100" form="editform"></textarea>
-                    <textarea name="Scontent" placeholder="Got some further education?" rows="8" cols="100" form="editform"></textarea>
-                    <textarea name="BScontent" placeholder="What did you do at school?" rows="8" cols="100" form="editform"></textarea>
-                    <input class="button" type="submit" name="submit" value="Download" form=editform>
+                <div class="manual_input">
+                    <p class="input_hint">Surname:</p>
+                    <input class="input_field" type="text" name="surname" value="{{ data['surname'] }}">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Start date:</p>
+                    <input class="input_field" type="date" name="start_date" value="{{ start_date }}">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">End date:</p>
+                    <input class="input_field" type="date" name="end_date" value="{{ end_date }}">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Number:</p>
+                    <input class="input_field" type="number" name="nr" value="{{ data['nr'] }}">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Year:</p>
+                    <input class="input_field" type="number" name="year" value="{{ data['year'] }}">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Unit:</p>
+                    <input class="input_field" type="text" name="unit" value="{{ data['unit'] }}">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Sign date:</p>
+                    <input class="input_field" type="date" name="sign_date" value="{{ data['sign_date'] }}">
                 </div>
             </div>
-        </form>
-    </body>
-</html>
+            <div class="textarea_container">
+                <textarea name="Bcontent" placeholder="What did you do at the company?" rows="8" cols="100" form="editform"></textarea>
+                <textarea name="Scontent" placeholder="Got some further education?" rows="8" cols="100" form="editform"></textarea>
+                <textarea name="BScontent" placeholder="What did you do at school?" rows="8" cols="100" form="editform"></textarea>
+                <input class="button" type="submit" name="submit" value="Download" form=editform>
+            </div>
+        </div>
+    </form>
+{% endblock %}

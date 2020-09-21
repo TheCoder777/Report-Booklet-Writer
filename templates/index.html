@@ -1,35 +1,21 @@
+{% extends "base.html" %}
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
-        <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/index.css') }}">
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-        <title>Berichtsheft Auto Writer</title>
-    </head>
-    <body>
-        <div class="heading">
-            <div class="headline home">
-                <a href="{{ url_for('index') }}">
-                    <img class="icon" src="{{ url_for('static', filename='home.svg') }}" alt="home">
-                </a>
-            </div>
-            <div class="headline">
-                <h1 class="header">Python Berichtsheft Auto Writer</h1>
-            </div>
-            <div class="headline settings">
-                <a href="{{ url_for('settings') }}">
-                    <img class="icon" src="{{ url_for('static', filename='settings.svg') }}" alt="settings">
-                </a>
-            </div>
-        </div>
-        <div class="bodybody">
-            <p class="simple_header">Simpler then ever before!</p>
-            <a class="button" href="{{ url_for('edit') }}">Start Now!</a>
-        </div>
-    </body>
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/index.css') }}">
+{% endblock %}
+{% block title %}Berichtsheft Auto Writer{% endblock %}
+
+{% block heading %}
+    {{ super() }}
+{% endblock %}
+{% block statusmessage %}Simpler then ever before!{% endblock %}
+{% block statuscontent %}
+    <a class="button" href="{{ url_for('edit') }}">Start Now!</a>
+{% endblock %}
+{% block content %}
     <div class="watermark_container">
         <a href="https://github.com/thecoder777" class="watermark">Design by @TheCoder777</a>
     </div>
-</html>
+{% endblock %}
