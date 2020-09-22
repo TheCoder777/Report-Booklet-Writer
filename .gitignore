@@ -2,3 +2,4 @@ __pycache__
 tmp
 cookie
 default_config.ini
+db

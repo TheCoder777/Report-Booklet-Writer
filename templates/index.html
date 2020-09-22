@@ -12,6 +12,14 @@
 {% block statusmessage %}Simpler then ever before!{% endblock %}
 {% block statuscontent %}
     <a class="button" href="{{ url_for('edit') }}">Start Now!</a>
+    <div class="text_links">
+        {% if not session["user"]: %}
+        <a class="username text_link" href="{{ url_for('login') }}">Login</a>
+        {% else: %}
+        <p class="">Logged in as: {{ session["user"].name }}</p>
+        <a class="text_link logout" href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+    </div>
 {% endblock %}
 {% block content %}
     <div class="watermark_container">

@@ -11,17 +11,48 @@
 
 {% block statusstyle %}
     {% if notify == "success" %}color: var(--accent-color);
+    {% elif (notify == "not_enough_data" or notify == "second_pw_needed" or notify == "passwords_missmatch" or notify == "invalid_email") %}color: var(--warning-color);
     {% endif %}
 {% endblock %}
 
 {% block statusmessage %}
     {% if notify == "success" %}Sucessfully registered!
+    {% elif notify == "not_enough_data" %}Not enough data provided!
+    {% elif notify == "second_pw_needed" %}You need to retype your password!
+    {% elif notify == "passwords_missmatch" %}The passwords don't match :(
+    {% elif notify == "invalid_email" %}Check your email address!<br>Im pretty sure there's a little typo :P
     {% else: %}Fill out the form below to register!
     {% endif %}
 {% endblock %}
 {% block content %}
     <form class="form" action="" method="post" id="registerform">
         <div class="form_wrapper">
+            {% if data: %}
+            <div class="credentials">
+                <div class="manual_input">
+                    <p class="input_hint">Name:</p>
+                    <input class="input_field" type="text" name="name" value="{{ data["name"] }}">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Surname:</p>
+                    <input class="input_field" type="text" name="surname" value="{{ data["surname"] }}">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Email:</p>
+                    <input class="input_field" type="text" name="email" value="{{ data["email"] }}" placeholder="name@example.com">
+                </div>
+            </div>
+            <div class="password">
+                <div class="manual_input">
+                    <p class="input_hint">Password:</p>
+                    <input class="input_field" type="password" name="password">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Retype Password:</p>
+                    <input class="input_field" type="password" name="password_re">
+                </div>
+            </div>
+            {% else: %}
             <div class="credentials">
                 <div class="manual_input">
                     <p class="input_hint">Name:</p>
@@ -46,6 +77,7 @@
                     <input class="input_field" type="password" name="password_re">
                 </div>
             </div>
+            {% endif %}
         </div>
         <div class="text_links">
             <p>Allready have an account? </p><a class="text_link" href="{{ url_for('login') }}">Login!</a>

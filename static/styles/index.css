@@ -23,6 +23,14 @@
     margin-bottom: 6rem;
 }
 
+.text_links {
+    margin-top: 4rem;
+}
+
+.logout {
+    display: block;
+}
+
 @media only screen and (max-width: 768px) {
     html {
         font-size: 10px;

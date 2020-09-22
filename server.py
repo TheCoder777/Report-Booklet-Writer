@@ -61,12 +61,6 @@ def writepdf(data, uinput):
 
 @app.route("/")
 def index():
-    # try:
-    #     if session["user"]:
-    #         return render_template("index.html", login=True)
-    #     else:
-    #         return render_template("index.html", login=False)
-    # except KeyError:
     return render_template("index.html")
 
 
@@ -99,7 +93,6 @@ def settings():
 def get_new_config():
     if request.method == "POST":
         data = dict(request.form.copy())
-
         try:
             if data["hard_reset"]:
                 confighandler.reset_config()
@@ -130,7 +123,7 @@ def login():
 def user_login():
     if request.method == "POST":
         try:
-            if request.form["login"]:
+            if request.form.get("login"):
                 if not (len(request.form["name"]) > 0 and len(request.form["password"]) > 0):
                     return render_template("security/login.html", notify="nodata")
                 name = request.form["name"]
@@ -140,22 +133,24 @@ def user_login():
                 else:
                     user = User(name=name)
                     hashandsalt = UserDB.get_pw_by_nickname(name)
-
                 if not hashandsalt:
                     return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="nouser")
                 if validate_pw(str(request.form["password"]), hashandsalt):
                     session["user"] = user
                     return redirect(url_for("index"))
                 else:
+                    print("failed 1")
                     return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="failed")
-            elif request.form["forgot_password"]:
-                pass
-            elif request.form["use_as_guest"]:
-                pass
+            if request.form.get("use_as_guest"):
+                return redirect(url_for("edit"))
+            elif request.form.get("forgot_password"):
+                return redirect(url_for("forgot_password"))
             else:
+                print("failed 2")
                 return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="failed")
-        except KeyError:
-            return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="failed")
+        except KeyError as e:
+            print("failed 3", e)
+            return render_template("security/login.html", notify="failed")
 
 
 @app.route("/register")
@@ -166,21 +161,29 @@ def register():
 @app.route("/register", methods=["POST"])
 def get_user():
     if request.method == "POST":
-        # try:
-        #     if request.form["use_as_guest"]:
-        #         pass
-        # except KeyError:
-        #     pass
         try:
-            if request.form["register"]:
+            if request.form.get("register"):
+                data = dict(request.form.copy())
+                if not (len(request.form["name"]) > 0 and len(request.form["surname"]) > 0 and len(request.form["email"]) > 0 and len(request.form["password"])):
+                    return render_template("security/register.html", data=data, notify="not_enough_data")
                 name = request.form["name"]
                 surname = request.form["surname"]
                 email = request.form["email"]
+                if not is_email(email):
+                    return render_template("security/register.html", data=data, notify="invalid_email")
+                if not (len(request.form["password"]) and len(request.form["password_re"])):
+                    return render_template("security/register.html", data=data, notify="second_pw_needed")
                 if pws_equal(request.form["password"], request.form["password_re"]):
                     pwd_and_salt = hashpw(request.form["password"])
                     UserDB.add_user(name, surname, email, pwd_and_salt)
-                    session["user"] = User(email)
-                    return render_template("security/register.html", notify="success")
+                    session["user"] = User(name=name, email=email)
+                    return redirect(url_for("index"))
+                else:
+                    return render_template("security/register.html", data=data, notify="passwords_missmatch")
+            elif request.form.get("use_as_guest"):
+                return redirect(url_for("edit"))
+            else:
+                return render_template("security/register.html", data=data, notify="failed")
         except KeyError:
             return render_template("security/register.html", notify="failed")
 
