@@ -34,27 +34,42 @@
                 <p class="input_hint">Surname:</p>
                 <input class="input_field" type="text" name="surname" value="{{ data['surname'] }}">
             </div>
+            {% if data.get("nickname"): %}
             <div class="manual_input">
-                <p class="input_hint">Current Number:</p>
-                <input class="input_field" type="number" name="nr" value="{{ data['nr'] }}">
+                <p class="input_hint">Nickname:</p>
+                <input class="input_field" type="text" name="nickname" value="{{ data['nickname'] }}">
+            </div>
+            {% endif %}
+            {% if data.get("email"): %}
+            <div class="manual_input">
+                <p class="input_hint">Email:</p>
+                <input class="input_field" type="text" name="email" value="{{ data['email'] }}">
+            </div>
+            {% endif %}
+            <div class="manual_input">
+                <p class="input_hint">Unit:</p>
+                <input class="input_field" type="text" name="unit" value="{{ data['unit'] }}">
             </div>
             <div class="manual_input">
                 <p class="input_hint">Week of first Year:</p>
                 <input class="input_field" type="number" name="kw" value="{{ data['kw'] }}">
             </div>
             <div class="manual_input">
+                <p class="input_hint">Current Number:</p>
+                <input class="input_field" type="number" name="nr" value="{{ data['nr'] }}">
+            </div>
+            <div class="manual_input">
                 <p class="input_hint">Year:</p>
                 <input class="input_field" type="number" name="year" value="{{ data['year'] }}">
             </div>
-            <div class="manual_input">
-                <p class="input_hint">Unit:</p>
-                <input class="input_field" type="text" name="unit" value="{{ data['unit'] }}">
-            </div>
+
         </div>
         <div class="buttons">
+            {% if not session.get("user"): %}
             <input class="secondary_button" type="submit" name="hard_reset" value="Reset to default">
+            {% endif %}
             <input class="secondary_button" type="reset" name="reset" value="Reset changed values" form=configform>
-            <input class="button" type="submit" name="submit" value="Save changes" form=configform>
+            <input class="button" type="submit" name="save" value="Save changes" form=configform>
         </div>
     </form>
 {% endblock %}

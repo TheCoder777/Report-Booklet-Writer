@@ -56,7 +56,7 @@ class UserDB():
 
     def add_user(self, name, surname, email, pwd_and_salt):
         self.cursor = self.get_cursor()
-        data = confighandler.parse_config()
+        data = confighandler.get_default_config()
         kw = int(data["kw"])
         nr = int(data["nr"])
         year = int(data["year"])
@@ -66,8 +66,24 @@ class UserDB():
         self.cursor.execute(f"INSERT INTO {self.table_name}\
         ('name', 'surname', 'nickname', 'email', pwd_and_salt, unit, kw, nr, year) \
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", (name, surname, nickname, email, pwd_and_salt, unit, kw, nr, year))
-
         self.connection.commit()
+
+
+    def update_config(self, user, data):
+        self.cursor = self.get_cursor()
+        try:
+            data["kw"] = int(data["kw"])
+            data["nr"] = int(data["nr"])
+            data["year"] = int(data["year"])
+        except ValueError:
+            pass
+        vals = list(data.values())
+        vals.append(user.email)
+        #print("UPDATE users SET name={}, surname={}, nickname={}, email={}, unit={}, kw={}, nr={}, year={} WHERE email={}".format(*vals))
+        self.cursor.execute(f"UPDATE {self.table_name} SET \
+        name=?, surname=?, nickname=?, email=?, unit=?, kw=?, nr=?, year=? WHERE email=?", (vals))
+        self.connection.commit()
+        return True
 
 
     def get_pw_by_email(self, email):
@@ -105,6 +121,22 @@ class UserDB():
         self.cursor.execute(f"SELECT email FROM {self.table_name} WHERE nickname =?", (nickname, ))
         data = self.cursor.fetchone()
         if data:
-            return data
+            return data[0]
         else:
             return False
+
+
+    def get_user_data(self, user):
+        self.cursor = self.get_cursor()
+        self.cursor.execute(f"SELECT name, surname, unit, kw, nr, year FROM {self.table_name} WHERE email =?", (user.email, ))
+        data = {}
+        data["name"], data["surname"], data["unit"], data["kw"], data["nr"], data["year"] = self.cursor.fetchone()
+        return data
+
+
+    def get_settings_data(self, user):
+        self.cursor = self.get_cursor()
+        self.cursor.execute(f"SELECT name, surname, nickname, email, unit, kw, nr, year FROM {self.table_name} WHERE email =?", (user.email, ))
+        data = {}
+        data["name"], data["surname"], data["nickname"], data["email"], data["unit"], data["kw"], data["nr"], data["year"] = self.cursor.fetchone()
+        return data

@@ -66,9 +66,13 @@ def index():
 
 @app.route("/edit")
 def edit():
-    data = confighandler.parse_config()
-    data["sign_date"] = pdfhandler.get_a_date(type="html")
+    if session.get("user"):
+        data = UserDB.get_user_data(session.get("user"))
+    else:
+        data = confighandler.parse_config()
+
     start_date, end_date = pdfhandler.get_date(data["kw"], type="server")
+    data["sign_date"] = pdfhandler.get_a_date(type="html")
     return render_template("edit.html", data=data, start_date=start_date, end_date=end_date)
 
 
@@ -79,13 +83,16 @@ def get_and_return():
         del uinput["submit"]
         data = confighandler.parse_config()
         pdf = writepdf(data, uinput)
-        confighandler.add_config_nr()
+        #confighandler.add_config_nr()  # only for local usage without users
         return send_file(pdf, as_attachment=True)
 
 
 @app.route("/settings")
 def settings():
-    data = confighandler.parse_config()
+    if session.get("user"):
+        data = UserDB.get_settings_data(session.get("user"))
+    else:
+        data = confighandler.parse_config()
     return render_template("settings.html", data=data, action="none")
 
 
@@ -93,25 +100,30 @@ def settings():
 def get_new_config():
     if request.method == "POST":
         data = dict(request.form.copy())
-        try:
-            if data["hard_reset"]:
-                confighandler.reset_config()
-                new_data = confighandler.parse_config()
-                return render_template("settings.html", data=new_data, action="success_reset")
-        except KeyError:
-            del data["submit"]
-        except:
-            print(pdfhandler.Error_msg.UNKNOWN_ERR)
-        try:
-            confighandler.update_config(data)
-            new_data = confighandler.parse_config()
-            return render_template("settings.html", data=new_data, action="success")
-        except FileNotFoundError as e:
-            print(e, "problems occurred while trying to update config")
-            return render_template("settings.html", data=data, action="fail")
-        except:
-            print(pdfhandler.Error_msg.UNKNOWN_ERR)
-            return render_template("settings.html", data=data, action="fail")
+        if session.get("user"):
+                if request.form.get("save"):
+                    del data["save"]
+                    if UserDB.update_config(session.get("user"), data):
+                        new_data = UserDB.get_settings_data(session.get("user"))
+                        return render_template("settings.html", data=new_data, action="success")
+                    else:
+                        return render_template("settings.html", data=data, action="fail")
+                else:
+                    return render_template("settings.html", data=data, action="fail")
+        else:
+            try:
+                if data.get("hard_reset"):
+                    confighandler.reset_config()
+                    new_data = confighandler.parse_config()
+                    return render_template("settings.html", data=new_data, action="success_reset")
+                elif data.get("save"):
+                    confighandler.update_config(data)
+                    new_data = confighandler.parse_config()
+                    return render_template("settings.html", data=new_data, action="success")
+                else:
+                    return render_template("settings.html", data=data, action="fail")
+            except KeyError:
+                return render_template("settings.html", data=data, action="fail")
 
 
 @app.route("/login")
@@ -139,17 +151,14 @@ def user_login():
                     session["user"] = user
                     return redirect(url_for("index"))
                 else:
-                    print("failed 1")
                     return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="failed")
             if request.form.get("use_as_guest"):
                 return redirect(url_for("edit"))
             elif request.form.get("forgot_password"):
                 return redirect(url_for("forgot_password"))
             else:
-                print("failed 2")
                 return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="failed")
         except KeyError as e:
-            print("failed 3", e)
             return render_template("security/login.html", notify="failed")
 
 

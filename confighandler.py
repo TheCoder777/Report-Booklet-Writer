@@ -92,3 +92,13 @@ def reset_config():
     config["user"]["name"] = name
     config["user"]["unit"] = unit
     write_config(config)
+
+def get_default_config():
+    data = {}
+    data["kw"] = "36"
+    data["nr"] = "1"
+    data["year"] = "1"
+    data["surname"] = "Musterman"
+    data["name"] = "Max"
+    data["unit"] = "Ausbildung"
+    return data
