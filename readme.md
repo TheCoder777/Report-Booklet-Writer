@@ -19,7 +19,7 @@ git clone https://github.com/TheCoder777/Python-Berichtsheft-Auto-Writer.git
 Then you need to install the dependencies, for example like this:
 
 ```bash
-pip install pdfrw PyPDF2 flask gevent reportlab colored Flask-Session
+pip install pdfrw PyPDF2 flask gevent reportlab colored Flask-Session bcrypt
 ```
 
 Finally, you can just run it:
@@ -38,8 +38,20 @@ If you want to configure your name and personal info, checkout  [`configuration`
 
 1. If you load it up, go to [localhost:8000](localhost:8000) (current default) and click on the start button!
 2. You can enter as much information as you want, and finally click on download!
-3. Your browser can/will now download a perfectly filled out pdf!
+3. Your browser will now download a perfectly filled out pdf!
 4. It's as easy as that!
+
+
+
+## Users
+
+You can create a user if you click on "create user" on the login page.
+
+Email validation will come soon!
+
+Edit your user specific settings on the settings page!
+
+You can login with either your email address or your nickname!
 
 
 
@@ -70,7 +82,7 @@ python server.py --debug
 ## Todo
 
 - Overview plan
-- User Management System (UMS)
+- Content overview
 - Mail server (just wait for it, you'll see)
 
 ------
