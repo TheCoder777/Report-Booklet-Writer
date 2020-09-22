@@ -10,13 +10,14 @@
 {% block headline %}Login{% endblock %}
 {% block statusstyle %}
     {% if notify == "success" %}color: var(--accent-color);
-    {% elif (notify == "fail" or notify == "nouser") %}color: var(--warn-color);
+    {% elif (notify == "fail" or notify == "nouser" or notify == "nodata") %}color: var(--warn-color);
     {% endif %}
 {% endblock %}
 
 {% block statusmessage %}
     {% if notify == "failed" %}Failed to login!<br>Wrong username or password!
     {% elif notify == "nouser" %}Failed to login!<br>User doesn't exist!
+    {% elif notify == "nodata" %}Failed to login!<br>No data provided!
     {% else: %}Enter your nickname or email and password to login!
     {% endif %}
 {% endblock %}
@@ -27,11 +28,19 @@
             <div class="form_fields">
                 <div class="manual_input">
                     <p class="input_hint">Name or Email:</p>
+                    {% if name: %}
+                    <input class="input_field" type="text" name="name" value="{{ name }}" placeholder="name@example.com">
+                    {% else: %}
                     <input class="input_field" type="text" name="name" placeholder="name@example.com">
+                    {% endif %}
                 </div>
                 <div class="manual_input">
                     <p class="input_hint">Password:</p>
+                    {% if pw: %}
+                    <input class="input_field" type="password" value="{{ pw }}" name="password">
+                    {% else: %}
                     <input class="input_field" type="password" name="password">
+                    {% endif %}
                 </div>
             </div>
         </div>

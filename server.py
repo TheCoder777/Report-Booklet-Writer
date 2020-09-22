@@ -23,19 +23,17 @@
 # SOFTWARE.
 
 
-import pdfhandler, confighandler, dbhandler, paths, io, time, sys, bcrypt
+import pdfhandler, confighandler, dbhandler, paths, io, time, sys, bcrypt, re
 from gevent.pywsgi import WSGIServer
 from flask import Flask, render_template, request, redirect, send_file, session, url_for
 from flask_session import Session
 from user import User
 
+
 app = Flask(__name__)
 
 
 def validate_pw(pw,hashandsalt):
-    print(pw)
-    print(pw.encode())
-    print(hashandsalt)
     return bcrypt.checkpw(pw.encode(), hashandsalt)
 
 
@@ -48,6 +46,10 @@ def pws_equal(pw1, pw2):
         return True
     else:
         return False
+
+
+def is_email(email):
+    return re.match(r"[^@]+@[^@]+\.[^@]+", email)
 
 
 def writepdf(data, uinput):
@@ -129,17 +131,31 @@ def user_login():
     if request.method == "POST":
         try:
             if request.form["login"]:
-                email = request.form["name"]
-                hashandsalt = UserDB.getpw(email)
+                if not (len(request.form["name"]) > 0 and len(request.form["password"]) > 0):
+                    return render_template("security/login.html", notify="nodata")
+                name = request.form["name"]
+                if is_email(name):
+                    user = User(email=name)
+                    hashandsalt = UserDB.get_pw_by_email(name)
+                else:
+                    user = User(name=name)
+                    hashandsalt = UserDB.get_pw_by_nickname(name)
+
                 if not hashandsalt:
-                    return render_template("security/login.html", notify="nouser")
+                    return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="nouser")
                 if validate_pw(str(request.form["password"]), hashandsalt):
-                    session["user"] = User(email)
+                    session["user"] = user
                     return redirect(url_for("index"))
                 else:
-                    return render_template("security/login.html", notify="failed")
+                    return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="failed")
+            elif request.form["forgot_password"]:
+                pass
+            elif request.form["use_as_guest"]:
+                pass
+            else:
+                return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="failed")
         except KeyError:
-            return render_template("security/login.html", notify="failed")
+            return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="failed")
 
 
 @app.route("/register")

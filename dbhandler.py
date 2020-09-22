@@ -70,56 +70,41 @@ class UserDB():
         self.connection.commit()
 
 
-    def getpw(self, name):
+    def get_pw_by_email(self, email):
         self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE email=?", (name, ))
+        self.cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE email=?", (email, ))
         pwd_and_salt = self.cursor.fetchone()
-        print(pwd_and_salt)
-        if len(pwd_and_salt[0]) > 0:
-            return pwd_and_salt[0]
-        elif len(pwd_and_salt[0]) > 0:
-            self.cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE nickname=?", (name, ))
-            pwd_and_salt = self.cursor.fetchone()
-            print("db response", pwd_and_salt)
+        if pwd_and_salt:
             return pwd_and_salt[0]
         else:
             return False
 
 
-    def get_name_nickname(self, email):
+    def get_pw_by_nickname(self, nickname):
+        self.cursor = self.get_cursor()
+        self.cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE nickname=?", (nickname, ))
+        pwd_and_salt = self.cursor.fetchone()
+        if pwd_and_salt:
+            return pwd_and_salt[0]
+        else:
+            return False
+
+
+    def get_name_nickname_by_email(self, email):
         self.cursor = self.get_cursor()
         self.cursor.execute(f"SELECT name, nickname FROM {self.table_name} WHERE email =?", (email, ))
         data = self.cursor.fetchone()
-        print("db response", data)
-        if len(data) > 0:
-            return data
-        elif len(data) > 0:
-            self.cursor.execute(f"SELECT name, nickname FROM {self.table_name} WHERE nickname =?", (email, ))
+        if data:
             return data
         else:
             return False
 
 
-    def get_val(self, id=False):
-        if id == False:
-            self.cursor.execute("SELECT * FROM people")
-            row = self.cursor.fetchone()
-
-            vals = []
-            while row is not None:
-                # for v in row:
-                #     vals.append(str(v))
-                vals.append((str(row[0]), str(row[1]), str(row[2]))) # append name and id to list in tuple
-                row = self.cursor.fetchone()
-
-            self.connection.commit()
-            return vals
-
+    def get_email_by_nickname(self, nickname):
+        self.cursor = self.get_cursor()
+        self.cursor.execute(f"SELECT email FROM {self.table_name} WHERE nickname =?", (nickname, ))
+        data = self.cursor.fetchone()
+        if data:
+            return data
         else:
-            self.cursor.execute("SELECT * FROM people WHERE id=?", (id, ))
-            row = self.cursor.fetchone()
-            # new_id = row[0]
-            name = row[1]
-            age = row[2]
-            self.connection.commit()
-            return (new_id, name, age)
+            return False

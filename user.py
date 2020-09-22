@@ -1,11 +1,15 @@
 import dbhandler
 
 class User():
-    def __init__(self, email):
+    def __init__(self, email="", name=""):
         self.email = email
+        self.name = name
+        self.nickname = self.name
         self.fetch_db()
 
     def fetch_db(self):
         UserDB = dbhandler.UserDB()
-        self.name, self.nickname = UserDB.get_name_nickname(self.email)
-        print(self.name, self.nickname)
+        if not len(self.name) > 0:
+            self.name, self.nickname = UserDB.get_name_nickname_by_email(self.email)
+        if not len(self.email) > 0:
+            self.email = UserDB.get_email_by_nickname(self.nickname)
