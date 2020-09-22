@@ -106,6 +106,34 @@ class UserDB():
             return False
 
 
+    def get_id_by_email(self, email):
+        self.cursor = self.get_cursor()
+        self.cursor.execute(f"SELECT id FROM {self.table_name} WHERE email=?", (email, ))
+        id = self.cursor.fetchone()
+        if id:
+            return id[0]
+        else:
+            return False
+
+    def get_id_by_nickname(self, nickname):
+        self.cursor = self.get_cursor()
+        self.cursor.execute(f"SELECT id FROM {self.table_name} WHERE nickname=?", (nickname, ))
+        id = self.cursor.fetchone()
+        if id:
+            return id[0]
+        else:
+            return False
+
+    def fetch_by_id(self, id):
+        self.cursor = self.get_cursor()
+        self.cursor.execute(f"SELECT name, nickname, email FROM {self.table_name} WHERE id=?", (id, ))
+        data = self.cursor.fetchone()
+        if data:
+            return data
+        else:
+            return False
+
+
     def get_name_nickname_by_email(self, email):
         self.cursor = self.get_cursor()
         self.cursor.execute(f"SELECT name, nickname FROM {self.table_name} WHERE email =?", (email, ))
@@ -126,9 +154,19 @@ class UserDB():
             return False
 
 
+    def get_name_email_by_nickname(self, nickname):
+        self.cursor = self.get_cursor()
+        self.cursor.execute(f"SELECT name, email FROM {self.table_name} WHERE nickname =?", (nickname, ))
+        data = self.cursor.fetchone()
+        if data:
+            return data
+        else:
+            return False
+
+
     def get_user_data(self, user):
         self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT name, surname, unit, kw, nr, year FROM {self.table_name} WHERE email =?", (user.email, ))
+        self.cursor.execute(f"SELECT name, surname, unit, kw, nr, year FROM {self.table_name} WHERE id =?", (user.id, ))
         data = {}
         data["name"], data["surname"], data["unit"], data["kw"], data["nr"], data["year"] = self.cursor.fetchone()
         return data
@@ -136,7 +174,7 @@ class UserDB():
 
     def get_settings_data(self, user):
         self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT name, surname, nickname, email, unit, kw, nr, year FROM {self.table_name} WHERE email =?", (user.email, ))
+        self.cursor.execute(f"SELECT name, surname, nickname, email, unit, kw, nr, year FROM {self.table_name} WHERE id =?", (user.id, ))
         data = {}
         data["name"], data["surname"], data["nickname"], data["email"], data["unit"], data["kw"], data["nr"], data["year"] = self.cursor.fetchone()
         return data

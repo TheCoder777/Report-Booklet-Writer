@@ -140,10 +140,10 @@ def user_login():
                     return render_template("security/login.html", notify="nodata")
                 name = request.form["name"]
                 if is_email(name):
-                    user = User(email=name)
+                    user = User(id=UserDB.get_id_by_email(name))
                     hashandsalt = UserDB.get_pw_by_email(name)
                 else:
-                    user = User(name=name)
+                    user = User(id=UserDB.get_id_by_nickname(name))
                     hashandsalt = UserDB.get_pw_by_nickname(name)
                 if not hashandsalt:
                     return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="nouser")
@@ -185,7 +185,7 @@ def get_user():
                 if pws_equal(request.form["password"], request.form["password_re"]):
                     pwd_and_salt = hashpw(request.form["password"])
                     UserDB.add_user(name, surname, email, pwd_and_salt)
-                    session["user"] = User(name=name, email=email)
+                    session["user"] = User(id=UserDB.get_id_by_email(email))
                     return redirect(url_for("index"))
                 else:
                     return render_template("security/register.html", data=data, notify="passwords_missmatch")
