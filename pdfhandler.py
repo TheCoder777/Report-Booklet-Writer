@@ -45,19 +45,18 @@ class Error_msg():
 
 def check_start_date(date):
     day, month, year = date.split(".")
-    date = ".".join([day, month])
-    if date == "31.08":
+    tdate = ".".join([day, month])
+    if tdate == "31.08":
         return "01.09." + year
     else:
         return date
 
 
 def reformat_date(date):
-    try:
-        year, month, day = date.split("-")
-        return ".".join([day, month, year])
-    except:
-        return date
+    year, month, day = date.split("-")
+    print(year, month, day)
+    date = ".".join([day, month, year])
+    return date
 
 
 def get_a_date(type=""):
@@ -67,20 +66,17 @@ def get_a_date(type=""):
         return time.strftime("%d.%m.%Y")
 
 
-def get_date(kw, type="client"):
+def get_date(kw, type, nr, year):
     kw = int(kw)
-    a_year = int(time.strftime("%Y"))
-    start_date = date.fromisocalendar(a_year, kw, 1)
-    end_date = date.fromisocalendar(a_year, kw, 5)
+    nr = int(nr) -1
 
-    if type == "client":
-        start_date = start_date.strftime("%d.%m.%Y")
-        end_date = end_date.strftime("%d.%m.%Y")
+    year = int(year) - 1
+    year = int(time.strftime("%Y")) + year
+    kw = (kw + nr) % 52
+    start_date = date.fromisocalendar(year, kw, 1)
+    end_date = date.fromisocalendar(year, kw, 5)
 
-    elif type == "raw":
-        return start_date, end_date
-
-    else:
+    if type == "server":
         start_date = start_date.strftime("%Y-%m-%d")
         end_date = end_date.strftime("%Y-%m-%d")
 
@@ -95,7 +91,6 @@ def draw(data, uinput, packet):
     kw = int(kw)
     kw = (kw + nr) % 52
     fullname = uinput["surname"] + " " + uinput["name"]
-
     start_date = reformat_date(uinput["start_date"])
     start_date = check_start_date(start_date)
 

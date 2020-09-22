@@ -48,18 +48,6 @@ textarea:focus {
     margin-bottom: 6rem;
 }
 
-.button {
-    font-size: 2rem;
-    margin: 1.5rem;
-    border: none;
-}
-
-.button:hover {
-    background-color: var(--accent-color-bright);
-    font-size: 2rem;
-    padding: 2rem;
-}
-
 @media only screen and (max-width: 768px) {
   textarea {
       font-size: 2rem;

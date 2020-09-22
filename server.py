@@ -71,7 +71,7 @@ def edit():
     else:
         data = confighandler.parse_config()
 
-    start_date, end_date = pdfhandler.get_date(data["kw"], type="server")
+    start_date, end_date = pdfhandler.get_date(kw=data["kw"], type="server", nr=data["nr"], year=data["year"])
     data["sign_date"] = pdfhandler.get_a_date(type="html")
     return render_template("edit.html", data=data, start_date=start_date, end_date=end_date)
 
@@ -79,12 +79,31 @@ def edit():
 @app.route("/edit", methods=["POST"])
 def get_and_return():
     if request.method == "POST":
-        uinput = dict(request.form.copy())
-        del uinput["submit"]
-        data = confighandler.parse_config()
-        pdf = writepdf(data, uinput)
-        #confighandler.add_config_nr()  # only for local usage without users
-        return send_file(pdf, as_attachment=True)
+        if request.form.get("submit"):
+            uinput = dict(request.form.copy())
+            del uinput["submit"]
+            if session.get("user"):
+                data = UserDB.get_settings_data(session.get("user"))
+            else:
+                data = confighandler.parse_config()
+
+            pdf = writepdf(data, uinput)
+            # confighandler.add_config_nr()  # only for local usage without users
+            # UserDB.increse_nr(session.get("user"))
+            return send_file(pdf, as_attachment=True)
+
+        elif request.form.get("refresh"):
+            data = dict(request.form.copy())
+            del data["refresh"]
+            udata = UserDB.get_user_data(session.get("user"))
+            start_date, end_date = pdfhandler.get_date(kw=udata["kw"], type="server", nr=data["nr"], year=data["year"])
+            return render_template("edit.html", data=data, start_date=start_date, end_date=end_date)
+        else:
+            data = dict(request.form.copy())
+            del data["refresh"]
+            udata = UserDB.get_user_data(session.get("user"))
+            start_date, end_date = pdfhandler.get_date(kw=udata["kw"], type="server", nr=data["nr"], year=data["year"])
+            return render_template("edit.html", data=data, start_date=start_date, end_date=end_date)
 
 
 @app.route("/settings")
