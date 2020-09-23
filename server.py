@@ -61,7 +61,8 @@ def writepdf(data, uinput):
 
 @app.route("/")
 def index():
-    session["mode"] = "Dark"
+    if not session.get("mode"):
+        session["mode"] = "Dark"
     return render_template("index.html")
 
 
