@@ -150,10 +150,10 @@ body::-webkit-scrollbar-thumb {
     margin-bottom: 1rem;
 }
 
-.icon:nth-last-child(2) {
+/* .icon:nth-last-child(2) {
     margin-top: auto;
     margin-bottom: 1rem;
-}
+} */
 
 .icon:first-child {
     margin-top: 1rem;
