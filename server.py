@@ -61,6 +61,7 @@ def writepdf(data, uinput):
 
 @app.route("/")
 def index():
+    session["mode"] = "Dark"
     return render_template("index.html")
 
 
@@ -230,6 +231,19 @@ def forgot_password():
 @app.route("/change-password")
 def change_password():
     return render_template("security/change_password.html")
+
+
+@app.route("/change-mode")
+def change_mode():
+    print(session["mode"])
+    if session["mode"] == "Dark":
+        session["mode"] = "Light"
+        print(session["mode"])
+        return redirect(request.referrer)
+    else:
+        session["mode"] = "Dark"
+        print(session["mode"])
+        return redirect(request.referrer)
 
 
 if __name__ == "__main__":

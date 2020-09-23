@@ -1,0 +1,12 @@
+:root {
+    --button-secondary-outline-color: #181a1b;
+    --text-color: #181a1b;
+    --text-color-inv: #fff;
+    --background-color: #eee;
+    --lighter-background: #ddd;
+    /* lighter means actually darker because of the light theme */
+    --background-color-inv: #fff;
+    --accent-color: #1abc9c;
+    --accent-color-bright: #1dd1ad;
+    --warning-color: #ff202f;
+}

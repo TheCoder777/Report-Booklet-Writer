@@ -11,15 +11,6 @@
     --button-border-radius: 1.5rem;
     --border-size: 0.2rem;
     --border-radius: 1rem;
-    --button-secondary-outline-color: #eee;
-    --text-color: #eee;
-    --text-color-inv: #111;
-    --background-color: #181a1b;
-    --lighter-background: #202324;
-    --background-color-inv: #eee;
-    --accent-color: #1abc9c;
-    --accent-color-bright: #1dd1ad;
-    --warning-color: #ff202f;
     --transition-speed: 0.5s;
     --transition-speed-fast: 0.2s;
 }
@@ -175,6 +166,7 @@ body::-webkit-scrollbar-thumb {
 .link_text {
     visibility: hidden;
     margin-left: 1rem;
+    white-space: nowrap;
 }
 
 .nav_link svg {
@@ -190,6 +182,23 @@ body::-webkit-scrollbar-thumb {
 .icon_color {
     fill: var(--text-color);
     transition: var(--transition-speed-fast) ease;
+}
+
+.dark_moon {
+    fill: var(--text-color);
+    stroke: "none";
+}
+.nav_link:hover .dark_moon  {
+    fill: var(--accent-color);
+}
+
+.light_moon {
+    stroke: var(--text-color);
+    fill: "none";
+}
+.nav_link:hover .light_moon  {
+    stroke: var(--accent-color);
+    fill: var(--accent-color);
 }
 
 .settings svg {
