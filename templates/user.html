@@ -3,17 +3,16 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/index.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/user.css') }}">
 {% endblock %}
 {% block title %}Berichtsheft Auto Writer{% endblock %}
 
 {% block headline %}Python Berichtsheft Auto Writer{% endblock %}
-{% block statusmessage %}Simpler then ever before!{% endblock %}
+{% block statusmessage %}Welcome, {{ session["user"].name }}{% endblock %}
 {% block statuscontent %}
-<a class="button" href="{{ url_for('login') }}">Login</a>
-<div class="text_links">
-    <p>Don't have an account? </p> <a class="text_link" href="{{ url_for('register') }}">Create one!</a>
-</div>
+    <a class="button" href="{{ url_for('login') }}">Edit</a>
+    <a class="button" href="{{ url_for('settings') }}">Settings</a>
+    <a class="button" href="{{ url_for('logout') }}">Logout</a>
 {% endblock %}
 {% block content %}
     <div class="watermark_container">

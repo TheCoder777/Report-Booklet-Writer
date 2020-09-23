@@ -30,12 +30,8 @@ html, body {
     overflow-x: hidden;
 }
 
-body::-webkit-scrollbar {
+/* body::-webkit-scrollbar {
   width: 0.25rem;
-}
-
-body:hover::-webkit-scrollbar {
-  width: 1rem;
 }
 
 body::-webkit-scrollbar-track {
@@ -44,7 +40,7 @@ body::-webkit-scrollbar-track {
 
 body::-webkit-scrollbar-thumb {
   background: var(--text-color);
-}
+} */
 
 .headline {
     font-size: 2rem;
