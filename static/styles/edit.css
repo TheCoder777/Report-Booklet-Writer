@@ -9,8 +9,8 @@ textarea {
     padding: 1rem;
     color: var(--text-color);
     border: 0 none;
-    border-bottom: 0.2rem solid var(--accent-color);
-    border-radius: 1rem;
+    border-bottom: var(--border-size) solid var(--accent-color);
+    border-radius: var(--border-radius);
     max-width: -webkit-fill-available;
     resize: vertical;
 }

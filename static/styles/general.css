@@ -8,6 +8,9 @@
     --button-font-size-hover: 1.8rem;
     --button-font-size-mobile: 2rem;
     --button-font-size-mobile-hover: 2rem;
+    --button-border-radius: 1.5rem;
+    --border-size: 0.2rem;
+    --border-radius: 1rem;
     --button-secondary-outline-color: #eee;
     --text-color: #eee;
     --text-color-inv: #111;
@@ -17,6 +20,8 @@
     --accent-color: #1abc9c;
     --accent-color-bright: #1dd1ad;
     --warning-color: #ff202f;
+    --transition-speed: 0.5s;
+    --transition-speed-fast: 0.2s;
 }
 
 html {
@@ -34,14 +39,33 @@ html, body {
     overflow-x: hidden;
 }
 
+body::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--text-color);
+}
+
+.headline {
+    font-size: 2rem;
+    text-align: center;
+    font-family: var(--heading-font);
+    color: var(--text-color);
+}
+
 .input_field {
     font-size: 1.2rem;
     background-color: var(--lighter-background);
     color: var(--text-color);
     padding: 1rem;
     border: 0 none;
-    border-bottom: 0.2rem solid var(--accent-color);
-    border-radius: 1rem;
+    border-bottom: var(--border-size) solid var(--accent-color);
+    border-radius: var(--border-radius);
     width: auto;
 }
 
@@ -78,30 +102,100 @@ html, body {
     padding: 0;
 }
 
-.icon {
-    height: 3rem;
-    margin: 1rem;
-}
-
-.headline {
-    margin: auto;
-}
-
-.heading {
-    /* width: 100%; */
+.nav {
+    position: fixed;
     display: flex;
-    padding: 2rem;
     align-items: center;
-    justify-content: center;
+    height: 100vh;
 }
 
-.header {
-    font-family: var(--heading-font);
-    font-size: 4rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
-    margin: auto;
+.navbar {
+    position: fixed;
+    background-color: var(--background-color);
+    margin: 1rem;
+    border: var(--border-size) solid var(--accent-color);
+    border-radius: var(--border-radius);
+    width: 5rem;
+}
 
+.navbar:hover .link_text{
+    transition: var(--transition-speed) ease;
+    transition-delay: 0.7s;
+    visibility: visible;
+}
+
+.navbar:hover {
+    transition: all var(--transition-speed) ease;
+    transition-delay: 0.5s;
+    width: 12rem;
+}
+
+.navbar_nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    height: 90vh;
+}
+
+.icon {
+    background-color: var(--background-color);
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.icon:last-child {
+    margin-top: auto;
+    margin-bottom: 1rem;
+}
+
+.icon:first-child {
+    margin-top: 1rem;
+}
+
+.icon:hover {
+    background-color: var(--lighter-background);
+}
+
+.nav_link {
+    color: var(--text-color);
+    font-family: var(--text-font);
+    display: flex;
+    align-items: center;
+    height: 3rem;
+    text-decoration: none;
+}
+
+.link_text {
+    /* display: none; */
+    visibility: hidden;
+    margin-left: 1rem;
+}
+
+.nav_link svg {
+    width: 2rem;
+    min-width: 2rem;
+    margin: 0 1.5rem;
+}
+
+.nav_link:hover .icon_color {
+    fill: var(--accent-color-bright);
+}
+
+.icon_color {
+    fill: var(--text-color);
+    transition: var(--transition-speed-fast) ease;
+}
+
+.settings svg {
+    transform: rotate(45deg);
+    transition: var(--transition-speed) ease;
+}
+
+.settings:hover svg{
+    transform: rotate(-45deg);
 }
 
 .simple_header {
@@ -116,10 +210,10 @@ html, body {
 .button {
     color: var(--text-color);
     background-color: var(--accent-color);
-    border: 0.2rem solid rgba(255, 255, 255, 0);
+    border: var(--border-size) solid rgba(255, 255, 255, 0);
     font-family: var(--heading-font);
     font-size: var(--button-font-size);
-    border-radius: 1.5rem;
+    border-radius:var(--button-border-radius);
     padding: 2rem;
     margin: 2rem;
     text-decoration: none;
@@ -131,7 +225,7 @@ html, body {
 
 .button:hover {
     background-color: var(--background-lighter);
-    border: 0.2rem solid var(--accent-color-bright);
+    border: var(--border-size) solid var(--accent-color-bright);
     font-size: var(--button-font-size);
 }
 
@@ -142,10 +236,10 @@ html, body {
 .secondary_button {
     color: var(--text-color);
     background-color: var(--lighter-background);
-    border: 0.2rem solid var(--button-secondary-outline-color);
+    border: var(--border-size) solid var(--button-secondary-outline-color);
     font-family: var(--heading-font);
     font-size: var(--button-font-size);
-    border-radius: 1.5rem;
+    border-radius: var(--button-border-radius);
     padding: 2rem;
     margin: 2rem;
     text-decoration: none;
@@ -157,7 +251,7 @@ html, body {
 
 .secondary_button:hover {
     background-color: var(--lighter-background);
-    border: 0.2rem solid var(--accent-color);
+    border: var(--border-size) solid var(--accent-color);
     font-size: var(--button-font-size);
 }
 
@@ -200,8 +294,8 @@ html, body {
 .form_fields {
     display: flex;
     flex-flow: column;
-    border: 0.2rem solid var(--accent-color);
-    border-radius: 1rem;
+    border: var(--border-size) solid var(--accent-color);
+    border-radius: var(--border-radius);
     margin: 2rem;
     padding: 1rem;
 }
@@ -216,21 +310,19 @@ html, body {
 @media only screen and (max-width: 768px) {
   html {
     font-size: 10px;
+    margin-bottom: 5rem;
   }
 
   .input_field {
       font-size: 2rem;
   }
+
   .manual_input {
       font-size: 2rem;
   }
 
-  .icon {
-      height: 2rem;
-  }
-
-  .header {
-      font-size: 2rem;
+  .form_wrapper {
+      width: -webkit-fill-available;
   }
 
   .simple_header {
@@ -241,5 +333,51 @@ html, body {
 
   .watermark {
       font-size: 1.5rem;
+  }
+
+  .button {
+      margin-bottom: 10rem;
+  }
+
+  .nav {
+      bottom: 0;
+      width: 100vw;
+      height: auto;
+      flex-flow: row;
+  }
+
+  .navbar {
+      bottom: 0;
+      height: 5rem;;
+      width: -webkit-fill-available;
+  }
+
+  .navbar:hover {
+      width: -webkit-fill-available;
+  }
+
+  .navbar_nav {
+      flex-flow: row;
+      height: auto;
+  }
+
+  .icon {
+      margin: 1rem;
+  }
+
+  .icon:hover {
+      background-color: var(--background-color);
+  }
+  .nav_link {
+      justify-content: center;
+      width: auto;
+  }
+
+  .nav_link svg {
+      margin: 0;
+  }
+
+  .link_text {
+      display: none;
   }
 }

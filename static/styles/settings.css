@@ -11,7 +11,7 @@
 
 .button {
     font-size: var(--button-font-size);
-    border: 0.2rem solid rgba(255, 255, 255, 0);
+    border: var(--border-size) solid rgba(255, 255, 255, 0);
     margin: 2rem;
     padding: 1rem;
 }
@@ -19,7 +19,7 @@
 .button:hover {
     font-size: var(--button-font-size);
     background-color: var(--lighter-background);
-    border: 0.2rem solid var(--accent-color);
+    border: var(--border-size) solid var(--accent-color);
     margin: 2rem;
     padding: 1rem;
 }
@@ -27,7 +27,7 @@
 .secondary_button {
     font-size: var(--button-font-size);
     background-color: var(--warning-color);
-    border: 0.2rem solid rgba(255, 255, 255, 0);
+    border: var(--border-size) solid rgba(255, 255, 255, 0);
     margin: 2rem;
     padding: 1rem;
 }
@@ -35,7 +35,7 @@
 .secondary_button:hover {
     font-size: var(--button-font-size);
     background-color: var(--lighter-background);
-    border: 0.2rem solid var(--warning-color);
+    border: var(--border-size) solid var(--warning-color);
     margin: 2rem;
     padding: 1rem;
 }
