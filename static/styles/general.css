@@ -43,6 +43,10 @@ body::-webkit-scrollbar {
   width: 0.25rem;
 }
 
+body:hover::-webkit-scrollbar {
+  width: 1rem;
+}
+
 body::-webkit-scrollbar-track {
   background: var(--background-color);
 }
@@ -169,7 +173,6 @@ body::-webkit-scrollbar-thumb {
 }
 
 .link_text {
-    /* display: none; */
     visibility: hidden;
     margin-left: 1rem;
 }
@@ -257,6 +260,36 @@ body::-webkit-scrollbar-thumb {
 
 .secondary_button:focus {
     outline: none;
+}
+
+.icon_button {
+    color: var(--text-color);
+    background-color: var(--background-color);
+    border: 0 none;
+    font-family: var(--heading-font);
+    font-size: var(--button-font-size);
+    padding: 0;
+    margin: 2rem;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    transform: rotate(45deg);
+    white-space: nowrap;
+    width: fit-content;
+    align-self: center;
+}
+
+.icon_button:hover {
+    transform: rotate(-45deg);
+}
+
+.icon_button:focus {
+    transform: rotate(-360deg);
+    outline: none;
+}
+
+.icon_button svg {
+    height: 5rem;
+    width: 5rem;
 }
 
 .bodybody {
@@ -368,6 +401,7 @@ body::-webkit-scrollbar-thumb {
   .icon:hover {
       background-color: var(--background-color);
   }
+
   .nav_link {
       justify-content: center;
       width: auto;
