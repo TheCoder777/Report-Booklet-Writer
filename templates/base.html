@@ -13,6 +13,16 @@
         <div class="nav">
             <nav class="navbar">
                 <ul class="navbar_nav">
+                    {% if session.get("user"): %}
+                    <li class="icon login">
+                        <div class="nav_link">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                <path class="icon_color" d="M16 6.25a5.507 5.507 0 00-5.5 5.5c0 3.033 2.468 5.5 5.5 5.5s5.5-2.467 5.5-5.5-2.468-5.5-5.5-5.5zm0 2c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5zm0 11c-6.729 0-12 2.855-12 6.5h2c0-2.128 4.106-4.5 10-4.5s10 2.372 10 4.5h2c0-3.645-5.271-6.5-12-6.5z", fill="#eee"/>
+                            </svg>
+                            <span class="link_text icon_text">{{ session["user"].name }}</span>
+                        </div>
+                    </li>
+                    {% endif %}
                     <li class="icon home">
                         <a class="nav_link" href="{{ url_for('index')}}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
@@ -29,6 +39,14 @@
                                 </g>
                             </svg>
                             <span class="link_text icon_text">Settings</span>
+                        </a>
+                    </li>
+                    <li class="icon logout">
+                        <a class="nav_link" href="{{ url_for('logout') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                              <path class="icon_color" fill="#eee" fill-opacity="1" stroke-width=".64" d="M12.77 0a1.92 1.92 0 00-1.887 1.92v5.12a.64.64 0 00.64.64.64.64 0 00.64-.64V1.92a.64.64 0 01.64-.64h16.42L18.287 6.464a.64.64 0 00-.365.576v17.28h-5.12a.64.64 0 01-.639-.64v-5.12a.64.64 0 00-1.28 0v5.12a1.92 1.92 0 001.92 1.92h5.12v5.76a.64.64 0 00.3.544.64.64 0 00.34.096.64.64 0 00.287-.07l12.088-6.042A1.92 1.92 0 0032 24.166V1.92A1.92 1.92 0 0030.08 0H12.802a1.92 1.92 0 00-.032 0zm17.95 1.99v22.176a.64.64 0 01-.352.577l-11.166 5.58V7.444zM6.385 6.398a.643.643 0 00-.436.187l-5.76 5.76a.64.64 0 000 .91l5.76 5.76a.64.64 0 00.455.185.64.64 0 00.455-.185.64.64 0 000-.91l-4.67-4.665h12.534a.64.64 0 000-1.28H2.188l4.67-4.665a.643.643 0 00-.473-1.097z"/>
+                            </svg>
+                            <span class="link_text icon_text">Logout</span>
                         </a>
                     </li>
                 </ul>

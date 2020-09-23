@@ -150,7 +150,7 @@ body::-webkit-scrollbar-thumb {
     margin-bottom: 1rem;
 }
 
-.icon:last-child {
+.icon:nth-last-child(2) {
     margin-top: auto;
     margin-bottom: 1rem;
 }
