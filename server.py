@@ -175,7 +175,7 @@ def user_login():
                     return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="nouser")
                 if validate_pw(str(request.form["password"]), hashandsalt):
                     session["user"] = user
-                    return redirect(url_for("index"))
+                    return redirect(url_for("user"))
                 else:
                     return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="failed")
             if request.form.get("use_as_guest"):
@@ -212,7 +212,7 @@ def get_user():
                     pwd_and_salt = hashpw(request.form["password"])
                     UserDB.add_user(name, surname, email, pwd_and_salt)
                     session["user"] = User(id=UserDB.get_id_by_email(email))
-                    return redirect(url_for("index"))
+                    return redirect(url_for("user"))
                 else:
                     return render_template("security/register.html", data=data, notify="passwords_missmatch")
             elif request.form.get("use_as_guest"):
@@ -257,12 +257,18 @@ def change_mode():
         print(session["mode"])
         return redirect(request.referrer)
 
+
 @app.route("/todolist")
 def todolist():
     if session.get("user"):
         return render_template("todolist.html", df=df)
     else:
         return redirect(url_for("index"))
+
+
+@app.route("/todolist")
+def save_todos():
+    pass
 
 
 if __name__ == "__main__":

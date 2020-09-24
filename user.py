@@ -1,4 +1,4 @@
-import dbhandler
+import dbhandler, pdfhandler
 
 class User():
     def __init__(self, id=0, email="", name="", nickname=""):
@@ -23,3 +23,6 @@ class User():
         #     self.name, self.nickname = UserDB.get_name_nickname_by_email(self.email)
         else:
             pass
+
+    def check_user_folder(self):
+        ##pdfhandler.check_file(paths.TODOLIST_PATH, self.id)

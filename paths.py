@@ -1,6 +1,7 @@
 DB_PATH = "./db"
 USER_DB_PATH = f"{DB_PATH}/user.db"
 CONTENT_DB_PATH = f"{DB_PATH}/content.db"
+TODOLIST_PATH = f"{DB_PATH}/todolist.json"
 TMP_PATH = "./tmp/"
 COOKIE_PATH = "./cookie"
 TEMPLATE_PATH = "Berichtsheft_template.pdf"
