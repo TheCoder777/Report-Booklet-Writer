@@ -42,6 +42,26 @@
                             <span class="link_text icon_text">Logout</span>
                         </a>
                     </li>
+                    <li class="icon todolist">
+                        <a class="nav_link" href="{{ url_for('logout') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" id="Layer_3" data-name="Layer 3" version="1.1" viewBox="0 0 32 29.752">
+                              <defs/>
+                              <defs id="defs4"/>
+                              <g id="g857" fill="none" stroke="#eee" stroke-opacity="1" transform="translate(-5.5 -6.44)">
+                                <g id="g875" transform="matrix(1.56098 0 0 1.56098 -3.085 -3.613)">
+                                  <path class="icon_color_todo" id="line8" fill="none" stroke="#eee" stroke-opacity="1" d="M14 9h11" class="cls-1"/>
+                                  <path class="icon_color_todo" id="path10" fill="none" stroke="#eee" stroke-opacity="1" d="M10 8.94A2.08 2.08 0 018 11a2.08 2.08 0 01-2-2.06 2 2 0 014 0z" class="cls-2"/>
+                                  <path class="icon_color_todo" id="path12" fill=var(--text-color) fill-opacity="1" stroke="#eee" stroke-opacity="1" d="M10 8.94A2.08 2.08 0 018 11a2.08 2.08 0 01-2-2.06 2 2 0 014 0z"/>
+                                  <path class="icon_color_todo" id="line14" fill="none" stroke="#eee" stroke-opacity="1" d="M14 16h11" class="cls-1"/>
+                                  <path class="icon_color_todo" id="path16" fill="none" stroke="#eee" stroke-opacity="1" d="M10 15.94A2.08 2.08 0 018 18a2.08 2.08 0 01-2-2.06 2 2 0 014 0z" class="cls-2"/>
+                                  <path class="icon_color_todo" id="line18" fill="none" stroke="#eee" stroke-opacity="1" d="M14 23h11" class="cls-1"/>
+                                  <path class="icon_color_todo" id="path20" fill="none" stroke="#eee" stroke-opacity="1" d="M10 22.94A2.08 2.08 0 018 25a2.08 2.08 0 01-2-2.06 2 2 0 014 0z" class="cls-2"/>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="link_text icon_text">Todolist</span>
+                        </a>
+                    </li>
                     {% else: %}
                     <li class="icon login">
                         <a class="nav_link" href="{{ url_for('login')}}">
