@@ -24,6 +24,7 @@
 
 
 import pdfhandler, confighandler, dbhandler, paths, io, time, sys, bcrypt, re
+import pandas as pd
 from gevent.pywsgi import WSGIServer
 from flask import Flask, render_template, request, redirect, send_file, session, url_for
 from flask_session import Session
@@ -256,6 +257,13 @@ def change_mode():
         print(session["mode"])
         return redirect(request.referrer)
 
+@app.route("/todolist")
+def todolist():
+    if session.get("user"):
+        return render_template("todolist.html", df=df)
+    else:
+        return redirect(url_for("index"))
+
 
 if __name__ == "__main__":
     HOST='localhost'
@@ -267,7 +275,7 @@ if __name__ == "__main__":
 
     pdfhandler.checkup()
     UserDB = dbhandler.UserDB()
-
+    df = pd.read_json("./test.exp.json")
     if len(sys.argv) > 1:
         if sys.argv[1] in ["--debug", "debug", "-d", "d"]:
             app.run(host=HOST, port=PORT, debug=True)  # for debugging

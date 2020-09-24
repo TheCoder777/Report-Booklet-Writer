@@ -1,0 +1,88 @@
+.todolist {
+    text-align: left;
+    font-family: var(--text-font);
+    color: var(--text-color);
+    margin-left: 14rem;
+}
+
+h2, h3 {
+    margin-top: 0;
+    padding-top: 2rem;
+}
+
+.section {
+}
+
+.head {
+    margin-top: 0;
+    margin-left: 2rem;
+}
+
+.lines {
+    margin-left: 4rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    list-style: none;
+    border-left: var(--border-size) solid var(--accent-color);
+    padding-left: 1rem;
+}
+
+.head_container {
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    list-style: none;
+    border-left: var(--border-size) solid var(--accent-color);
+    margin: 0;
+    padding-left: 0.5rem;
+}
+
+.section_container {
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    list-style: none;
+}
+
+.line {
+    vertical-align:middle;
+}
+
+/* .checkbox {
+    appearance: none;
+    background-color: var(--background-color);
+    border: var(--border-size) solid var(--text-color);
+    border-radius: var(--border-radius);
+    padding: 0.3rem;
+}
+
+.checkbox:active .checkbox:checked:active{
+    color: var(--accent-color);
+    border: var(--border-size) solid var(--accent-color);
+}
+
+.checkbox:checked:after {
+    content: '\2714';
+    color: var(--accent-color);
+    border: 0 none;
+    padding: 0;
+}*/
+
+.checkbox:checked {
+    background-color: var(--accent-color);
+}
+
+.section_title {
+    padding-top: 2rem;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-left: -0.5rem;
+}
+
+.head_title {
+    padding-top: 1rem;
+    font-size: 1.5rem;
+    margin-left: 1.5rem;
+}
+
+/* .section_title, .head_title, .item {
+    margin-left: 1rem;
+} */
