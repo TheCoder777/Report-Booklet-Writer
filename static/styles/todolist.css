@@ -86,3 +86,17 @@ h2, h3 {
 /* .section_title, .head_title, .item {
     margin-left: 1rem;
 } */
+
+.float_button {
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 1.5rem;
+}
+
+.float_button svg {
+    width: 2rem;
+    min-width: 2rem;
+    padding: 0;
+    margin: 0;
+}
