@@ -269,6 +269,8 @@ def change_mode():
 @app.route("/todolist")
 def todolist():
     if session.get("user"):
+        if not "df" in globals():
+            df = todolisthandler.open_todolist(session["user"].id)
         return render_template("todolist.html", df=df)
     else:
         return render_template("index.html", notify="login_required")
@@ -277,6 +279,8 @@ def todolist():
 @app.route("/todolist", methods=["POST"])
 def save_todos():
     if session.get("user"):
+        if not "df" in globals():
+            df = todolisthandler.open_todolist(session["user"].id)
         data = dict(request.form.copy())
         if data.get("save"):
             del data["save"]
@@ -291,7 +295,6 @@ def save_todos():
 
             # insert only returned
             for key in data.keys():
-                print("key: ", key)
                 if len(key) == 1:
                     key = int(key)
                     df[key]["done"] = True
@@ -313,9 +316,9 @@ def save_todos():
                     df[l1]["blocks"][l2]["body"][l3]["done"] = True
 
             todolisthandler.save_todolist(session["user"].id, df)
-            return render_template("todolist.html", notify="success")
+            return render_template("todolist.html", df=df, notify="success")
         else:
-            return render_template("todolist.html", notify="fail")
+            return render_template("todolist.html", df=df, notify="fail")
     else:
         print("here")
         return render_template("index.html", notify="login_required")
