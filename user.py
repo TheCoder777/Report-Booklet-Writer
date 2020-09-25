@@ -24,5 +24,6 @@ class User():
         else:
             pass
 
-    def check_user_folder(self):
-        ##pdfhandler.check_file(paths.TODOLIST_PATH, self.id)
+
+    def check_user_files(self):
+        pdfhandler.check_all_user_files(self.id)

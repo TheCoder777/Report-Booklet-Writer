@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 
-import io, os, time
+import io, os, time, shutil
 import confighandler, paths
 from datetime import date
 from PyPDF2 import PdfFileWriter, PdfFileReader
@@ -148,7 +148,7 @@ def draw(data, uinput, packet):
 
 def compile(packet):
     new_pdf = PdfFileReader(packet)
-    template = PdfFileReader(open(paths.TEMPLATE_PATH, "rb"))
+    template = PdfFileReader(open(paths.PDF_TEMPLATE_PATH, "rb"))
     out = PdfFileWriter()
     page = template.getPage(0)
     page.mergePage(new_pdf.getPage(0))
@@ -180,6 +180,13 @@ def checkup():
     else:
         print(console + SUCCESS + "Cookie directory found!" + RESET)
 
+    if not os.path.isdir(paths.USER_PATH):
+        print(console + f"User directory {paths.USER_PATH} doesn't exist...", end="")
+        os.mkdir(paths.USER_PATH)
+        print(SUCCESS + "created!" + RESET)
+    else:
+        print(console + SUCCESS + "User directory found!" + RESET)
+
     if not os.path.isdir(paths.DB_PATH):
         print(console + f"DB directory {paths.DB_PATH} doesn't exist...", end="")
         os.mkdir(paths.DB_PATH)
@@ -187,11 +194,17 @@ def checkup():
     else:
         print(console + SUCCESS + "DB directory found!" + RESET)
 
-    if not os.path.exists(paths.TEMPLATE_PATH):
-        print(console + ERROR + "Template not found! Please add a template!" + RESET)
+    if not os.path.exists(paths.PDF_TEMPLATE_PATH):
+        print(console + ERROR + "PDF Template not found! Please add a pdf template!" + RESET)
         sys.exit(1)
     else:
-        print(console + SUCCESS + "Template found!" + RESET)
+        print(console + SUCCESS + "PDF Template found!" + RESET)
+
+    if not os.path.exists(paths.TODOLIST_TEMPLATE_PATH):
+        print(console + ERROR + "Todolist template not found! Please add a todolist template!" + RESET)
+        sys.exit(1)
+    else:
+        print(console + SUCCESS + "Todolist template found!" + RESET)
 
     # garbadge cleaning
     filelist = [f for f in os.listdir(paths.TMP_PATH) if f.endswith(".pdf")]
@@ -206,3 +219,28 @@ def checkup():
     diff = time.time() - start_time
 
     print(console + BOLD + SUCCESS + f"Checkup finished succuessfully in {diff:.4f} seconds!\n" + RESET)
+
+
+def check_all_user_files(id):
+    console = BOLD + "[USER CHECKUP] " + RESET
+    user_dir = os.path.join(paths.USER_PATH, str(id))
+    # print(user_dir)
+    # print(os.path.join(paths.USER_PATH, str(id)))
+    # user dir
+    tocheck = user_dir
+    if not os.path.exists(tocheck):
+        print(console + ERROR + f"User diretory {tocheck} doesn't exist..." + RESET, end="")
+        os.mkdir(tocheck)
+        print(console + SUCCESS + "created!" + RESET)
+    else:
+        print(console + SUCCESS + "User directory found!" + RESET)
+
+    # todolist
+    tocheck = os.path.join(paths.USER_PATH, str(id), paths.TODOLIST_PATH)
+    if not os.path.exists(tocheck):
+        print(console + ERROR + "Todolist file doesn't exist..." + RESET, end="")
+        print("from", paths.TODOLIST_TEMPLATE_PATH, "to", user_dir)
+        shutil.copy2(paths.TODOLIST_TEMPLATE_PATH, os.path.join(user_dir, paths.TODOLIST_PATH))
+        print(console + SUCCESS + "copied!" + RESET)
+    else:
+        print(console + SUCCESS + "User directory found!" + RESET)

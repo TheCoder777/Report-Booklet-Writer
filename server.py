@@ -23,7 +23,7 @@
 # SOFTWARE.
 
 
-import pdfhandler, confighandler, dbhandler, paths, io, time, sys, bcrypt, re
+import pdfhandler, confighandler, todolisthandler, dbhandler, paths, io, time, sys, bcrypt, re
 import pandas as pd
 from gevent.pywsgi import WSGIServer
 from flask import Flask, render_template, request, redirect, send_file, session, url_for
@@ -175,6 +175,9 @@ def user_login():
                     return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="nouser")
                 if validate_pw(str(request.form["password"]), hashandsalt):
                     session["user"] = user
+                    session["user"].check_user_files()
+                    global df
+                    df = todolisthandler.open_todolist(session["user"].id)
                     return redirect(url_for("user"))
                 else:
                     return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="failed")
@@ -212,6 +215,9 @@ def get_user():
                     pwd_and_salt = hashpw(request.form["password"])
                     UserDB.add_user(name, surname, email, pwd_and_salt)
                     session["user"] = User(id=UserDB.get_id_by_email(email))
+                    session["user"].check_user_files()
+                    global df
+                    df = todolisthandler.open_todolist(session["user"].id)
                     return redirect(url_for("user"))
                 else:
                     return render_template("security/register.html", data=data, notify="passwords_missmatch")
@@ -266,9 +272,48 @@ def todolist():
         return redirect(url_for("index"))
 
 
-@app.route("/todolist")
+@app.route("/todolist", methods=["POST"])
 def save_todos():
-    pass
+    data = dict(request.form.copy())
+    print(data)
+    if data.get("save"):
+        del data["save"]
+
+        # reset all
+        for i in range(len(df.columns)):
+            df[i]["done"] = False
+            for j in range(len(df[i]["blocks"])):
+                df[i]["blocks"][j]["done"] = False
+                for k in range(len(df[i]["blocks"][j]["body"])):
+                    df[i]["blocks"][j]["body"][k]["done"] = False
+
+        # insert only returned
+        for key in data.keys():
+            print("key: ", key)
+            if len(key) == 1:
+                key = int(key)
+                df[key]["done"] = True
+                for j in range(len(df[key]["blocks"])):
+                    df[key]["blocks"][j]["done"] = True
+                    for k in range(len(df[key]["blocks"][j]["body"])):
+                        df[key]["blocks"][j]["body"][k]["done"] = True
+
+            elif len(key) == 3:
+                l1, l2 = key.split(".")
+                l1, l2 = int(l1), int(l2)
+                df[l1]["blocks"][l2]["done"] = True
+                for k in range(len(df[l1]["blocks"][l2]["body"])):
+                    df[l1]["blocks"][l2]["body"][k]["done"] = True
+
+            elif len(key) == 5:
+                l1, l2, l3 = key.split(".")
+                l1, l2, l3 = int(l1), int(l2), int(l3)
+                print(type(l1))
+                df[l1]["blocks"][l2]["body"][l3]["done"] = True
+
+        todolisthandler.save_todolist(session["user"].id, df)
+        return redirect(url_for("todolist"))
+    print("here")
 
 
 if __name__ == "__main__":
@@ -278,10 +323,8 @@ if __name__ == "__main__":
     SESSION_FILE_DIR=paths.COOKIE_PATH
     app.config.from_object(__name__)
     Session(app)
-
     pdfhandler.checkup()
     UserDB = dbhandler.UserDB()
-    df = pd.read_json("./test.exp.json")
     if len(sys.argv) > 1:
         if sys.argv[1] in ["--debug", "debug", "-d", "d"]:
             app.run(host=HOST, port=PORT, debug=True)  # for debugging

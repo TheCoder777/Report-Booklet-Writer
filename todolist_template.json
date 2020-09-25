@@ -1,0 +1,605 @@
+{
+    "0": {
+        "title": "Abschnitt A: fachrichtungs\u00fcbergreifende berufsprofilgebende Fertigkeiten, Kenntnisse und F\u00e4higkeiten",
+        "id": 0,
+        "blocks": [{
+            "id": 0,
+            "head": "Planen, Vorbereiten und Durchf\u00fchren von Arbeitsaufgaben in Abstimmung mit den kundenspezifischen Gesch\u00e4fts- und Leistungsprozessen (\u00a7 4 Absatz 2 Nummer 1)",
+            "body": [{
+                "content": "Grunds\u00e4tze und Methoden des Projektmanagements anwenden",
+                "done": false
+            }, {
+                "content": "Auftragsunterlagen und Durchf\u00fchrbarkeit des Auftrags pr\u00fcfen, insbesondere in Hinblick auf rechtliche, wirtschaftliche und terminliche Vorgaben, und den Auftrag mit den betrieblichen Prozessen und M\u00f6glichkeiten abstimmen ",
+                "done": false
+            }, {
+                "content": "Zeitplan und Reihenfolge der Arbeitsschritte f\u00fcr den eigenen Arbeitsbereich festlegen",
+                "done": false
+            }, {
+                "content": "Termine planen und abstimmen sowie Termin\u00fcberwachung durchf\u00fchren",
+                "done": false
+            }, {
+                "content": "Probleme analysieren und als Aufgabe definieren sowie L\u00f6sungsalternativen entwickeln und beurteilen",
+                "done": false
+            }, {
+                "content": "Arbeits- und Organisationsmittel wirtschaftlich und \u00f6kologisch unter Ber\u00fccksichtigung der vorhandenen Ressourcen und der Budgetvorgaben einsetzen",
+                "done": false
+            }, {
+                "content": "Aufgaben im Team sowie mit internen und externen Kunden und Kundinnen planen und abstimmen",
+                "done": false
+            }, {
+                "content": "betriebswirtschaftlich relevante Daten erheben und bewerten und dabei Gesch\u00e4fts- und Leistungsprozesse ber\u00fccksichtigen",
+                "done": false
+            }, {
+                "content": "eigene Vorgehensweise sowie die Aufgabendurchf\u00fchrung im Team reflektieren und bei der Verbesserung der Arbeitsprozesse mitwirken",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 1,
+            "head": "Informieren und Beraten von Kunden und Kundinnen (\u00a7 4 Absatz 2 Nummer 2)",
+            "body": [{
+                "content": "im Rahmen der Marktbeobachtung Preise, Leistungen und Konditionen von Wettbewerbern vergleichen",
+                "done": false
+            }, {
+                "content": "Bedarfe von Kunden und Kundinnen feststellen sowie Zielgruppen unterscheiden",
+                "done": false
+            }, {
+                "content": "Kunden und Kundinnen unter Beachtung von Kommunikationsregeln informieren sowie Sachverhalte pr\u00e4sentieren und dabei deutsche und englische Fachbegriffe anwenden",
+                "done": false
+            }, {
+                "content": "Ma\u00dfnahmen f\u00fcr Marketing und Vertrieb unterst\u00fctzen",
+                "done": false
+            }, {
+                "content": "Informationsquellen auch in englischer Sprache aufgabenbezogen auswerten und f\u00fcr die Kundeninformation nutzen",
+                "done": false
+            }, {
+                "content": "Gespr\u00e4che situationsgerecht f\u00fchren und Kunden und Kundinnen unter Ber\u00fccksichtigung der Kundeninteressen beraten",
+                "done": false
+            }, {
+                "content": "Kundenbeziehungen unter Beachtung rechtlicher Regelungen und betrieblicher Grunds\u00e4tze gestalten",
+                "done": false
+            }, {
+                "content": "Daten und Sachverhalte interpretieren, multimedial aufbereiten und situationsgerecht unter Nutzung digitaler Werkzeuge und unter Ber\u00fccksichtigung der betrieblichen Vorgaben pr\u00e4sentieren",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 2,
+            "head": "Beurteilen marktg\u00e4ngiger IT-Systeme und kundenspezifischer L\u00f6sungen (\u00a7 4 Absatz 2 Nummer 3)",
+            "body": [{
+                "content": "marktg\u00e4ngige IT-Systeme f\u00fcr unterschiedliche Einsatzbereiche hinsichtlich Leistungsf\u00e4higkeit, Wirtschaftlichkeit und Barrierefreiheit beurteilen",
+                "done": false
+            }, {
+                "content": "Angebote zu IT-Komponenten, IT-Produkten und IT-Dienstleistungen einholen und bewerten sowie Spezifikationen und Konditionen vergleichen",
+                "done": false
+            }, {
+                "content": "technologische Entwicklungstrends von IT-Systemen feststellen sowie ihre wirtschaftlichen, sozialen und beruflichen Auswirkungen aufzeigen",
+                "done": false
+            }, {
+                "content": "Ver\u00e4nderungen von Einsatzfeldern f\u00fcr IT-Systeme aufgrund technischer, wirtschaftlicher und gesellschaftlicher Entwicklungen feststellen",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 3,
+            "head": "Entwickeln, Erstellen und Betreuen von IT-L\u00f6sungen (\u00a7 4 Absatz 2 Nummer 4)",
+            "body": [{
+                "content": "IT-Systeme zur Bearbeitung betrieblicher Fachaufgaben analysieren sowie unter Beachtung insbesondere von Lizenzmodellen, Urheberrechten und Barrierefreiheit konzeptionieren, konfigurieren, testen und dokumentieren",
+                "done": false
+            }, {
+                "content": "Programmiersprachen, insbesondere prozedurale und objektorientierte Programmiersprachen, unterscheiden 5",
+                "done": false
+            }, {
+                "content": "systematisch Fehler erkennen, analysieren und beheben",
+                "done": false
+            }, {
+                "content": "Algorithmen formulieren und Anwendungen in einer Programmiersprache erstellen",
+                "done": false
+            }, {
+                "content": "Datenbankmodelle unterscheiden, Daten organisieren und speichern sowie Abfragen erstellen",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 4,
+            "head": "Durchf\u00fchren und Dokumentieren von qualit\u00e4tssichernden Ma\u00dfnahmen (\u00a7 4 Absatz 2 Nummer 5)",
+            "body": [{
+                "content": "betriebliche Qualit\u00e4tssicherungssysteme im eigenen Arbeitsbereich anwenden und Qualit\u00e4tssicherungsma\u00dfnahmen projektbegleitend durchf\u00fchren und dokumentieren 4",
+                "done": false
+            }, {
+                "content": "Ursachen von Qualit\u00e4tsm\u00e4ngeln systematisch feststellen, beseitigen und dokumentieren",
+                "done": false
+            }, {
+                "content": "im Rahmen eines Verbesserungsprozesses die Zielerreichung kontrollieren, insbesondere einen Soll-IstVergleich durchf\u00fchren",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 5,
+            "head": "Umsetzen, Integrieren und Pr\u00fcfen von Ma\u00dfnahmen zur IT-Sicherheit und zum Datenschutz (\u00a7 4 Absatz 2 Nummer 6)",
+            "body": [{
+                "content": "betriebliche Vorgaben und rechtliche Regelungen zur IT-Sicherheit und zum Datenschutz einhalten",
+                "done": false
+            }, {
+                "content": "Sicherheitsanforderungen von IT-Systemen analysieren und Ma\u00dfnahmen zur IT-Sicherheit ableiten, abstimmen, umsetzen und evaluieren 6",
+                "done": false
+            }, {
+                "content": "Bedrohungsszenarien erkennen und Schadenspotenziale unter Ber\u00fccksichtigung wirtschaftlicher und technischer Kriterien einsch\u00e4tzen",
+                "done": false
+            }, {
+                "content": "Kunden und Kundinnen im Hinblick auf Anforderungen an die IT-Sicherheit und an den Datenschutz beraten",
+                "done": false
+            }, {
+                "content": "Wirksamkeit und Effizienz der umgesetzten Ma\u00dfnahmen zur IT-Sicherheit und zum Datenschutz pr\u00fcfen",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 6,
+            "head": "Erbringen der Leistungen und Auftragsabschluss (\u00a7 4 Absatz 2 Nummer 7)",
+            "body": [{
+                "content": "Leistungen nach betrieblichen und vertraglichen Vorgaben dokumentieren",
+                "done": false
+            }, {
+                "content": "Leistungserbringung unter Ber\u00fccksichtigung der organisatorischen und terminlichen Vorgaben mit Kunden und Kundinnen abstimmen und kontrollieren",
+                "done": false
+            }, {
+                "content": "Ver\u00e4nderungsprozesse begleiten und unterst\u00fctzen",
+                "done": false
+            }, {
+                "content": "Kunden und Kundinnen in die Nutzung von Produkten und Dienstleistungen einweisen",
+                "done": false
+            }, {
+                "content": "Leistungen und Dokumentationen an Kunden und Kundinnen \u00fcbergeben sowie Abnahmeprotokolle anfertigen",
+                "done": false
+            }, {
+                "content": "Kosten f\u00fcr erbrachte Leistungen erfassen sowie im Zeitvergleich und im Soll-Ist-Vergleich bewerten",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 7,
+            "head": "Betreiben von IT-Systemen (\u00a7 4 Absatz 2 Nummer 8)",
+            "body": [{
+                "content": "Netzwerkkonzepte f\u00fcr unterschiedliche Anwendungsgebiete unterscheiden",
+                "done": false
+            }, {
+                "content": "Datenaustausch von vernetzten Systemen realisieren",
+                "done": false
+            }, {
+                "content": "Verf\u00fcgbarkeit und Ausfallwahrscheinlichkeiten analysieren und L\u00f6sungsvorschl\u00e4ge unterbreiten",
+                "done": false
+            }, {
+                "content": "Ma\u00dfnahmen zur pr\u00e4ventiven Wartung und zur St\u00f6rungsvermeidung einleiten und durchf\u00fchren 3",
+                "done": false
+            }, {
+                "content": "St\u00f6rungsmeldungen aufnehmen und analysieren sowie Ma\u00dfnahmen zur St\u00f6rungsbeseitigung ergreifen",
+                "done": false
+            }, {
+                "content": "Dokumentationen zielgruppengerecht und barrierefrei anfertigen, bereitstellen und pflegen, insbesondere technische Dokumentationen, System- sowie Benutzerdokumentationen",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 8,
+            "head": "Inbetriebnehmen von Speicherl\u00f6sungen (\u00a7 4 Absatz 2 Nummer 9)",
+            "body": [{
+                "content": "Sicherheitsmechanismen, insbesondere Zugriffsm\u00f6glichkeiten und -rechte, festlegen und implementieren",
+                "done": false
+            }, {
+                "content": "Speicherl\u00f6sungen, insbesondere Datenbanksysteme, integrieren",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 9,
+            "head": "Programmieren von Softwarel\u00f6sungen (\u00a7 4 Absatz 2 Nummer 10)",
+            "body": [{
+                "content": "Programmspezifikationen festlegen, Datenmodelle und Strukturen aus fachlichen Anforderungen ableiten sowie Schnittstellen festlegen",
+                "done": false
+            }, {
+                "content": "Programmiersprachen ausw\u00e4hlen und unterschiedliche Programmiersprachen anwenden",
+                "done": false
+            }, {
+                "content": "Teilaufgaben von IT-Systemen automatisieren",
+                "done": false
+            }],
+            "done": false
+        }],
+        "done": false
+    },
+    "1": {
+        "title": "Abschnitt B: berufsprofilgebende Fertigkeiten, Kenntnisse und F\u00e4higkeiten in der Fachrichtung Anwendungsentwicklung",
+        "id": 1,
+        "blocks": [{
+            "id": 0,
+            "head": "Konzipieren und Umsetzen von kundenspezifischen Softwareanwendungen (\u00a7 4 Absatz 3 Nummer 1)",
+            "body": [{
+                "content": "Vorgehensmodelle und -methoden sowie Entwicklungsumgebungen und -bibliotheken ausw\u00e4hlen und einsetzen",
+                "done": false
+            }, {
+                "content": "Analyse- und Designverfahren anwenden",
+                "done": false
+            }, {
+                "content": "Benutzerschnittstellen ergonomisch gestalten und an Kundenanforderungen anpassen",
+                "done": false
+            }, {
+                "content": "Anwendungsl\u00f6sungen unter Ber\u00fccksichtigung der bestehenden Systemarchitektur entwerfen und realisieren",
+                "done": false
+            }, {
+                "content": "bestehende Anwendungsl\u00f6sungen anpassen",
+                "done": false
+            }, {
+                "content": "Datenaustausch zwischen Systemen realisieren und unterschiedliche Datenquellen nutzen",
+                "done": false
+            }, {
+                "content": "komplexe Abfragen aus unterschiedlichen Datenquellen durchf\u00fchren und Datenbestandsberichte erstellen",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 1,
+            "head": "Sicherstellen der Qualit\u00e4t von Softwareanwendungen (\u00a7 4 Absatz 3 Nummer 2)",
+            "body": [{
+                "content": "Sicherheitsaspekte bei der Entwicklung von Softwareanwendungen ber\u00fccksichtigen",
+                "done": false
+            }, {
+                "content": "Datenintegrit\u00e4t mithilfe von Werkzeugen sicherstellen",
+                "done": false
+            }, {
+                "content": "Modultests erstellen und durchf\u00fchren 5",
+                "done": false
+            }, {
+                "content": "Werkzeuge zur Versionsverwaltung einsetzen",
+                "done": false
+            }, {
+                "content": "Testkonzepte erstellen und Tests durchf\u00fchren sowie Testergebnisse bewerten und dokumentieren",
+                "done": false
+            }, {
+                "content": "Daten und Sachverhalte aus Tests multimedial aufbereiten und situationsgerecht unter Nutzung digitaler Werkzeuge und unter Beachtung der betrieblichen Vorgaben pr\u00e4sentieren",
+                "done": false
+            }],
+            "done": false
+        }],
+        "done": false
+    },
+    "2": {
+        "title": "Abschnitt C: berufsprofilgebende Fertigkeiten, Kenntnisse und F\u00e4higkeiten in der Fachrichtung Systemintegration",
+        "id": 2,
+        "blocks": [{
+            "id": 0,
+            "head": "Konzipieren und Realisieren von IT-Systemen (\u00a7 4 Absatz 4 Nummer 1)",
+            "body": [{
+                "content": "Systeml\u00f6sungen entsprechend den kundenspezifischen Anforderungen unter Ber\u00fccksichtigung von Sicherheitsaspekten konzipieren",
+                "done": false
+            }, {
+                "content": "IT-Systeme ausw\u00e4hlen, installieren und konfigurieren",
+                "done": false
+            }, {
+                "content": "externe IT-Ressourcen bewerten, ausw\u00e4hlen und in ein IT-System integrieren",
+                "done": false
+            }, {
+                "content": "Kompatibilit\u00e4tsprobleme von IT-Systemen und Systemkomponenten beurteilen und l\u00f6sen",
+                "done": false
+            }, {
+                "content": "Testkonzepte erstellen sowie Tests durchf\u00fchren und dokumentieren",
+                "done": false
+            }, {
+                "content": "System\u00fcbergabe planen und mit den beteiligten Organisationseinheiten sowie Kunden und Kundinnen abstimmen und durchf\u00fchren",
+                "done": false
+            }, {
+                "content": "Daten\u00fcbernahmen planen und durchf\u00fchren",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 1,
+            "head": "Installieren und Konfigurieren von Netzwerken (\u00a7 4 Absatz 4 Nummer 2)",
+            "body": [{
+                "content": "Netzwerkprotokolle und -schnittstellen f\u00fcr unterschiedliche Anwendungsbereiche bewerten und ausw\u00e4hlen",
+                "done": false
+            }, {
+                "content": "Netzwerkkomponenten ausw\u00e4hlen, installieren und konfigurieren 5",
+                "done": false
+            }, {
+                "content": "Systeme zur IT-Sicherheit in Netzwerken implementieren und dokumentieren",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 2,
+            "head": "Administrieren von IT-Systemen (\u00a7 4 Absatz 4 Nummer 3)",
+            "body": [{
+                "content": "Richtlinien zur Nutzung von IT-Systemen erstellen und einf\u00fchren",
+                "done": false
+            }, {
+                "content": "Lizenzrechte verwalten und die Einhaltung von Lizenzbestimmungen \u00fcberwachen",
+                "done": false
+            }, {
+                "content": "Berechtigungskonzepte entwerfen, abstimmen und umsetzen",
+                "done": false
+            }, {
+                "content": "Systemaktualisierungen evaluieren und durchf\u00fchren",
+                "done": false
+            }, {
+                "content": "Konzepte zur Datensicherung und -archivierung erstellen und umsetzen 7",
+                "done": false
+            }, {
+                "content": "Konzepte zur Daten- und Systemwiederherstellung erstellen und umsetzen",
+                "done": false
+            }, {
+                "content": "Systemauslastung \u00fcberwachen und Ressourcen verwalten",
+                "done": false
+            }, {
+                "content": "Systemverhalten \u00fcberwachen, bewerten und Ma\u00dfnahmen ergreifen",
+                "done": false
+            }, {
+                "content": "Benutzeranfragen aufnehmen, analysieren und bearbeiten",
+                "done": false
+            }],
+            "done": false
+        }],
+        "done": false
+    },
+    "3": {
+        "title": "Abschnitt D: berufsprofilgebende Fertigkeiten, Kenntnisse und F\u00e4higkeiten in der Fachrichtung Daten- und Prozessanalyse",
+        "id": 3,
+        "blocks": [{
+            "id": 0,
+            "head": "Analysieren von Arbeits- und Gesch\u00e4ftsprozessen (\u00a7 4 Absatz 5 Nummer 1)",
+            "body": [{
+                "content": "betriebs- und produktionswirtschaftliche Gesch\u00e4ftsprozesse und ihr Zusammenwirken im Unternehmen analysieren",
+                "done": false
+            }, {
+                "content": "Anforderungen in einer Prozessdarstellung abbilden",
+                "done": false
+            }, {
+                "content": "Werkzeuge der Prozessoptimierung vergleichen und vorschlagen",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 1,
+            "head": "Analysieren von Datenquellen und Bereitstellen von Daten (\u00a7 4 Absatz 5 Nummer 2)",
+            "body": [{
+                "content": "Daten aus heterogenen Datenquellen identifizieren und klassifizieren",
+                "done": false
+            }, {
+                "content": "Berechtigung zur Nutzung und zur Verkn\u00fcpfung von Daten pr\u00fcfen sowie entsprechende Ma\u00dfnahmen ableiten",
+                "done": false
+            }, {
+                "content": "technische Voraussetzungen zur \u00dcbernahme von Daten sicherstellen und Daten bereitstellen",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 2,
+            "head": "Nutzen der Daten zur Optimierung von Arbeits- und Gesch\u00e4ftsprozessen sowie zur Optimierung digitaler Gesch\u00e4ftsmodelle (\u00a7 4 Absatz 5 Nummer 3)",
+            "body": [{
+                "content": "Daten auf Qualit\u00e4t, insbesondere auf Plausibilit\u00e4t, Quantit\u00e4t, Redundanz, Vollst\u00e4ndigkeit und Validit\u00e4t pr\u00fcfen, Ergebnisse dokumentieren und bei Abweichungen vom Sollzustand Ma\u00dfnahmen, insbesondere zur Verbesserung der Datenqualit\u00e4t, vorschlagen",
+                "done": false
+            }, {
+                "content": "Auffindbarkeit, Zug\u00e4nglichkeit, Interoperabilit\u00e4t, Wiederverwendbarkeit von Daten sicherstellen",
+                "done": false
+            }, {
+                "content": "analytische und statistische Verfahren anwenden",
+                "done": false
+            }, {
+                "content": "Programmiersprachen mit integrierten Auswertungsverfahren und Visualisierungswerkzeugen nutzen",
+                "done": false
+            }, {
+                "content": "Ergebnisse der Analyse f\u00fcr unterschiedliche Zielgruppen aufbereiten",
+                "done": false
+            }, {
+                "content": "mathematische Vorhersagemodelle anwenden",
+                "done": false
+            }, {
+                "content": "Werkzeuge zur Mustererkennung und zur Modellgenerierung nutzen",
+                "done": false
+            }, {
+                "content": "Analyseergebnisse zur Optimierung der betriebsund produktionswirtschaftlichen Gesch\u00e4ftsprozesse nutzen",
+                "done": false
+            }, {
+                "content": "Kennzahlen ableiten und f\u00fcr ein Monitoringsystem vorschlagen",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 3,
+            "head": "Umsetzen des Datenschutzes und der Schutzziele der Datensicherheit (\u00a7 4 Absatz 5 Nummer 4)",
+            "body": [{
+                "content": "mit f\u00fcr Datenschutz zust\u00e4ndigen Personen und Einrichtungen kooperieren",
+                "done": false
+            }, {
+                "content": "Benutzer-, Zugriffs- und Datenhaltungs- sowie Datensicherungskonzepte erstellen und dabei die verschiedenen Datenklassifizierungen ber\u00fccksichtigen",
+                "done": false
+            }, {
+                "content": "beim Umgang mit Daten und bei der Erstellung der Konzepte Datensparsamkeit und Datensorgfalt beachten",
+                "done": false
+            }, {
+                "content": "Verfahren zur Datenverschl\u00fcsselung ausw\u00e4hlen und nutzen",
+                "done": false
+            }],
+            "done": false
+        }],
+        "done": false
+    },
+    "4": {
+        "title": "Abschnitt E: berufsprofilgebende Fertigkeiten, Kenntnisse und F\u00e4higkeiten in der Fachrichtung Digitale Vernetzung",
+        "id": 4,
+        "blocks": [{
+            "id": 0,
+            "head": "Analysieren und Planen von Systemen zur Vernetzung von Prozessen und Produkten (\u00a7 4 Absatz 6 Nummer 1)",
+            "body": [{
+                "content": "das Zusammenwirken der Komponenten cyberphysischer Systeme erfassen und visualisieren",
+                "done": false
+            }, {
+                "content": "bestehende Vernetzung eingesetzter Software und technischer Schnittstellen analysieren, insbesondere unter Ber\u00fccksichtigung der bestehenden Netztopologien",
+                "done": false
+            }, {
+                "content": "bei der Planung Aspekte der IT-Sicherheit und technische Rahmenbedingungen, insbesondere Netzwerkanforderungen, ber\u00fccksichtigen",
+                "done": false
+            }, {
+                "content": "Netzwerkkomponenten ausw\u00e4hlen, technische Unterlagen erstellen und Kosten kalkulieren",
+                "done": false
+            }, {
+                "content": "die L\u00f6sung zur Vernetzung und zu \u00c4nderungen am System kundenbezogen abstimmen",
+                "done": false
+            }, {
+                "content": "Daten auswerten und Vorschl\u00e4ge zur Optimierung der Interaktion von Systemen entwickeln",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 1,
+            "head": " Errichten, \u00c4ndern und Pr\u00fcfen von vernetzten Systemen (\u00a7 4 Absatz 6 Nummer 2)",
+            "body": [{
+                "content": "Systemkomponenten und Netzwerkbetriebssysteme installieren, anpassen und konfigurieren",
+                "done": false
+            }, {
+                "content": "Softwarel\u00f6sungen zur Visualisierung und Optimierung von Prozessabl\u00e4ufen anwenden",
+                "done": false
+            }, {
+                "content": "Programme erstellen und anpassen sowie Signalund Daten\u00fcbertragungseinrichtungen konfigurieren",
+                "done": false
+            }, {
+                "content": "Sicherheits- und Datensicherungssysteme ber\u00fccksichtigen, Gefahrenpotenziale identifizieren und Zugangsberechtigungen festlegen",
+                "done": false
+            }, {
+                "content": "Testkonzepte erstellen, Tests durchf\u00fchren, Fehler beseitigen sowie Ergebnisse und \u00c4nderungen dokumentieren",
+                "done": false
+            }, {
+                "content": "Systeme in Betrieb nehmen, Inbetriebnahmeprotokolle erstellen und Systeme \u00fcbergeben",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 2,
+            "head": "Betreiben von vernetzten Systemen und Sicherstellung der Systemverf\u00fcgbarkeit (\u00a7 4 Absatz 6 Nummer 3)",
+            "body": [{
+                "content": "Systemauslastung \u00fcberwachen und Systemstatus dokumentieren",
+                "done": false
+            }, {
+                "content": "Systemdaten erfassen und im Hinblick auf Vorgabeparameter auswerten und Systemst\u00f6rungen feststellen und beheben 4",
+                "done": false
+            }, {
+                "content": "Daten auswerten, um Wartungsintervalle und Prozessabl\u00e4ufe zu optimieren",
+                "done": false
+            }, {
+                "content": "System-, Diagnose- und Prozessdaten auswerten, Schwachstellen identifizieren und Ma\u00dfnahmen ableiten",
+                "done": false
+            }, {
+                "content": "Angriffsszenarien in cyber-physischen Systemen unterscheiden und antizipieren",
+                "done": false
+            }, {
+                "content": "Anomalien in vernetzten Systemen feststellen und Schutzma\u00dfnahmen einleiten",
+                "done": false
+            }, {
+                "content": "bereichsspezifische Sicherheitsl\u00f6sungen implementieren",
+                "done": false
+            }, {
+                "content": "Systemaktualisierungen vornehmen und Optimierungen vorschlagen",
+                "done": false
+            }],
+            "done": false
+        }],
+        "done": false
+    },
+    "5": {
+        "title": "Abschnitt F: fachrichtungs\u00fcbergreifende, integrativ zu vermittelnde Fertigkeiten, Kenntnisse und F\u00e4higkeiten",
+        "id": 5,
+        "blocks": [{
+            "id": 0,
+            "head": " Berufsbildung sowie Arbeitsund Tarifrecht (\u00a7 4 Absatz 7 Nummer 1)",
+            "body": [{
+                "content": "wesentliche Inhalte und Bestandteile des Ausbildungsvertrages darstellen, Rechte und Pflichten aus dem Ausbildungsvertrag feststellen und Aufgaben der Beteiligten im dualen System beschreiben",
+                "done": false
+            }, {
+                "content": "den betrieblichen Ausbildungsplan mit der Ausbildungsordnung vergleichen",
+                "done": false
+            }, {
+                "content": "arbeits-, sozial- und mitbestimmungsrechtliche Vorschriften sowie f\u00fcr den Arbeitsbereich geltende Tarifund Arbeitszeitregelungen beachten",
+                "done": false
+            }, {
+                "content": "Positionen der eigenen Entgeltabrechnung erkl\u00e4ren",
+                "done": false
+            }, {
+                "content": "Chancen und Anforderungen des lebensbegleitenden Lernens f\u00fcr die berufliche und pers\u00f6nliche Entwicklung begr\u00fcnden und die eigenen Kompetenzen weiterentwickeln",
+                "done": false
+            }, {
+                "content": "Lern- und Arbeitstechniken sowie Methoden des selbstgesteuerten Lernens anwenden und beruflich relevante Informationsquellen nutzen",
+                "done": false
+            }, {
+                "content": "berufliche Aufstiegs- und Weiterentwicklungsm\u00f6glichkeiten darstellen",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 1,
+            "head": "Aufbau und Organisation des Ausbildungsbetriebes (\u00a7 4 Absatz 7 Nummer 2)",
+            "body": [{
+                "content": "die Rechtsform und den organisatorischen Aufbau des Ausbildungsbetriebes mit seinen Aufgaben und Zust\u00e4ndigkeiten sowie die Zusammenh\u00e4nge zwischen den Gesch\u00e4ftsprozessen erl\u00e4utern",
+                "done": false
+            }, {
+                "content": "Beziehungen des Ausbildungsbetriebes und seiner Besch\u00e4ftigten zu Wirtschaftsorganisationen, Berufsvertretungen und Gewerkschaften nennen",
+                "done": false
+            }, {
+                "content": "Grundlagen, Aufgaben und Arbeitsweise der betriebsverfassungsrechtlichen Organe des Ausbildungsbetriebes beschreiben",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 2,
+            "head": "Sicherheit und Gesundheitsschutz bei der Arbeit (\u00a7 4 Absatz 7 Nummer 3)",
+            "body": [{
+                "content": "Gef\u00e4hrdung von Sicherheit und Gesundheit am Arbeitsplatz feststellen und Ma\u00dfnahmen zur Vermeidung der Gef\u00e4hrdung ergreifen",
+                "done": false
+            }, {
+                "content": "berufsbezogene Arbeitsschutz- und Unfallverh\u00fctungsvorschriften anwenden",
+                "done": false
+            }, {
+                "content": "Verhaltensweisen bei Unf\u00e4llen beschreiben sowie erste Ma\u00dfnahmen einleiten",
+                "done": false
+            }, {
+                "content": "Vorschriften des vorbeugenden Brandschutzes anwenden sowie Verhaltensweisen bei Br\u00e4nden beschreiben und Ma\u00dfnahmen zur Brandbek\u00e4mpfung ergreifen",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 3,
+            "head": "Umweltschutz (\u00a7 4 Absatz 7 Nummer 4)",
+            "body": [{
+                "content": "Zur Vermeidung betriebsbedingter Umweltbelastungen im beruflichen Einwirkungsbereich beitragen, insbesondere m\u00f6gliche Umweltbelastungen durch den Ausbildungsbetrieb und seinen Beitrag zum Umweltschutz an Beispielen erkl\u00e4ren",
+                "done": false
+            }, {
+                "content": "Zur Vermeidung betriebsbedingter Umweltbelastungen im beruflichen Einwirkungsbereich beitragen, insbesondere f\u00fcr den Ausbildungsbetrieb geltende Regelungen des Umweltschutzes anwenden",
+                "done": false
+            }, {
+                "content": "M\u00f6glichkeiten der wirtschaftlichen und umweltschonenden Energie- und Materialverwendung nutzen",
+                "done": false
+            }, {
+                "content": "Abf\u00e4lle vermeiden sowie Stoffe und Materialien einer umweltschonenden Entsorgung zuf\u00fchren",
+                "done": false
+            }],
+            "done": false
+        }, {
+            "id": 4,
+            "head": "Vernetztes Zusammenarbeiten unter Nutzung digitaler Medien (\u00a7 4 Absatz 7 Nummer 5)",
+            "body": [{
+                "content": "gegenseitige Wertsch\u00e4tzung unter Ber\u00fccksichtigung gesellschaftlicher Vielfalt bei betrieblichen Abl\u00e4ufen praktizieren",
+                "done": false
+            }, {
+                "content": "Strategien zum verantwortungsvollen Umgang mit digitalen Medien anwenden und im virtuellen Raum unter Wahrung der Pers\u00f6nlichkeitsrechte Dritter zusammenarbeiten",
+                "done": false
+            }, {
+                "content": "insbesondere bei der Speicherung, Darstellung und Weitergabe digitaler Inhalte die Auswirkungen des eigenen Kommunikations- und Informationsverhaltens ber\u00fccksichtigen",
+                "done": false
+            }, {
+                "content": "bei der Beurteilung, Entwicklung, Umsetzung und Betreuung von IT-L\u00f6sungen ethische Aspekte reflektieren",
+                "done": false
+            }],
+            "done": false
+        }],
+        "done": false
+    }
+}
