@@ -228,12 +228,14 @@ def get_user():
         except KeyError:
             return render_template("security/register.html", notify="failed")
 
+
 @app.route("/user")
 def user():
     if session.get("user"):
         return render_template("user.html")
     else:
         redirect(url_for("index"))
+
 
 @app.route("/logout")
 def logout():

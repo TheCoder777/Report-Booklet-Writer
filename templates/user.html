@@ -11,6 +11,7 @@
 {% block statusmessage %}Welcome, {{ session["user"].name }}{% endblock %}
 {% block statuscontent %}
     <a class="button" href="{{ url_for('edit') }}">Edit</a>
+    <a class="button" href="{{ url_for('todolist') }}">Todolist</a>
     <a class="button" href="{{ url_for('settings') }}">Settings</a>
     <a class="button" href="{{ url_for('logout') }}">Logout</a>
 {% endblock %}

@@ -355,77 +355,84 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media only screen and (max-width: 768px) {
-  html {
-    font-size: 10px;
-    margin-bottom: 5rem;
-  }
+    html {
+        font-size: 10px;
+        margin-bottom: 5rem;
+    }
 
-  .input_field {
-      font-size: 2rem;
-  }
+    .input_field {
+        font-size: 2rem;
+    }
 
-  .manual_input {
-      font-size: 2rem;
-  }
+    .manual_input {
+        font-size: 2rem;
+    }
 
-  .form_wrapper {
+    .form_wrapper {
       width: -webkit-fill-available;
-  }
+    }
 
-  .simple_header {
-      margin-left: 0.5rem;
-      margin-right: 0.5rem;
-      margin-top: 0;
-  }
+    .simple_header {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        margin-top: 0;
+    }
 
-  .watermark {
-      font-size: 1.5rem;
-  }
+    .watermark {
+        font-size: 1.5rem;
+    }
 
-  .button {
-      margin-bottom: 10rem;
-  }
+    .button {
+        margin-bottom: 10rem;
+        font-size: var(--button-font-size-mobile);
+        width: -webkit-fill-available;
+    }
 
-  .nav {
-      bottom: 0;
-      width: 100vw;
-      height: auto;
-      flex-flow: row;
-  }
+    .secondary_button {
+        font-size: var(--button-font-size-mobile);
+        width: -webkit-fill-available;
+    }
 
-  .navbar {
-      bottom: 0;
-      height: 5rem;;
-      width: -webkit-fill-available;
-  }
+    .nav {
+        bottom: 0;
+        width: 100vw;
+        height: auto;
+        flex-flow: row;
+    }
 
-  .navbar:hover {
-      width: -webkit-fill-available;
-  }
+    .navbar {
+        bottom: 0;
+        height: 5rem;;
+        width: -webkit-fill-available;
+    }
 
-  .navbar_nav {
-      flex-flow: row;
-      height: auto;
-  }
+    .navbar:hover {
+        width: -webkit-fill-available;
+    }
 
-  .icon {
-      margin: 1rem;
-  }
+    .navbar_nav {
+        flex-flow: row;
+        height: auto;
+    }
 
-  .icon:hover {
-      background-color: var(--background-color);
-  }
+    .icon {
+        margin: 1rem;
+    }
 
-  .nav_link {
-      justify-content: center;
-      width: auto;
-  }
+    .icon:hover {
+        background-color: var(--background-color);
+    }
 
-  .nav_link svg {
-      margin: 0;
-  }
+    .nav_link {
+        justify-content: center;
+        width: auto;
+    }
 
-  .link_text {
-      display: none;
-  }
+    .nav_link svg {
+        margin: 0;
+    }
+
+    .link_text {
+        display: none;
+    }
 }

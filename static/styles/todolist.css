@@ -10,9 +10,6 @@ h2, h3 {
     padding-top: 2rem;
 }
 
-.section {
-}
-
 .head {
     margin-top: 0;
     margin-left: 2rem;
@@ -83,10 +80,6 @@ h2, h3 {
     margin-left: 1.5rem;
 }
 
-/* .section_title, .head_title, .item {
-    margin-left: 1rem;
-} */
-
 .float_button {
     position: fixed;
     top: 0;
@@ -99,4 +92,32 @@ h2, h3 {
     min-width: 2rem;
     padding: 0;
     margin: 0;
+}
+
+@media only screen and (max-width: 768px) {
+    .todolist {
+        text-align: left;
+        font-family: var(--text-font);
+        color: var(--text-color);
+        margin-left: 0rem;
+    }
+
+    .head {
+        margin-top: 0;
+        margin-left: 1rem;
+    }
+
+    .lines {
+        margin-left: 2rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        list-style: none;
+        border-left: var(--border-size) solid var(--accent-color);
+        padding-left: 1rem;
+    }
+
+    ul {
+        padding-left: 1rem;
+    }
+
 }
