@@ -79,7 +79,6 @@ class UserDB():
             pass
         vals = list(data.values())
         vals.append(user.email)
-        #print("UPDATE users SET name={}, surname={}, nickname={}, email={}, unit={}, kw={}, nr={}, year={} WHERE email={}".format(*vals))
         self.cursor.execute(f"UPDATE {self.table_name} SET \
         name=?, surname=?, nickname=?, email=?, unit=?, kw=?, nr=?, year=? WHERE email=?", (vals))
         self.connection.commit()

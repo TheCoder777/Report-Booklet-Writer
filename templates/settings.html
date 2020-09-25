@@ -65,11 +65,11 @@
 
         </div>
         <div class="buttons">
+            <input class="button" type="submit" name="save" value="Save changes" form=configform>
+            <input class="secondary_button" type="reset" name="reset" value="Reset changed values" form=configform>
             {% if not session.get("user"): %}
             <input class="secondary_button" type="submit" name="hard_reset" value="Reset to default">
             {% endif %}
-            <input class="secondary_button" type="reset" name="reset" value="Reset changed values" form=configform>
-            <input class="button" type="submit" name="save" value="Save changes" form=configform>
         </div>
     </form>
 {% endblock %}

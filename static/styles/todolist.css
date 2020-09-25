@@ -80,14 +80,30 @@ h2, h3 {
     margin-left: 1.5rem;
 }
 
-.float_button {
+.save_button {
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    border-right: 0 none;
     position: fixed;
     top: 0;
     right: 0;
     padding: 1.5rem;
+    margin-top: 10rem;
+    margin-right: 0;
+    transition: var(--transition-speed-fast);
 }
 
-.float_button svg {
+.save_button:hover {
+    background-color: var(--lighter-background);
+    border-right: 0 none;
+    width: auto;
+    transition: var(--transition-speed-fast);
+}
+
+.save_button:hover .icon_color {
+    fill: var(--accent-color-bright);
+}
+
+.save_button svg {
     width: 2rem;
     min-width: 2rem;
     padding: 0;

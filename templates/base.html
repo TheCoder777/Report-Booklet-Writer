@@ -18,15 +18,32 @@
             <nav class="navbar">
                 <ul class="navbar_nav">
                     <li class="icon home">
-                        <a class="nav_link" href="{{ url_for('index')}}">
+                        <a class="nav_link" href="{{ url_for('index') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                 <path class="icon_color" d="M29.707 15.793l-13-13a.999.999 0 00-1.414 0l-13 13a.999.999 0 101.414 1.414L16 4.914l8.014 8.014c-.001.025-.014.047-.014.072v15H8V18a1 1 0 10-2 0v11a1 1 0 001 1h18a1 1 0 001-1V14.914l2.293 2.293a.997.997 0 001.414 0 .999.999 0 000-1.414z" fill="#eee"/>
                             </svg>
                             <span class="link_text icon_text">Home</span>
                         </a>
                     </li>
+                    <li class="icon edit">
+                        <a class="nav_link" href="{{ url_for('edit') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg"viewBox="0 0 32 31.996">
+                                <defs id="defs899">
+                                    <style id="style897">.cls-1{fill:none;stroke:#1d1d1b;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px}</style>
+                                </defs>
+                                <g id="g916" transform="matrix(1.67851 0 0 1.67851 -5.858 -2.43)">
+                                    <path class="icon_color_stroke" id="_Path_" fill="none" stroke="#eee" stroke-opacity="1" d="M19.51 12v4.29a3.22 3.22 0 01-3.22 3.22H7.71a3.22 3.22 0 01-3.22-3.22V7.71a3.22 3.22 0 013.22-3.22H12" class="cls-1" data-name="&lt;Path&gt;"/>
+                                    <g id="_Group_" fill="none" stroke="#eee" stroke-opacity="1" data-name="&lt;Group&gt;">
+                                        <path class="icon_color_stroke" id="_Rectangle_" fill="none" stroke="#eee" stroke-opacity="1" d="M17.64 3.14h3.28v3.17h-3.28z" class="cls-1" data-name="&lt;Rectangle&gt;" transform="rotate(-45 19.28 4.734)"/>
+                                        <path class="icon_color_stroke" id="_Path_2" fill="none" stroke="#eee" stroke-opacity="1" d="M19.24 7.01l-4.43 4.43-2.27.03.03-2.28L17 4.77z" class="cls-1" data-name="&lt;Path&gt;"/>
+                                    </g>
+                                </g>
+                            </svg>
+                            <span class="link_text icon_text">Quick Edit</span>
+                        </a>
+                    </li>
                     {% if session.get("user"): %}
-                    <li class="icon login">
+                    <li class="icon user">
                         <div class="nav_link">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                 <path class="icon_color" d="M16 6.25a5.507 5.507 0 00-5.5 5.5c0 3.033 2.468 5.5 5.5 5.5s5.5-2.467 5.5-5.5-2.468-5.5-5.5-5.5zm0 2c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5zm0 11c-6.729 0-12 2.855-12 6.5h2c0-2.128 4.106-4.5 10-4.5s10 2.372 10 4.5h2c0-3.645-5.271-6.5-12-6.5z", fill="#eee"/>
@@ -34,18 +51,9 @@
                             <span class="link_text icon_text">{{ session["user"].name }}</span>
                         </div>
                     </li>
-                    <li class="icon logout">
-                        <a class="nav_link" href="{{ url_for('logout') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-                              <path class="icon_color" fill="#eee" fill-opacity="1" stroke-width=".64" d="M12.77 0a1.92 1.92 0 00-1.887 1.92v5.12a.64.64 0 00.64.64.64.64 0 00.64-.64V1.92a.64.64 0 01.64-.64h16.42L18.287 6.464a.64.64 0 00-.365.576v17.28h-5.12a.64.64 0 01-.639-.64v-5.12a.64.64 0 00-1.28 0v5.12a1.92 1.92 0 001.92 1.92h5.12v5.76a.64.64 0 00.3.544.64.64 0 00.34.096.64.64 0 00.287-.07l12.088-6.042A1.92 1.92 0 0032 24.166V1.92A1.92 1.92 0 0030.08 0H12.802a1.92 1.92 0 00-.032 0zm17.95 1.99v22.176a.64.64 0 01-.352.577l-11.166 5.58V7.444zM6.385 6.398a.643.643 0 00-.436.187l-5.76 5.76a.64.64 0 000 .91l5.76 5.76a.64.64 0 00.455.185.64.64 0 00.455-.185.64.64 0 000-.91l-4.67-4.665h12.534a.64.64 0 000-1.28H2.188l4.67-4.665a.643.643 0 00-.473-1.097z"/>
-                            </svg>
-                            <span class="link_text icon_text">Logout</span>
-                        </a>
-                    </li>
                     <li class="icon todo">
                         <a class="nav_link" href="{{ url_for('todolist') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" id="Layer_3" data-name="Layer 3" version="1.1" viewBox="0 0 32 29.752">
-                              <defs/>
                               <defs id="defs4"/>
                               <g id="g857" fill="none" stroke="#eee" stroke-opacity="1" transform="translate(-5.5 -6.44)">
                                 <g id="g875" transform="matrix(1.56098 0 0 1.56098 -3.085 -3.613)">
@@ -64,7 +72,7 @@
                     </li>
                     {% else: %}
                     <li class="icon login">
-                        <a class="nav_link" href="{{ url_for('login')}}">
+                        <a class="nav_link" href="{{ url_for('login') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                 <path class="icon_color" d="M16 6.25a5.507 5.507 0 00-5.5 5.5c0 3.033 2.468 5.5 5.5 5.5s5.5-2.467 5.5-5.5-2.468-5.5-5.5-5.5zm0 2c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5zm0 11c-6.729 0-12 2.855-12 6.5h2c0-2.128 4.106-4.5 10-4.5s10 2.372 10 4.5h2c0-3.645-5.271-6.5-12-6.5z", fill="#eee"/>
                             </svg>
@@ -72,7 +80,26 @@
                         </a>
                     </li>
                     {% endif %}
-
+                    {% if session.get("user"): %}
+                    <li class="icon logout" style="margin-top: auto;">
+                        <a class="nav_link" href="{{ url_for('logout') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                              <path class="icon_color" fill="#eee" fill-opacity="1" stroke-width=".64" d="M12.77 0a1.92 1.92 0 00-1.887 1.92v5.12a.64.64 0 00.64.64.64.64 0 00.64-.64V1.92a.64.64 0 01.64-.64h16.42L18.287 6.464a.64.64 0 00-.365.576v17.28h-5.12a.64.64 0 01-.639-.64v-5.12a.64.64 0 00-1.28 0v5.12a1.92 1.92 0 001.92 1.92h5.12v5.76a.64.64 0 00.3.544.64.64 0 00.34.096.64.64 0 00.287-.07l12.088-6.042A1.92 1.92 0 0032 24.166V1.92A1.92 1.92 0 0030.08 0H12.802a1.92 1.92 0 00-.032 0zm17.95 1.99v22.176a.64.64 0 01-.352.577l-11.166 5.58V7.444zM6.385 6.398a.643.643 0 00-.436.187l-5.76 5.76a.64.64 0 000 .91l5.76 5.76a.64.64 0 00.455.185.64.64 0 00.455-.185.64.64 0 000-.91l-4.67-4.665h12.534a.64.64 0 000-1.28H2.188l4.67-4.665a.643.643 0 00-.473-1.097z"/>
+                            </svg>
+                            <span class="link_text icon_text">Logout</span>
+                        </a>
+                    </li>
+                    <li class="icon settings">
+                        <a class="nav_link" href="{{ url_for('settings') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                <g class="icon_color" fill="#eee">
+                                    <path d="M30 16a4.007 4.007 0 00-3.307-3.94l-.347-.835a4.006 4.006 0 00-.447-5.124c-1.346-1.346-3.599-1.521-5.125-.448l-.835-.346A4.006 4.006 0 0016 2a4.007 4.007 0 00-3.94 3.307l-.835.346a4.007 4.007 0 00-5.124.448A3.972 3.972 0 004.929 8.93c0 .833.253 1.628.724 2.296l-.346.834A4.006 4.006 0 002 16a4.007 4.007 0 003.307 3.94l.346.834a4.007 4.007 0 00.448 5.125c1.344 1.345 3.601 1.521 5.125.448l.835.346A4.007 4.007 0 0016.001 30a4.005 4.005 0 003.939-3.307l.835-.347a4.005 4.005 0 005.125-.447 3.973 3.973 0 001.172-2.829c0-.833-.254-1.628-.724-2.296l.346-.834A4.005 4.005 0 0030 16c0 .001 0 .001 0 0zm-4 2.002a1 1 0 00-.924.617l-.808 1.948a1 1 0 00.217 1.09c.378.378.586.88.586 1.414 0 .535-.208 1.037-.586 1.415-.78.78-2.051.778-2.829 0a1 1 0 00-1.09-.217l-1.949.808a1 1 0 00-.617.924c0 1.103-.897 2-2 2s-2-.897-2-2a1 1 0 00-.617-.924l-1.95-.808a1 1 0 00-1.09.217c-.756.756-2.072.756-2.828 0a2.003 2.003 0 010-2.829 1 1 0 00.217-1.09l-.808-1.948A1 1 0 006 18.002c-1.103 0-2-.897-2-2.001 0-1.103.897-2 2-2 .404 0 .769-.244.924-.617l.808-1.95a1 1 0 00-.217-1.09 1.986 1.986 0 01-.586-1.414 2.003 2.003 0 013.415-1.415c.286.286.716.37 1.09.217l1.949-.808c.373-.155.617-.52.617-.924 0-1.103.897-2 2-2s2 .897 2 2c0 .404.244.769.617.924l1.95.808a1 1 0 001.09-.217c.756-.756 2.072-.756 2.828 0 .779.78.779 2.049 0 2.829a1 1 0 00-.217 1.09l.808 1.95c.154.372.52.616.924.616 1.103 0 2 .897 2 2a2.003 2.003 0 01-2 2.002z"/><path d="M16 11c-2.757 0-5 2.243-5 5s2.243 5 5 5a1 1 0 100-2c-1.654 0-3-1.346-3-3s1.346-3 3-3a3.004 3.004 0 012.519 4.632 1 1 0 101.678 1.088A4.99 4.99 0 0021 16c0-2.757-2.243-5-5-5z"/>
+                                </g>
+                            </svg>
+                            <span class="link_text icon_text">Settings</span>
+                        </a>
+                    </li>
+                    {% else: %}
                     <li class="icon settings" style="margin-top: auto;">
                         <a class="nav_link" href="{{ url_for('settings') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
@@ -83,6 +110,7 @@
                             <span class="link_text icon_text">Settings</span>
                         </a>
                     </li>
+                    {% endif %}
                     <li class="icon mode">
                         <a class="nav_link" href="{{ url_for('change_mode') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29.614 32">

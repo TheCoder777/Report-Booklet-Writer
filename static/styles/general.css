@@ -106,19 +106,21 @@ body::-webkit-scrollbar-thumb {
     margin: 1rem;
     border: var(--border-size) solid var(--accent-color);
     border-radius: var(--border-radius);
+    transition: all var(--transition-speed) ease;
     width: 5rem;
+    box-shadow: 0 0 0.7rem #000;
 }
 
 .navbar:hover .link_text{
     transition: var(--transition-speed) ease;
-    transition-delay: 0.7s;
+    transition-delay: 0.45s;
     visibility: visible;
 }
 
 .navbar:hover {
     transition: all var(--transition-speed) ease;
-    transition-delay: 0.5s;
-    width: 12rem;
+    transition-delay: 0.3s;
+    width: 14rem;
 }
 
 .navbar_nav {
@@ -135,12 +137,9 @@ body::-webkit-scrollbar-thumb {
     background-color: var(--background-color);
     width: 100%;
     margin-bottom: 1rem;
+    transition: var(--transition-speed-fast) ease;
+    border-radius: var(--border-radius);
 }
-
-/* .icon:nth-last-child(2) {
-    margin-top: auto;
-    margin-bottom: 1rem;
-} */
 
 .icon:first-child {
     margin-top: 1rem;
@@ -148,6 +147,7 @@ body::-webkit-scrollbar-thumb {
 
 .icon:hover {
     background-color: var(--lighter-background);
+    transition: var(--transition-speed-fast) ease;
 }
 
 .nav_link {
@@ -160,6 +160,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .link_text {
+    transition-delay: -0.2s;
     visibility: hidden;
     margin-left: 1rem;
     white-space: nowrap;
@@ -171,12 +172,25 @@ body::-webkit-scrollbar-thumb {
     margin: 0 1.5rem;
 }
 
-.nav_link:hover .icon_color {
-    fill: var(--accent-color-bright);
-}
+/* ICON COLORS */
 
 .icon_color {
     fill: var(--text-color);
+    transition: var(--transition-speed-fast) ease;
+}
+
+.nav_link:hover .icon_color {
+    fill: var(--accent-color-bright);
+    transition: var(--transition-speed-fast) ease;
+}
+
+.icon_color_stroke {
+    stroke: var(--text-color);
+    transition: var(--transition-speed-fast) ease;
+}
+
+.nav_link:hover .icon_color_stroke {
+    stroke: var(--accent-color-bright);
     transition: var(--transition-speed-fast) ease;
 }
 
@@ -201,18 +215,18 @@ body::-webkit-scrollbar-thumb {
     stroke: var(--text-color);
     fill: "none";
 }
+
 .nav_link:hover .light_moon  {
     stroke: var(--accent-color);
-    fill: var(--accent-color);
 }
 
 .settings svg {
-    transform: rotate(45deg);
     transition: var(--transition-speed) ease;
 }
 
 .settings:hover svg{
-    transform: rotate(-45deg);
+    transform: rotate(-90deg);
+    transition: var(--transition-speed) ease;
 }
 
 .simple_header {
@@ -299,6 +313,8 @@ body::-webkit-scrollbar-thumb {
 .icon_button:focus {
     transform: rotate(-360deg);
     outline: none;
+    color: var(--text-color);
+    background-color: var(--background-color);
 }
 
 .icon_button svg {

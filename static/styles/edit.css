@@ -44,10 +44,6 @@ textarea:focus {
     width: 100%;
 }
 
-.simple_header {
-    margin-bottom: 6rem;
-}
-
 @media only screen and (max-width: 768px) {
   textarea {
       font-size: 2rem;

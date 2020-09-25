@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg"viewBox="0 0 32 31.996">
+    <defs id="defs899">
+        <style id="style897">.cls-1{fill:none;stroke:#1d1d1b;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px}</style>
+    </defs>
+    <g id="g916" transform="matrix(1.67851 0 0 1.67851 -5.858 -2.43)">
+        <path id="_Path_" fill="none" stroke="#eee" stroke-opacity="1" d="M19.51 12v4.29a3.22 3.22 0 01-3.22 3.22H7.71a3.22 3.22 0 01-3.22-3.22V7.71a3.22 3.22 0 013.22-3.22H12" class="cls-1" data-name="&lt;Path&gt;"/>
+        <g id="_Group_" fill="none" stroke="#eee" stroke-opacity="1" data-name="&lt;Group&gt;">
+            <path id="_Rectangle_" fill="none" stroke="#eee" stroke-opacity="1" d="M17.64 3.14h3.28v3.17h-3.28z" class="cls-1" data-name="&lt;Rectangle&gt;" transform="rotate(-45 19.28 4.734)"/>
+            <path id="_Path_2" fill="none" stroke="#eee" stroke-opacity="1" d="M19.24 7.01l-4.43 4.43-2.27.03.03-2.28L17 4.77z" class="cls-1" data-name="&lt;Path&gt;"/>
+        </g>
+    </g>
+</svg>

@@ -224,8 +224,6 @@ def checkup():
 def check_all_user_files(id):
     console = BOLD + "[USER CHECKUP] " + RESET
     user_dir = os.path.join(paths.USER_PATH, str(id))
-    # print(user_dir)
-    # print(os.path.join(paths.USER_PATH, str(id)))
     # user dir
     tocheck = user_dir
     if not os.path.exists(tocheck):

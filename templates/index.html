@@ -8,7 +8,17 @@
 {% block title %}Berichtsheft Auto Writer{% endblock %}
 
 {% block headline %}Python Berichtsheft Auto Writer{% endblock %}
-{% block statusmessage %}Simpler then ever before!{% endblock %}
+
+{% block statusstyle %}
+    {% if notify=="login_required": %}color: var(--warning-color);
+    {% endif %}
+{% endblock %}
+
+{% block statusmessage %}
+    {% if notify=="login_required": %}You need to login to use this service!
+    {% else: %}Simpler then ever before!
+    {% endif %}
+{% endblock %}
 {% block statuscontent %}
 <a class="button" href="{{ url_for('login') }}">Login</a>
 <div class="text_links">
