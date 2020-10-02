@@ -96,7 +96,7 @@ def get_and_return():
 
             pdf = writepdf(data, uinput)
             # confighandler.add_config_nr()  # only for local usage without users
-            # UserDB.increse_nr(session.get("user"))
+            UserDB.increase_nr(session.get("user"))
             return send_file(pdf, as_attachment=True)
 
         elif request.form.get("refresh"):

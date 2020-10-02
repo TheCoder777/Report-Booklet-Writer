@@ -177,3 +177,14 @@ class UserDB():
         data = {}
         data["name"], data["surname"], data["nickname"], data["email"], data["unit"], data["kw"], data["nr"], data["year"] = self.cursor.fetchone()
         return data
+
+
+    def increase_nr(self, user):
+        # Increse number of db records on download
+        self.cursor = self.get_cursor()
+        self.cursor.execute(f"SELECT nr FROM {self.table_name} WHERE id =?", (user.id, ))
+        nr = self.cursor.fetchone()
+        nr = nr[0] + 1
+        self.cursor.execute(f"UPDATE {self.table_name} SET nr=? WHERE id =?", ([nr, user.id]))
+        self.connection.commit()
+        return True
