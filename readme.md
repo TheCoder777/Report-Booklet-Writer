@@ -8,7 +8,7 @@ Start using Python Berichtsheft Auto Writer now!
 
 ## Installation
 
-**Disclaimer: You need to have python 3.8 installed, otherwise it will not work!**
+**Disclaimer: You need to have python 3.8 installed, otherwise it wont work!**
 
 To use this tool, you first have to clone the Project:
 
@@ -19,13 +19,17 @@ git clone https://github.com/TheCoder777/Python-Berichtsheft-Auto-Writer.git
 Then you need to install the dependencies, for example like this:
 
 ```bash
-pip install pdfrw PyPDF2 flask gevent reportlab colored Flask-Session bcrypt
+pip install pdfrw PyPDF2 flask gevent reportlab colored Flask-Session bcrypt pandas
 ```
 
-Finally, you can just run it:
+Finally, you can just run it with:
 
 ```bash
 python server.py
+
+# alternative
+
+./server.py
 ```
 
 The program will mostly take care of itself during the checkup, so no need to worry!
@@ -81,9 +85,10 @@ python server.py --debug
 
 ## Todo
 
-- Overview plan
-- Content overview
+- Content overview (export all PDFs at once)
 - Mail server (just wait for it, you'll see)
+- Private/Public Profile setting
+- Dashboard
 
 ------
 
