@@ -60,7 +60,6 @@
     .card {
         width: 80vw;
         height: 7rem;
-        z-index: 1;
     }
 
     .card:hover {
