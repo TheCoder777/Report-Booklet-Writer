@@ -54,7 +54,6 @@ def check_start_date(date):
 
 def reformat_date(date):
     year, month, day = date.split("-")
-    print(year, month, day)
     date = ".".join([day, month, year])
     return date
 
@@ -81,6 +80,14 @@ def get_date(kw, type, nr, year):
         end_date = end_date.strftime("%Y-%m-%d")
 
     return start_date, end_date
+
+
+def get_kw_from_date(d):
+    # date formatted as: yyyy-mm-dd
+    year, month, day = d.split("-")
+    dateobj = date(int(year), int(month), int(day))
+    iso_date = dateobj.isocalendar()
+    return iso_date[1] # only kw
 
 
 def draw(data, uinput, packet):
@@ -158,6 +165,43 @@ def compile(packet):
     out_stream = open(filename, "wb")
     out.write(out_stream)
     out_stream.close()
+    return filename
+
+
+def create_many(content):
+    pages = PdfFileWriter()
+    data = {}
+    uinput = {}
+    for c in content:
+        packet = io.BytesIO()
+        template = PdfFileReader(open(paths.PDF_TEMPLATE_PATH, "rb"))
+        template_page = template.getPage(0)
+        uinput["name"] = c[1]
+        uinput["surname"] = c[2]
+        data["kw"] = c[3]  # only for old draw method, CHANGE THIS SOON!!
+        uinput["nr"] = int(c[4]) - 1 # this is because the draw method increases the nr automatically
+        print("writing to pdf nr: ", uinput["nr"])
+        uinput["year"] = str(c[5])
+        uinput["unit"] = c[6]
+        uinput["start_date"] = c[7]
+        uinput["end_date"] = c[8]
+        uinput["sign_date"] = c[9]
+        uinput["Bcontent"] = c[10]
+        uinput["Scontent"] = c[11]
+        uinput["BScontent"] = c[12]
+        packet = draw(data, uinput, packet)
+        packet.seek(0)
+        new_pdf = PdfFileReader(packet)
+        template_page.mergePage(new_pdf.getPage(0))
+        pages.addPage(template_page)
+        del packet
+        del template_page
+        del new_pdf
+        
+
+    filename = paths.TMP_PATH + "save.pdf"
+    out_stream = open(filename, "wb")
+    pages.write(out_stream)
     return filename
 
 

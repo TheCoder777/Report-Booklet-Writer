@@ -60,6 +60,14 @@ def writepdf(data, uinput):
     return pdfhandler.compile(packet)
 
 
+def write_many_pdfs():
+    packet = io.BytesIO()
+    if not "ContentDB" in globals():
+        ContentDB = dbhandler.ContentDB(session["user"].id)
+    content = ContentDB.get_content()
+    return pdfhandler.create_many(content)
+
+
 @app.route("/")
 def index():
     if not session.get("mode"):
@@ -97,6 +105,9 @@ def get_and_return():
             pdf = writepdf(data, uinput)
             # confighandler.add_config_nr()  # only for local usage without users
             UserDB.increase_nr(session.get("user"))
+            if not "ContentDB" in globals():
+                ContentDB = dbhandler.ContentDB(session["user"].id)
+            ContentDB.add_record(uinput, data)
             return send_file(pdf, as_attachment=True)
 
         elif request.form.get("refresh"):
@@ -171,6 +182,8 @@ def user_login():
                 else:
                     user = User(id=UserDB.get_id_by_nickname(name))
                     hashandsalt = UserDB.get_pw_by_nickname(name)
+                # if not "ContentDB" in globals():
+                #     ContentDB = dbhandler.ContentDB(session["user"].id)
                 if not hashandsalt:
                     return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="nouser")
                 if validate_pw(str(request.form["password"]), hashandsalt):
@@ -211,6 +224,8 @@ def get_user():
                     return render_template("security/register.html", data=data, notify="invalid_email")
                 if not (len(request.form["password"]) and len(request.form["password_re"])):
                     return render_template("security/register.html", data=data, notify="second_pw_needed")
+                # if not "ContentDB" in globals():
+                #     ContentDB = dbhandler.ContentDB(session["user"].id)
                 if pws_equal(request.form["password"], request.form["password_re"]):
                     pwd_and_salt = hashpw(request.form["password"])
                     UserDB.add_user(name, surname, email, pwd_and_salt)
@@ -255,7 +270,6 @@ def change_password():
 
 @app.route("/change-mode")
 def change_mode():
-    print(session["mode"])
     if session["mode"] == "Dark":
         session["mode"] = "Light"
         return redirect(request.referrer)
@@ -267,9 +281,8 @@ def change_mode():
 @app.route("/todolist")
 def todolist():
     if session.get("user"):
-        if not "df" in globals():
-            df = todolisthandler.open_todolist(session["user"].id)
-        return render_template("todolist.html", df=df)
+        df = todolisthandler.open_todolist(session["user"].id)
+        return render_template("todolist.html", data=df)
     else:
         return render_template("index.html", notify="login_required")
 
@@ -314,12 +327,39 @@ def save_todos():
                     df[l1]["blocks"][l2]["body"][l3]["done"] = True
 
             todolisthandler.save_todolist(session["user"].id, df)
-            return render_template("todolist.html", df=df, notify="success")
+            df = todolisthandler.open_todolist(session["user"].id)
+            return render_template("todolist.html", data=df, notify="success")
         else:
-            return render_template("todolist.html", df=df, notify="fail")
+            df = todolisthandler.open_todolist(session["user"].id)
+            return render_template("todolist.html", data=df, notify="fail")
     else:
-        print("here")
         return render_template("index.html", notify="login_required")
+
+
+@app.route("/content-overview")
+def content_overview():
+    if session.get("user"):
+        if not session.get("content_mode"):
+            session["content_mode"] = "cards"  # set default, read from Userdb later
+        if not "ContentDB" in globals():
+            ContentDB = dbhandler.ContentDB(session["user"].id)
+        content = ContentDB.get_content()
+        return render_template("content_overview.html", mode=session.get("content_mode"), content=content)
+
+    else:
+        return render_template("index.html", notify="login_required")
+
+
+@app.route("/content-overview", methods=["POST"])
+def export_all():
+    if session.get("user"):
+        if request.form.get("export"):
+            pdf = write_many_pdfs()
+            return send_file(pdf, as_attachment=True)
+    else:
+        return render_template("index.html", notify="login_required")
+
+
 
 if __name__ == "__main__":
     HOST='localhost'

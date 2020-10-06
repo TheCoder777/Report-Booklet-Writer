@@ -196,28 +196,34 @@ body::-webkit-scrollbar-thumb {
 
 .icon_color_todo {
     stroke: var(--text-color);
+    transition: var(--transition-speed-fast) ease;
 }
 
 .nav_link:hover .icon_color_todo {
     stroke: var(--accent-color-bright);
     fill: var(--accent-color-bright);
+    transition: var(--transition-speed-fast) ease;
 }
 
 .dark_moon {
     fill: var(--text-color);
     stroke: "none";
+    transition: var(--transition-speed-fast) ease;
 }
 .nav_link:hover .dark_moon  {
     fill: var(--accent-color);
+    transition: var(--transition-speed-fast) ease;
 }
 
 .light_moon {
     stroke: var(--text-color);
     fill: "none";
+    transition: var(--transition-speed-fast) ease;
 }
 
 .nav_link:hover .light_moon  {
     stroke: var(--accent-color);
+    transition: var(--transition-speed-fast) ease;
 }
 
 .settings svg {
@@ -414,6 +420,7 @@ body::-webkit-scrollbar-thumb {
         width: 100vw;
         height: auto;
         flex-flow: row;
+        z-index: 100;
     }
 
     .navbar {
