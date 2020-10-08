@@ -39,13 +39,13 @@
             </svg>
         </button>
         <ul>
-            {% for i in range(df.columns| length): %}
-                {% if not df[i]["done"]: %}
+            {% for i in range(data.columns| length): %}
+                {% if not data[i]["done"]: %}
                 <div class="section_container">
                     <li class="section">
                         <div class="section_title">
                             <input class="line checkbox" id="{{i}}" type="checkbox" name="{{i}}" form="todolistform">
-                            <label class="line" for="{{i}}">{{ df[i]["title"] }}</label>
+                            <label class="line" for="{{i}}">{{ data[i]["title"] }}</label>
                         </div>
                     </li>
                 {% else: %}
@@ -53,17 +53,17 @@
                     <li class="section">
                         <div class="section_title">
                             <input class="line checkbox" id="{{i}}" type="checkbox" name="{{i}}" checked form="todolistform">
-                            <label class="line" for="{{i}}" style="text-decoration:line-through;">{{ df[i]["title"] }}</label>
+                            <label class="line" for="{{i}}" style="text-decoration:line-through;">{{ data[i]["title"] }}</label>
                         </div>
                     </li>
                 {% endif %}
-                {% for j in range(df[i]["blocks"]| length): %}
-                    {% if not df[i]["blocks"][j]["done"]: %}
+                {% for j in range(data[i]["blocks"]| length): %}
+                    {% if not data[i]["blocks"][j]["done"]: %}
                     <div class="head_container">
                         <li class="head">
                             <div class="head_title">
                                 <input class="line checkbox" id="{{i}}.{{j}}" type="checkbox" name="{{i}}.{{j}}" form="todolistform">
-                                <label class="line" for="{{i}}.{{j}}">{{ df[i]["blocks"][j]["head"] }}</label>
+                                <label class="line" for="{{i}}.{{j}}">{{ data[i]["blocks"][j]["head"] }}</label>
                             </div>
                         </li>
                     {% else: %}
@@ -71,23 +71,23 @@
                         <li class="head">
                             <div class="head_title">
                                 <input class="line checkbox" id="{{i}}.{{j}}" type="checkbox" name="{{i}}.{{j}}" checked form="todolistform">
-                                <label class="line" for="{{i}}.{{j}}" style="text-decoration:line-through;">{{ df[i]["blocks"][j]["head"] }}</label>
+                                <label class="line" for="{{i}}.{{j}}" style="text-decoration:line-through;">{{ data[i]["blocks"][j]["head"] }}</label>
                             </div>
                         </li>
                     {% endif %}
-                    {% for k in range(df[i]["blocks"][j]["body"]| length): %}
-                        {% if not df[i]["blocks"][j]["body"][k]["done"]: %}
+                    {% for k in range(data[i]["blocks"][j]["body"]| length): %}
+                        {% if not data[i]["blocks"][j]["body"][k]["done"]: %}
                         <li class="lines">
                             <div class="item">
                                 <input class="line checkbox" id="{{i}}.{{j}}.{{k}}" type="checkbox" name="{{i}}.{{j}}.{{k}}" form="todolistform">
-                                <label class="line" for="{{i}}.{{j}}.{{k}}">{{ df[i]["blocks"][j]["body"][k]["content"] }}</label>
+                                <label class="line" for="{{i}}.{{j}}.{{k}}">{{ data[i]["blocks"][j]["body"][k]["content"] }}</label>
                             </div>
                         </li>
                         {% else: %}
                         <li class="lines">
                             <div class="item">
                                 <input class="line checkbox" id="{{i}}.{{j}}.{{k}}" type="checkbox" name="{{i}}.{{j}}.{{k}}" checked form="todolistform">
-                                <label class="line" for="{{i}}.{{j}}.{{k}}" style="text-decoration:line-through;">{{ df[i]["blocks"][j]["body"][k]["content"] }}</label>
+                                <label class="line" for="{{i}}.{{j}}.{{k}}" style="text-decoration:line-through;">{{ data[i]["blocks"][j]["body"][k]["content"] }}</label>
                             </div>
                         </li>
                         {% endif %}

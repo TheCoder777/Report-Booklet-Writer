@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/content_overview.css') }}">
+{% endblock %}
+{% block title %}Content Overview{% endblock %}
+
+{% block headline %}Python Berichtsheft Auto Writer{% endblock %}
+
+{% block statusmessage %}Here is all you've ever edited!{% endblock %}
+
+{% block content %}
+
+{% if mode == "cards": %}
+    <form class="form" action="" method="post" id="contentform">
+        <input class="button" type="submit" name="export" value="Export all" form=contentform>
+    </form>
+    <section class="card_list">
+        {% for cont in content: %}
+        <a class="card_link" href="/edit?id={{ cont[0] }}">
+            <article class="card">
+                <header class="card_head">
+                    <p class="number">Number: {{ cont[4] }}</p>
+                    <h2 class="card_header">Week: {{ cont[3] }}, from {{ cont[7]}} to {{ cont[8] }}</h2>
+                </header>
+            </article>
+        </a>
+        {% endfor %}
+    </section>
+
+
+{% elif mode == "table": %}
+
+{% endif %}
+
+{% endblock %}
