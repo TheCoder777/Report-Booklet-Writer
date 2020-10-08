@@ -257,3 +257,21 @@ class ContentDB():
             c[8] = pdfhandler.reformat_date(c[8])
             new_content.append(c)
         return new_content
+
+    def get_content_by_id(self, id):
+        self.cursor = self.get_cursor()
+        self.cursor.execute(f"SELECT * FROM {self.table_name} WHERE id=?", (id, ))
+        content = self.cursor.fetchone()
+        return content
+
+
+    def update(self, data, id):
+        self.cursor = self.get_cursor()
+        data = list(data)
+        # append id to end of list (because of sql statment)
+        data.append(id)
+        self.cursor.execute(f"UPDATE {self.table_name} SET \
+        name=?, surname=?, kw=?, nr=?, year=?, unit=?,\
+        start_date=?, end_date=?, sign_date=?, Bcontent=?, \
+        Scontent=?, BScontent=? WHERE id=?", (data))
+        self.connection.commit()

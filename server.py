@@ -86,6 +86,13 @@ def edit():
     else:
         data = confighandler.parse_config()
 
+    if request.args.get("id"):
+        if not "ContentDB" in globals():
+            ContentDB = dbhandler.ContentDB(session["user"].id)
+        data = ContentDB.get_content_by_id(request.args.get("id"))
+        data = list(data)
+        data.pop(0)
+        return render_template("edit_custom.html", data=data)
     start_date, end_date = pdfhandler.get_date(kw=data["kw"], type="server", nr=data["nr"], year=data["year"])
     data["sign_date"] = pdfhandler.get_a_date(type="html")
     return render_template("edit.html", data=data, start_date=start_date, end_date=end_date)
@@ -94,6 +101,7 @@ def edit():
 @app.route("/edit", methods=["POST"])
 def get_and_return():
     if request.method == "POST":
+        uinput = dict(request.form.copy())
         if request.form.get("submit"):
             uinput = dict(request.form.copy())
             del uinput["submit"]
@@ -111,14 +119,27 @@ def get_and_return():
             return send_file(pdf, as_attachment=True)
 
         elif request.form.get("refresh"):
-            data = dict(request.form.copy())
-            del data["refresh"]
+            del uinput["refresh"]
             udata = UserDB.get_user_data(session.get("user"))
-            start_date, end_date = pdfhandler.get_date(kw=udata["kw"], type="server", nr=data["nr"], year=data["year"])
+            start_date, end_date = pdfhandler.get_date(kw=udata["kw"], type="server", nr=uinput["nr"], year=uinput["year"])
             return render_template("edit.html", data=data, start_date=start_date, end_date=end_date)
+
+        elif request.form.get("save_custom"):
+            data = dict(request.form.copy())
+            del data["save_custom"]
+            if not "ContentDB" in globals():
+                ContentDB = dbhandler.ContentDB(session["user"].id)
+            ContentDB.update(list(data.values()), request.args.get("id"))
+            return redirect("content-overview")
+
+        if request.form.get("refresh_custom"):
+            del uinput["refresh_custom"]
+            start_date, end_date = pdfhandler.get_date(kw=uinput["kw"], type="server", nr=uinput["nr"], year=uinput["year"])
+            uinput = list(uinput.values())
+            return render_template("edit_custom.html", data=uinput, start_date=start_date, end_date=end_date)
+
         else:
             data = dict(request.form.copy())
-            del data["refresh"]
             udata = UserDB.get_user_data(session.get("user"))
             start_date, end_date = pdfhandler.get_date(kw=udata["kw"], type="server", nr=data["nr"], year=data["year"])
             return render_template("edit.html", data=data, start_date=start_date, end_date=end_date)

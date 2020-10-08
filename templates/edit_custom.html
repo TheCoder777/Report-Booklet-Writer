@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
+    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/edit.css') }}">
+{% endblock %}
+{% block title %}Edit Berichtsheft{% endblock %}
+
+{% block headline %}Python Berichtsheft Auto Writer{% endblock %}
+
+{% block statusmessage %}Loaded Berichtsheft from Week {{ data[3] }}: {% endblock %}
+
+{% block content %}
+    <form class="form" action="" method="post" id="editform">
+        <div class="form_wrapper">
+            <div class="input_container">
+                <div class="manual_input">
+                    <p class="input_hint">Name:</p>
+                    <input class="input_field" type="text" name="name" value="{{ data[0] }}">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Surname:</p>
+                    <input class="input_field" type="text" name="surname" value="{{ data[1] }}">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Week:</p>
+                    <input class="input_field" type="number" name="kw" value="{{ data[2] }}">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Number:</p>
+                    <input class="input_field" type="number" name="nr" value="{{ data[3] }}">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Year:</p>
+                    <input class="input_field" type="number" name="year" value="{{ data[4] }}">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Unit:</p>
+                    <input class="input_field" type="text" name="unit" value="{{ data[5] }}">
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Start date:</p>
+                    {% if start_date: %}
+                        <input class="input_field" type="date" name="start_date" value="{{ start_date }}">
+                    {% else: %}
+                        <input class="input_field" type="date" name="start_date" value="{{ data[6] }}">
+                    {% endif %}
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">End date:</p>
+                    {% if end_date: %}
+                        <input class="input_field" type="date" name="end_date" value="{{ end_date }}">
+                    {% else: %}
+                        <input class="input_field" type="date" name="end_date" value="{{ data[7] }}">
+                    {% endif %}
+                </div>
+                <div class="manual_input">
+                    <p class="input_hint">Sign date:</p>
+                    <input class="input_field" type="date" name="sign_date" value="{{ data[8] }}">
+                </div>
+            </div>
+            <button class="icon_button" title="re-calculate" type="submit" name="refresh_custom" value="Refresh" form=editform>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                    <path class="icon_color" d="M23.07 24.519A9.97 9.97 0 0116 27.443a9.969 9.969 0 01-7.071-2.924 9.955 9.955 0 01-2.867-8.182 1 1 0 111.987.222 7.966 7.966 0 002.294 6.546c3.118 3.118 8.194 3.12 11.314 0 3.119-3.12 3.119-8.195 0-11.314-2.639-2.639-6.727-3.053-9.817-1.17l3.302.844a1 1 0 11-.495 1.937l-6.45-1.647 1.649-6.45a1 1 0 111.938.495l-.76 2.973c3.835-2.197 8.813-1.63 12.047 1.603 3.899 3.899 3.899 10.243 0 14.143z" fill="#eee"/>
+                </svg>
+            </button>
+            <div class="textarea_container">
+                <textarea name="Bcontent" rows="8" cols="100" form="editform">{{ data[9] }}</textarea>
+                <textarea name="Scontent" rows="8" cols="100" form="editform">{{ data[10] }}</textarea>
+                <textarea name="BScontent" rows="8" cols="100" form="editform">{{ data[11] }}</textarea>
+                <input class="button" type="submit" name="save_custom" value="Save" form=editform>
+            </div>
+        </div>
+    </form>
+{% endblock %}

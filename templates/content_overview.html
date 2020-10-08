@@ -19,21 +19,14 @@
     </form>
     <section class="card_list">
         {% for cont in content: %}
-        <article class="card">
-            <header class="card_head">
-                <p class="number">Number: {{ cont[4] }}</p>
-                <h2 class="card_header">Week: {{ cont[3] }}, from {{ cont[7]}} to {{ cont[8] }}</h2>
-            </header>
-            <!-- <div class="content">
-                <p> {{ cont[10] }}</p>
-            </div>
-            <div class="content">
-                <p> {{ cont[11] }}</p>
-            </div>
-            <div class="content">
-                <p> {{ cont[12] }}</p>
-            </div> -->
-        </article>
+        <a class="card_link" href="/edit?id={{ cont[0] }}">
+            <article class="card">
+                <header class="card_head">
+                    <p class="number">Number: {{ cont[4] }}</p>
+                    <h2 class="card_header">Week: {{ cont[3] }}, from {{ cont[7]}} to {{ cont[8] }}</h2>
+                </header>
+            </article>
+        </a>
         {% endfor %}
     </section>
 

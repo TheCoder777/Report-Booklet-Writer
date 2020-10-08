@@ -6,6 +6,10 @@
     padding-bottom: 2rem;
 }
 
+.card_link {
+    color: var(--text-color);
+    text-decoration: none;
+}
 
 .card {
     display: flex;
