@@ -23,12 +23,147 @@
 # SOFTWARE.
 
 
-import pdfhandler, confighandler, todolisthandler, dbhandler, paths, io, time, sys, bcrypt, re
+import paths, io, time, sys, bcrypt, re
 import pandas as pd
 from gevent.pywsgi import WSGIServer
 from flask import Flask, render_template, request, redirect, send_file, session, url_for
+from handlers import pdfhandler, confighandler, todolisthandler, dbhandler
 from flask_session import Session
 from user import User
+
+
+class Paths ():
+    """
+    Global config for Filepaths and Directories
+    """
+
+    DB_PATH                 = "./db"
+    USER_DB_PATH            = f"{DB_PATH}/user.db"
+
+    TMP_PATH                = "./tmp/"
+    COOKIE_PATH             = "./cookie"
+    USER_PATH               = f"{DB_PATH}/users"
+
+    TEMPLATE_PREFIX         = "./templates/default/"
+    PDF_TEMPLATE_PATH       = f"{TEMPLATE_PREFIX}Berichtsheft_template.pdf"
+    TODOLIST_TEMPLATE_PATH  = f"{TEMPLATE_PREFIX}todolist_template.json"
+
+    # relative from user directory:
+    CONTENT_DB_PATH         = f"content.db"
+    TODOLIST_PATH           = f"todolist.json"
+
+# Initialize paths
+paths = Paths()
+
+
+class Config():
+    """
+    Global default config
+    (This replaced the config.ini file and confighandler)
+    """
+    
+    KW      = "36"
+    NR      = "1"
+    YEAR    = "1"
+    SURNAME = "Musterman"
+    NAME    = "Max"
+    UNIT    = "Ausbildung"
+
+# Initialize config
+config = Config()
+
+
+def checkup():
+    """
+    Global checkup for all files and dirs
+    """
+
+    start_time = time.time()
+    console = BOLD + "[CHECKUP] " + RESET
+    print()
+
+    if not os.path.isdir(paths.TMP_PATH):
+        print(console + f"Temporary save directory {paths.TMP_PATH} doesn't exist...", end="")
+        os.mkdir(paths.TMP_PATH)
+        print(SUCCESS + "created!" + RESET)
+    else:
+        print(console + SUCCESS + "Temporary directory found!" + RESET)
+
+    if not os.path.isdir(paths.COOKIE_PATH):
+        print(console + f"Cookie directory {paths.COOKIE_PATH} doesn't exist...", end="")
+        os.mkdir(paths.COOKIE_PATH)
+        print(SUCCESS + "created!" + RESET)
+    else:
+        print(console + SUCCESS + "Cookie directory found!" + RESET)
+
+    if not os.path.isdir(paths.USER_PATH):
+        print(console + f"User directory {paths.USER_PATH} doesn't exist...", end="")
+        os.mkdir(paths.USER_PATH)
+        print(SUCCESS + "created!" + RESET)
+    else:
+        print(console + SUCCESS + "User directory found!" + RESET)
+
+    if not os.path.isdir(paths.DB_PATH):
+        print(console + f"DB directory {paths.DB_PATH} doesn't exist...", end="")
+        os.mkdir(paths.DB_PATH)
+        print(SUCCESS + "created!" + RESET)
+    else:
+        print(console + SUCCESS + "DB directory found!" + RESET)
+
+    if not os.path.exists(paths.PDF_TEMPLATE_PATH):
+        print(console + ERROR + "PDF Template not found! Please add a pdf template!" + RESET)
+        sys.exit(1)
+    else:
+        print(console + SUCCESS + "PDF Template found!" + RESET)
+
+    if not os.path.exists(paths.TODOLIST_TEMPLATE_PATH):
+        print(console + ERROR + "Todolist template not found! Please add a todolist template!" + RESET)
+        sys.exit(1)
+    else:
+        print(console + SUCCESS + "Todolist template found!" + RESET)
+
+    # garbadge cleaning
+    filelist = [f for f in os.listdir(paths.TMP_PATH) if f.endswith(".pdf")]
+    if filelist:
+        print(console + "Cleaning cache...")
+        for f in filelist:
+            print(WARNING + "\tremoving: " + os.path.join(paths.TMP_PATH, f) + "..." + RESET, end="")
+            os.remove(os.path.join(paths.TMP_PATH, f))
+            print(SUCCESS + "done!" + RESET)
+    else:
+        print(console + SUCCESS +  "Cache is clean!" + RESET)
+
+    # Calculate time difference
+    diff = time.time() - start_time
+
+    print(console + BOLD + SUCCESS + f"Checkup finished succuessfully in {diff:.4f} seconds!\n" + RESET)
+
+
+def check_all_user_files(id):
+    """
+    Create user directories and copy templates
+    """
+
+    console = BOLD + "[USER CHECKUP] " + RESET
+    user_dir = os.path.join(paths.USER_PATH, str(id))
+    # check user dir
+    tocheck = user_dir
+    if not os.path.exists(tocheck):
+        print(console + ERROR + f"User diretory {tocheck} doesn't exist..." + RESET, end="")
+        os.mkdir(tocheck)
+        print(console + SUCCESS + "created!" + RESET)
+    else:
+        print(console + SUCCESS + "User directory found!" + RESET)
+
+    # check todolist
+    tocheck = os.path.join(paths.USER_PATH, str(id), paths.TODOLIST_PATH)
+    if not os.path.exists(tocheck):
+        print(console + ERROR + "Todolist file doesn't exist..." + RESET, end="")
+        print("from", paths.TODOLIST_TEMPLATE_PATH, "to", user_dir)
+        shutil.copy2(paths.TODOLIST_TEMPLATE_PATH, os.path.join(user_dir, paths.TODOLIST_PATH))
+        print(console + SUCCESS + "copied!" + RESET)
+    else:
+        print(console + SUCCESS + "User directory found!" + RESET)
 
 
 app = Flask(__name__)
@@ -379,7 +514,6 @@ def export_all():
             return send_file(pdf, as_attachment=True)
     else:
         return render_template("index.html", notify="login_required")
-
 
 
 if __name__ == "__main__":
