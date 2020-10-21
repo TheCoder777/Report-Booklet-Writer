@@ -23,59 +23,32 @@
 # SOFTWARE.
 
 
-import paths, io, time, sys, bcrypt, re
-import pandas as pd
-from gevent.pywsgi import WSGIServer
+# load system modules
+import bcrypt
+import io
+import os
+import re
+import sys
+import time
+
+#  flask modules and extensions
 from flask import Flask, render_template, request, redirect, send_file, session, url_for
-from handlers import pdfhandler, confighandler, todolisthandler, dbhandler
 from flask_session import Session
-from user import User
 
+#  WSGI server for better performance
+from gevent.pywsgi import WSGIServer
 
-class Paths ():
-    """
-    Global config for Filepaths and Directories
-    """
-
-    DB_PATH                 = "./db"
-    USER_DB_PATH            = f"{DB_PATH}/user.db"
-
-    TMP_PATH                = "./tmp/"
-    COOKIE_PATH             = "./cookie"
-    USER_PATH               = f"{DB_PATH}/users"
-
-    TEMPLATE_PREFIX         = "./templates/default/"
-    PDF_TEMPLATE_PATH       = f"{TEMPLATE_PREFIX}Berichtsheft_template.pdf"
-    TODOLIST_TEMPLATE_PATH  = f"{TEMPLATE_PREFIX}todolist_template.json"
-
-    # relative from user directory:
-    CONTENT_DB_PATH         = f"content.db"
-    TODOLIST_PATH           = f"todolist.json"
-
-# Initialize paths
-paths = Paths()
-
-
-class Config():
-    """
-    Global default config
-    (This replaced the config.ini file and confighandler)
-    """
-    
-    KW      = "36"
-    NR      = "1"
-    YEAR    = "1"
-    SURNAME = "Musterman"
-    NAME    = "Max"
-    UNIT    = "Ausbildung"
-
-# Initialize config
-config = Config()
+# load internal modules
+from defines.colors import RESET, BOLD, ERROR, WARNING, SUCCESS
+from defines import paths
+from handlers import pdfhandler, todolisthandler, dbhandler
+from models.user import User
 
 
 def checkup():
     """
     Global checkup for all files and dirs
+    If this doesn't succeed, the server will NOT start!
     """
 
     start_time = time.time()
@@ -122,7 +95,7 @@ def checkup():
     else:
         print(console + SUCCESS + "Todolist template found!" + RESET)
 
-    # garbadge cleaning
+    # garbadge cleaning (delete all pdf in tmp file)
     filelist = [f for f in os.listdir(paths.TMP_PATH) if f.endswith(".pdf")]
     if filelist:
         print(console + "Cleaning cache...")
@@ -133,37 +106,10 @@ def checkup():
     else:
         print(console + SUCCESS +  "Cache is clean!" + RESET)
 
-    # Calculate time difference
+    # Calculate time difference (just because we can)
     diff = time.time() - start_time
 
     print(console + BOLD + SUCCESS + f"Checkup finished succuessfully in {diff:.4f} seconds!\n" + RESET)
-
-
-def check_all_user_files(id):
-    """
-    Create user directories and copy templates
-    """
-
-    console = BOLD + "[USER CHECKUP] " + RESET
-    user_dir = os.path.join(paths.USER_PATH, str(id))
-    # check user dir
-    tocheck = user_dir
-    if not os.path.exists(tocheck):
-        print(console + ERROR + f"User diretory {tocheck} doesn't exist..." + RESET, end="")
-        os.mkdir(tocheck)
-        print(console + SUCCESS + "created!" + RESET)
-    else:
-        print(console + SUCCESS + "User directory found!" + RESET)
-
-    # check todolist
-    tocheck = os.path.join(paths.USER_PATH, str(id), paths.TODOLIST_PATH)
-    if not os.path.exists(tocheck):
-        print(console + ERROR + "Todolist file doesn't exist..." + RESET, end="")
-        print("from", paths.TODOLIST_TEMPLATE_PATH, "to", user_dir)
-        shutil.copy2(paths.TODOLIST_TEMPLATE_PATH, os.path.join(user_dir, paths.TODOLIST_PATH))
-        print(console + SUCCESS + "copied!" + RESET)
-    else:
-        print(console + SUCCESS + "User directory found!" + RESET)
 
 
 app = Flask(__name__)
@@ -209,7 +155,6 @@ def index():
         session["mode"] = "Dark"
     if session.get("user"):
         return redirect("user")
-        # return render_template("index.html")
     else:
         return render_template("index.html")
 
@@ -333,10 +278,10 @@ def user_login():
                     return render_template("security/login.html", notify="nodata")
                 name = request.form["name"]
                 if is_email(name):
-                    user = User(id=UserDB.get_id_by_email(name))
+                    user = User(uid=UserDB.get_id_by_email(name))
                     hashandsalt = UserDB.get_pw_by_email(name)
                 else:
-                    user = User(id=UserDB.get_id_by_nickname(name))
+                    user = User(uid=UserDB.get_id_by_nickname(name))
                     hashandsalt = UserDB.get_pw_by_nickname(name)
                 # if not "ContentDB" in globals():
                 #     ContentDB = dbhandler.ContentDB(session["user"].id)
@@ -385,7 +330,7 @@ def get_user():
                 if pws_equal(request.form["password"], request.form["password_re"]):
                     pwd_and_salt = hashpw(request.form["password"])
                     UserDB.add_user(name, surname, email, pwd_and_salt)
-                    session["user"] = User(id=UserDB.get_id_by_email(email))
+                    session["user"] = User(uid=UserDB.get_id_by_email(email))
                     session["user"].check_user_files()
                     global df
                     df = todolisthandler.open_todolist(session["user"].id)
@@ -449,6 +394,7 @@ def save_todos():
         if not "df" in globals():
             df = todolisthandler.open_todolist(session["user"].id)
         data = dict(request.form.copy())
+        # TODO: move this to todolisthandler
         if data.get("save"):
             del data["save"]
 
@@ -523,7 +469,7 @@ if __name__ == "__main__":
     SESSION_FILE_DIR=paths.COOKIE_PATH
     app.config.from_object(__name__)
     Session(app)
-    pdfhandler.checkup()
+    checkup()
     UserDB = dbhandler.UserDB()
     if len(sys.argv) > 1:
         if sys.argv[1] in ["--debug", "debug", "-d", "d"]:

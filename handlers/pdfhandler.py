@@ -21,25 +21,16 @@
 # SOFTWARE.
 
 
-import io, os, time
+# load system modules
+import io
+import time
 from datetime import date
-from PyPDF2 import PdfFileWriter, PdfFileReader
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
 from textwrap import wrap
-from colored import attr, fg
 
-
-# colors
-RESET = attr("reset")
-BOLD = attr(1)
-ERROR = fg(1)
-WARNING = fg(214)
-SUCCESS = fg(2)
-
-
-class Error_msg():
-    UNKNOWN_ERR = "Unknow error occurred!"
+from PyPDF2 import PdfFileWriter, PdfFileReader
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from defines import paths
 
 
 def check_start_date(date):
@@ -178,7 +169,7 @@ def create_many(content):
         uinput["name"] = c[1]
         uinput["surname"] = c[2]
         data["kw"] = c[3]  # only for old draw method, CHANGE THIS SOON!!
-        uinput["nr"] = int(c[4]) - 1 # this is because the draw method increases the nr automatically
+        uinput["nr"] = int(c[4]) - 1  # this is because the draw method increases the nr automatically
         uinput["year"] = str(c[5])
         uinput["unit"] = c[6]
         uinput["start_date"] = c[7]

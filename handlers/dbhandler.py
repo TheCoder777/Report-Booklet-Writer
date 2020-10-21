@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 
-import sqlite3, handlers.confighandler, handlers.pdfhandler, paths, sys, os
+import sqlite3, handlers.pdfhandler, paths, sys, os
 
 
 class UserDB():
