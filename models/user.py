@@ -29,7 +29,7 @@ from defines import paths
 
 class User:
     def __init__(self, vals):
-        self.uid, self.name, self.surname, self.nickname, self.email, self.unit, self.kw, self.nr, self.year = vals
+        self.uid, self.name, self.surname, self.nickname, self.email, self.unit, self.week, self.nr, self.year, self.color_mode = vals
         self.check_user_files()
 
     def check_user_files(self):

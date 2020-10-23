@@ -39,11 +39,12 @@ from flask_session import Session
 from gevent.pywsgi import WSGIServer
 
 # load internal modules
-from defines.colors import RESET, BOLD, ERROR, WARNING, SUCCESS
+from defines.colors import RESET, BOLD, ERROR, WARNING, SUCCESS, MSG_NORMAL, MSG_SUCCESS, MSG_WARNING
 from defines import paths
+from defines import messages
 from handlers import pdfhandler, todolisthandler, dbhandler
 from models.user import User
-
+from models.message import Message
 
 def checkup():
     """
@@ -177,6 +178,9 @@ def get_and_return():
             if not "ContentDB" in globals():
                 ContentDB = dbhandler.ContentDB(session["user"].id)
             ContentDB.add_record(uinput, data)
+            # TODO: set a mimetype
+            # TODO: use a fileobject not a path
+            # TODO: set attachment_filename to save_kw_xx.pdf (maybe?)
             return send_file(pdf, as_attachment=True)
 
         elif request.form.get("refresh"):
@@ -247,50 +251,6 @@ def get_new_config():
                 return render_template("settings.html", data=data, action="fail")
 
 
-@app.route("/login")
-def login():
-    return render_template("security/login.html")
-
-
-@app.route("/login", methods=["POST"])
-def user_login():
-    if request.method == "POST":
-        try:
-            if request.form.get("login"):
-                if not (len(request.form["name"]) > 0 and len(request.form["password"]) > 0):
-                    return render_template("security/login.html", notify="nodata")
-                name = request.form["name"]
-                if is_email(name):
-                    user = User(uid=UserDB.get_id_by_email(name))
-                    hashandsalt = UserDB.get_pw_by_email(name)
-                else:
-                    user = User(uid=UserDB.get_id_by_nickname(name))
-                    hashandsalt = UserDB.get_pw_by_nickname(name)
-                # if not "ContentDB" in globals():
-                #     ContentDB = dbhandler.ContentDB(session["user"].id)
-                if not hashandsalt:
-                    return render_template("security/login.html", name=request.form["name"],
-                                           pw=request.form["password"], notify="nouser")
-                if validate_pw(str(request.form["password"]), hashandsalt):
-                    session["user"] = user
-                    session["user"].check_user_files()
-                    global df
-                    df = todolisthandler.open_todolist(session["user"].id)
-                    return redirect(url_for("user"))
-                else:
-                    return render_template("security/login.html", name=request.form["name"],
-                                           pw=request.form["password"], notify="failed")
-            if request.form.get("use_as_guest"):
-                return redirect(url_for("edit"))
-            elif request.form.get("forgot_password"):
-                return redirect(url_for("forgot_password"))
-            else:
-                return render_template("security/login.html", name=request.form["name"], pw=request.form["password"],
-                                       notify="failed")
-        except KeyError as e:
-            return render_template("security/login.html", notify="failed")
-
-
 # Login/Register related functions
 
 
@@ -322,31 +282,53 @@ def pws_equal(pw1, pw2):
         return False
 
 
-def check_credentials(credentials):
+def check_register_credentials(credentials):
     # This will use the msg system soon!
 
     # List for missing credentials (for the msg system)
-    missing_list = []
+    msg = Message()
 
     # validate name/surname (not empty)
     if not len(credentials["name"]) > 0:
-        missing_list.append("name")
+        msg.add(messages.MISSING_NAME)
     if not len(credentials["surname"]) > 0:
-        missing_list.append("surname")
+        msg.add(messages.MISSING_SURNAME)
+
+    # Check if email exists
+    if not len(credentials["email"]) > 0:
+        msg.add(messages.MISSING_EMAIL)
 
     # check email with regex
-    if not is_email(credentials["email"]):
-        missing_list.append("email")
+    # TODO: check if the email is already used in db
+    elif not is_email(credentials["email"]):
+        msg.add(messages.INVALID_EMAIL)
 
     # check password match
     if not is_password(credentials["password"]):
-        missing_list.append("password doesn't fit requirements")
+        msg.add(messages.UNFULFILLED_PASSWORD_REQUIREMENTS)
 
     # check if passwords are equal
     if not pws_equal(credentials["password"], credentials["password_re"]):
-        missing_list.append("passwords missmatch")
+        msg.add(messages.PASSWORD_MISSMATCH)
 
-    return missing_list
+    return msg
+
+
+def check_login_credentials(credentials):
+    msg = Message()
+
+    if not len(credentials["email"]) > 0:
+        msg.add(messages.MISSING_EMAIL)
+
+    elif not is_email(credentials["email"]):
+        msg.add(messages.INVALID_EMAIL)
+
+    if not len(credentials["password"]) > 0:
+        msg.add(messages.MISSING_PASSWORD)
+
+    return msg
+
+# REGISTER
 
 
 @app.route("/register")
@@ -360,21 +342,53 @@ def get_user():
     if request.form.get("register"):
         # copy the user credentials to a python dict and check them
         credentials = dict(request.form.copy())
-        missing_list = check_credentials(credentials)
-        if len(missing_list) == 0:
+        msg = check_register_credentials(credentials)
+        if len(msg.messages) == 0:
             # create a password hash
             pwd_and_salt = hashpw(request.form["password"])
             session["user"] = UserDB.new_user(credentials, pwd_and_salt)
-            session["user"].check_user_files()
-            # initialize df gobally for the todolist handler (will be moved to /todolist later)
+            # TODO: move df initalization to /todolist
             global df
             df = todolisthandler.open_todolist(session["user"].id)
             return redirect(url_for("user"))
         else:
-            return render_template("security/register.html", data=credentials, msg=missing_list)
-
-    if request.form.get("use_as_guest"):
+            return render_template("security/register.html", data=credentials, msg=msg.get())
+    # Check if the "Use as guest" button is pressed
+    elif request.form.get("use_as_guest"):
         return redirect(url_for("edit"))
+
+
+# LOGIN
+
+
+@app.route("/login")
+def login():
+    return render_template("security/login.html")
+
+
+@app.route("/login", methods=["POST"])
+def user_login():
+    # Check if the Login Button is pressed
+    if request.form.get("login"):
+        # copy the user credentials to a python dict and check them
+        credentials = dict(request.form.copy())
+        msg = check_login_credentials(credentials)
+        if len(msg.messages) == 0:
+            hash_and_salt = UserDB.get_pw(credentials["email"])
+            # validate password with hash from db
+            if not validate_pw(credentials["password"], hash_and_salt):
+                msg.add(messages.INVALID_PASSWORD)
+                return render_template("security/login.html", data=credentials, msg=msg.get())
+            # Login user
+            session["user"] = UserDB.get_user(credentials["email"])
+            return redirect(url_for("user"))
+        return render_template("security/login.html", data=credentials, msg=msg.get())
+    # Check if the "Use as guest" button is pressed
+    elif request.form.get("use_as_guest"):
+        return redirect(url_for("edit"))
+    # Check if the "Forgot password" button is pressed
+    elif request.form.get("forgot_password"):
+        return redirect(url_for("forgot_password"))
 
 
 @app.route("/user")
@@ -387,6 +401,7 @@ def user():
 
 @app.route("/logout")
 def logout():
+    # Logout user
     del session["user"]
     return redirect(url_for("index"))
 

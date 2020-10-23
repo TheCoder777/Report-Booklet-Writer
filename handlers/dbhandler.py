@@ -100,18 +100,25 @@ class UserDB:
         vals = list(data.values())
         vals.append(user.email)
         self.cursor.execute(f"UPDATE {self.table_name} SET \
-        name=?, surname=?, nickname=?, email=?, unit=?, kw=?, nr=?, year=? WHERE email=?", (vals))
+        name=?, surname=?, nickname=?, email=?, unit=?, kw=?, nr=?, year=? WHERE email=?", vals)
         self.connection.commit()
         return True
 
-    def get_pw_by_email(self, email):
-        self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE email=?", (email,))
-        pwd_and_salt = self.cursor.fetchone()
-        if pwd_and_salt:
-            return pwd_and_salt[0]
-        else:
-            return False
+    def get_pw(self, email):
+        cursor = self.get_cursor()
+        cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE email=?", email)
+        return self.cursor.fetchone()[0]
+
+    def get_user(self, email):
+        self.connection.Row = sqlite3.Row
+        cursor = self.get_cursor()
+        cursor.execute(f"SELECT * FROM {self.table_name} WHERE email=?", email)
+        udict = dict(cursor.fetchall()[0])
+
+        del self.connection.Row
+        del udict["pwd_and_salt"]
+
+        return User(udict.values())
 
     def get_pw_by_nickname(self, nickname):
         self.cursor = self.get_cursor()
