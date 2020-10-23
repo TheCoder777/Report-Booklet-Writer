@@ -104,7 +104,7 @@ def checkup():
             os.remove(os.path.join(paths.TMP_PATH, f))
             print(SUCCESS + "done!" + RESET)
     else:
-        print(console + SUCCESS +  "Cache is clean!" + RESET)
+        print(console + SUCCESS + "Cache is clean!" + RESET)
 
     # Calculate time difference (just because we can)
     diff = time.time() - start_time
@@ -113,25 +113,6 @@ def checkup():
 
 
 app = Flask(__name__)
-
-
-def validate_pw(pw,hashandsalt):
-    return bcrypt.checkpw(pw.encode(), hashandsalt)
-
-
-def hashpw(pw):
-    return bcrypt.hashpw(pw.encode(), bcrypt.gensalt())
-
-
-def pws_equal(pw1, pw2):
-    if pw1 == pw2:
-        return True
-    else:
-        return False
-
-
-def is_email(email):
-    return re.match(r"[^@]+@[^@]+\.[^@]+", email)
 
 
 def writepdf(data, uinput):
@@ -201,7 +182,8 @@ def get_and_return():
         elif request.form.get("refresh"):
             del uinput["refresh"]
             udata = UserDB.get_user_data(session.get("user"))
-            start_date, end_date = pdfhandler.get_date(kw=udata["kw"], type="server", nr=uinput["nr"], year=uinput["year"])
+            start_date, end_date = pdfhandler.get_date(kw=udata["kw"], type="server", nr=uinput["nr"],
+                                                       year=uinput["year"])
             return render_template("edit.html", data=data, start_date=start_date, end_date=end_date)
 
         elif request.form.get("save_custom"):
@@ -214,7 +196,8 @@ def get_and_return():
 
         if request.form.get("refresh_custom"):
             del uinput["refresh_custom"]
-            start_date, end_date = pdfhandler.get_date(kw=uinput["kw"], type="server", nr=uinput["nr"], year=uinput["year"])
+            start_date, end_date = pdfhandler.get_date(kw=uinput["kw"], type="server", nr=uinput["nr"],
+                                                       year=uinput["year"])
             uinput = list(uinput.values())
             return render_template("edit_custom.html", data=uinput, start_date=start_date, end_date=end_date)
 
@@ -239,15 +222,15 @@ def get_new_config():
     if request.method == "POST":
         data = dict(request.form.copy())
         if session.get("user"):
-                if request.form.get("save"):
-                    del data["save"]
-                    if UserDB.update_config(session.get("user"), data):
-                        new_data = UserDB.get_settings_data(session.get("user"))
-                        return render_template("settings.html", data=new_data, action="success")
-                    else:
-                        return render_template("settings.html", data=data, action="fail")
+            if request.form.get("save"):
+                del data["save"]
+                if UserDB.update_config(session.get("user"), data):
+                    new_data = UserDB.get_settings_data(session.get("user"))
+                    return render_template("settings.html", data=new_data, action="success")
                 else:
                     return render_template("settings.html", data=data, action="fail")
+            else:
+                return render_template("settings.html", data=data, action="fail")
         else:
             try:
                 if data.get("hard_reset"):
@@ -286,7 +269,8 @@ def user_login():
                 # if not "ContentDB" in globals():
                 #     ContentDB = dbhandler.ContentDB(session["user"].id)
                 if not hashandsalt:
-                    return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="nouser")
+                    return render_template("security/login.html", name=request.form["name"],
+                                           pw=request.form["password"], notify="nouser")
                 if validate_pw(str(request.form["password"]), hashandsalt):
                     session["user"] = user
                     session["user"].check_user_files()
@@ -294,15 +278,75 @@ def user_login():
                     df = todolisthandler.open_todolist(session["user"].id)
                     return redirect(url_for("user"))
                 else:
-                    return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="failed")
+                    return render_template("security/login.html", name=request.form["name"],
+                                           pw=request.form["password"], notify="failed")
             if request.form.get("use_as_guest"):
                 return redirect(url_for("edit"))
             elif request.form.get("forgot_password"):
                 return redirect(url_for("forgot_password"))
             else:
-                return render_template("security/login.html", name=request.form["name"], pw=request.form["password"], notify="failed")
+                return render_template("security/login.html", name=request.form["name"], pw=request.form["password"],
+                                       notify="failed")
         except KeyError as e:
             return render_template("security/login.html", notify="failed")
+
+
+# Login/Register related functions
+
+
+def is_email(email):
+    # Email regex (x@x.x where x is element from all characters)
+    return re.match(r"[^@]+@[^@]+\.[^@]+", email)
+
+
+def is_password(pw):
+    # Password regex
+    # - 8 characters (at least 1 Uppercase)
+    # - one number
+    # - one special character (from !"#$%&'()*+,-./:;<=>?@[\]\^_`{|}~)
+    return re.fullmatch(r"^(?=.*[A-Z])(?=.*[a-z])(?=.*?\d)(?=.*?[!\"#$%&\'()*+,-./:;<=>?@[\]\\^_`{|}~]).{8,}$", pw)
+
+
+def validate_pw(pw, hashandsalt):
+    return bcrypt.checkpw(pw.encode(), hashandsalt)
+
+
+def hashpw(pw):
+    return bcrypt.hashpw(pw.encode(), bcrypt.gensalt())
+
+
+def pws_equal(pw1, pw2):
+    if pw1 == pw2:
+        return True
+    else:
+        return False
+
+
+def check_credentials(credentials):
+    # This will use the msg system soon!
+
+    # List for missing credentials (for the msg system)
+    missing_list = []
+
+    # validate name/surname (not empty)
+    if not len(credentials["name"]) > 0:
+        missing_list.append("name")
+    if not len(credentials["surname"]) > 0:
+        missing_list.append("surname")
+
+    # check email with regex
+    if not is_email(credentials["email"]):
+        missing_list.append("email")
+
+    # check password match
+    if not is_password(credentials["password"]):
+        missing_list.append("password doesn't fit requirements")
+
+    # check if passwords are equal
+    if not pws_equal(credentials["password"], credentials["password_re"]):
+        missing_list.append("passwords missmatch")
+
+    return missing_list
 
 
 @app.route("/register")
@@ -312,37 +356,25 @@ def register():
 
 @app.route("/register", methods=["POST"])
 def get_user():
-    if request.method == "POST":
-        try:
-            if request.form.get("register"):
-                data = dict(request.form.copy())
-                if not (len(request.form["name"]) > 0 and len(request.form["surname"]) > 0 and len(request.form["email"]) > 0 and len(request.form["password"])):
-                    return render_template("security/register.html", data=data, notify="not_enough_data")
-                name = request.form["name"]
-                surname = request.form["surname"]
-                email = request.form["email"]
-                if not is_email(email):
-                    return render_template("security/register.html", data=data, notify="invalid_email")
-                if not (len(request.form["password"]) and len(request.form["password_re"])):
-                    return render_template("security/register.html", data=data, notify="second_pw_needed")
-                # if not "ContentDB" in globals():
-                #     ContentDB = dbhandler.ContentDB(session["user"].id)
-                if pws_equal(request.form["password"], request.form["password_re"]):
-                    pwd_and_salt = hashpw(request.form["password"])
-                    UserDB.add_user(name, surname, email, pwd_and_salt)
-                    session["user"] = User(uid=UserDB.get_id_by_email(email))
-                    session["user"].check_user_files()
-                    global df
-                    df = todolisthandler.open_todolist(session["user"].id)
-                    return redirect(url_for("user"))
-                else:
-                    return render_template("security/register.html", data=data, notify="passwords_missmatch")
-            elif request.form.get("use_as_guest"):
-                return redirect(url_for("edit"))
-            else:
-                return render_template("security/register.html", data=data, notify="failed")
-        except KeyError:
-            return render_template("security/register.html", notify="failed")
+    # Check if the register button is pressed (this will be a 'next' button soon)
+    if request.form.get("register"):
+        # copy the user credentials to a python dict and check them
+        credentials = dict(request.form.copy())
+        missing_list = check_credentials(credentials)
+        if len(missing_list) == 0:
+            # create a password hash
+            pwd_and_salt = hashpw(request.form["password"])
+            session["user"] = UserDB.new_user(credentials, pwd_and_salt)
+            session["user"].check_user_files()
+            # initialize df gobally for the todolist handler (will be moved to /todolist later)
+            global df
+            df = todolisthandler.open_todolist(session["user"].id)
+            return redirect(url_for("user"))
+        else:
+            return render_template("security/register.html", data=credentials, msg=missing_list)
+
+    if request.form.get("use_as_guest"):
+        return redirect(url_for("edit"))
 
 
 @app.route("/user")
@@ -463,10 +495,10 @@ def export_all():
 
 
 if __name__ == "__main__":
-    HOST='localhost'
-    PORT=8000
-    SESSION_TYPE="filesystem"
-    SESSION_FILE_DIR=paths.COOKIE_PATH
+    HOST = 'localhost'
+    PORT = 8000
+    SESSION_TYPE = "filesystem"
+    SESSION_FILE_DIR = paths.COOKIE_PATH
     app.config.from_object(__name__)
     Session(app)
     checkup()

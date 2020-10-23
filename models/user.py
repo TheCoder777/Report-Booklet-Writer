@@ -38,9 +38,8 @@ class User:
         (Checkup for the user)
         """
 
-        uid = self.uid
         console = BOLD + "[USER CHECKUP] " + RESET
-        user_dir = os.path.join(paths.USER_PATH, str(uid))
+        user_dir = os.path.join(paths.USER_PATH, str(self.uid))
         # check user dir
         tocheck = user_dir
         if not os.path.exists(tocheck):
@@ -51,7 +50,7 @@ class User:
             print(console + SUCCESS + "User directory found!" + RESET)
 
         # check todolist
-        tocheck = os.path.join(paths.USER_PATH, str(uid), paths.TODOLIST_PATH)
+        tocheck = os.path.join(paths.USER_PATH, str(self.uid), paths.TODOLIST_PATH)
         if not os.path.exists(tocheck):
             print(console + ERROR + "Todolist file doesn't exist..." + RESET, end="")
             print("from", paths.TODOLIST_TEMPLATE_PATH, "to", user_dir)

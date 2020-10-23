@@ -21,11 +21,14 @@
 # SOFTWARE.
 
 
-import os, paths
+import os
 import pandas as pd
+from defines import paths
 
-def open_todolist(id):
-    return pd.read_json(os.path.join(paths.USER_PATH, str(id), paths.TODOLIST_PATH))
 
-def save_todolist(id, df):
-    df.to_json(os.path.join(paths.USER_PATH, str(id), paths.TODOLIST_PATH))
+def open_todolist(uid):
+    return pd.read_json(os.path.join(paths.USER_PATH, str(uid), paths.TODOLIST_PATH))
+
+
+def save_todolist(uid, df):
+    df.to_json(os.path.join(paths.USER_PATH, str(uid), paths.TODOLIST_PATH))

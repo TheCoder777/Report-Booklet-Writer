@@ -21,10 +21,19 @@
 # SOFTWARE.
 
 
-import sqlite3, handlers.pdfhandler, paths, sys, os
+# load system modules
+import os
+import sqlite3
+import sys
+
+# load internal modules
+from defines import configs
+from defines import paths
+from defines.colormode import Colormode
+from models.user import User
 
 
-class UserDB():
+class UserDB:
     def __init__(self):
         self.table_name = "users"
         self.db_path = paths.USER_DB_PATH
@@ -39,35 +48,46 @@ class UserDB():
             self.cursor = self.get_cursor()
             self.cursor.execute(f"CREATE TABLE if not exists {self.table_name} \
             (id INTEGER PRIMARY KEY, \
-            name TEXT, surname TEXT, \
+            name TEXT, \
+            surname TEXT, \
             nickname TEXT, \
             email TEXT, \
             pwd_and_salt TEXT, \
             unit TEXT, \
-            kw INTEGER, \
+            week INTEGER, \
             nr INTEGER, \
-            year INTEGER)")
+            year INTEGER, \
+            color_mode TEXT)")
             return True
 
         except FileNotFoundError as e:
             print(f"Database file '{self.db_path}' not found!", file=sys.stderr)
             return False
 
+    def new_user(self, cr, pwd):
+        cursor = self.get_cursor()
 
-    def add_user(self, name, surname, email, pwd_and_salt):
-        self.cursor = self.get_cursor()
-        data = confighandler.get_default_config()
-        kw = int(data["kw"])
-        nr = int(data["nr"])
-        year = int(data["year"])
-        unit = str(data["unit"])
-        nickname = name
+        # default nickname is the username
+        nickname = cr["name"]
+        week = configs.KW
+        nr = configs.NR
+        year = configs.YEAR
+        unit = configs.UNIT
 
-        self.cursor.execute(f"INSERT INTO {self.table_name}\
-        ('name', 'surname', 'nickname', 'email', pwd_and_salt, unit, kw, nr, year) \
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", (name, surname, nickname, email, pwd_and_salt, unit, kw, nr, year))
+        # list for both the db and the User object
+        db_entry = [cr["name"], cr["surname"], nickname, cr["email"], pwd, unit, week, nr, year, Colormode.DARK]
+
+        # add user to db
+        cursor.execute(f"INSERT INTO {self.table_name}\
+        (name, surname, nickname, email, pwd_and_salt, unit, week, nr, year, color_mode) \
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", db_entry)
         self.connection.commit()
 
+        # add current uid to entry (last used id by the current cursor
+        user_entry = [cursor.lastrowid, cr["name"], cr["surname"], nickname, cr["email"], unit, week, nr, year,
+                      Colormode.DARK]
+
+        return User(user_entry)
 
     def update_config(self, user, data):
         self.cursor = self.get_cursor()
@@ -84,30 +104,27 @@ class UserDB():
         self.connection.commit()
         return True
 
-
     def get_pw_by_email(self, email):
         self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE email=?", (email, ))
+        self.cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE email=?", (email,))
         pwd_and_salt = self.cursor.fetchone()
         if pwd_and_salt:
             return pwd_and_salt[0]
         else:
             return False
-
 
     def get_pw_by_nickname(self, nickname):
         self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE nickname=?", (nickname, ))
+        self.cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE nickname=?", (nickname,))
         pwd_and_salt = self.cursor.fetchone()
         if pwd_and_salt:
             return pwd_and_salt[0]
         else:
             return False
 
-
     def get_id_by_email(self, email):
         self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT id FROM {self.table_name} WHERE email=?", (email, ))
+        self.cursor.execute(f"SELECT id FROM {self.table_name} WHERE email=?", (email,))
         id = self.cursor.fetchone()
         if id:
             return id[0]
@@ -116,7 +133,7 @@ class UserDB():
 
     def get_id_by_nickname(self, nickname):
         self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT id FROM {self.table_name} WHERE nickname=?", (nickname, ))
+        self.cursor.execute(f"SELECT id FROM {self.table_name} WHERE nickname=?", (nickname,))
         id = self.cursor.fetchone()
         if id:
             return id[0]
@@ -125,64 +142,57 @@ class UserDB():
 
     def fetch_by_id(self, id):
         self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT name, nickname, email FROM {self.table_name} WHERE id=?", (id, ))
+        self.cursor.execute(f"SELECT name, nickname, email FROM {self.table_name} WHERE id=?", (id,))
         data = self.cursor.fetchone()
         if data:
             return data
         else:
             return False
-
 
     def get_name_nickname_by_email(self, email):
         self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT name, nickname FROM {self.table_name} WHERE email =?", (email, ))
+        self.cursor.execute(f"SELECT name, nickname FROM {self.table_name} WHERE email =?", (email,))
         data = self.cursor.fetchone()
-        if data:
-            return data
-        else:
-            return False
-
+        return data
 
     def get_email_by_nickname(self, nickname):
         self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT email FROM {self.table_name} WHERE nickname =?", (nickname, ))
+        self.cursor.execute(f"SELECT email FROM {self.table_name} WHERE nickname =?", (nickname,))
         data = self.cursor.fetchone()
         if data:
             return data[0]
         else:
             return False
 
-
     def get_name_email_by_nickname(self, nickname):
         self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT name, email FROM {self.table_name} WHERE nickname =?", (nickname, ))
+        self.cursor.execute(f"SELECT name, email FROM {self.table_name} WHERE nickname =?", (nickname,))
         data = self.cursor.fetchone()
         if data:
             return data
         else:
             return False
 
-
     def get_user_data(self, user):
         self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT name, surname, unit, kw, nr, year FROM {self.table_name} WHERE id =?", (user.id, ))
+        self.cursor.execute(f"SELECT name, surname, unit, kw, nr, year FROM {self.table_name} WHERE id =?", (user.id,))
         data = {}
         data["name"], data["surname"], data["unit"], data["kw"], data["nr"], data["year"] = self.cursor.fetchone()
         return data
 
-
     def get_settings_data(self, user):
         self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT name, surname, nickname, email, unit, kw, nr, year FROM {self.table_name} WHERE id =?", (user.id, ))
+        self.cursor.execute(
+            f"SELECT name, surname, nickname, email, unit, kw, nr, year FROM {self.table_name} WHERE id =?", (user.id,))
         data = {}
-        data["name"], data["surname"], data["nickname"], data["email"], data["unit"], data["kw"], data["nr"], data["year"] = self.cursor.fetchone()
+        data["name"], data["surname"], data["nickname"], data["email"], data["unit"], data["kw"], data["nr"], data[
+            "year"] = self.cursor.fetchone()
         return data
-
 
     def increase_nr(self, user):
         # Increse number of db records on download
         self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT nr FROM {self.table_name} WHERE id =?", (user.id, ))
+        self.cursor.execute(f"SELECT nr FROM {self.table_name} WHERE id =?", (user.id,))
         nr = self.cursor.fetchone()
         nr = nr[0] + 1
         self.cursor.execute(f"UPDATE {self.table_name} SET nr=? WHERE id =?", ([nr, user.id]))
@@ -197,11 +207,9 @@ class ContentDB():
         self.db_path = os.path.join(paths.USER_PATH, str(uid), paths.CONTENT_DB_PATH)
         self.initialize()
 
-
     def get_cursor(self):
         self.connection = sqlite3.connect(self.db_path)
         return self.connection.cursor()
-
 
     def initialize(self):
         try:
@@ -225,7 +233,6 @@ class ContentDB():
             print(f"Database file '{self.db_path}' not found!", file=sys.stderr)
             return False
 
-
     def add_record(self, uinput, data):
         kw = pdfhandler.get_kw_from_date(uinput["start_date"])
         name = uinput["name"]
@@ -242,9 +249,9 @@ class ContentDB():
         self.cursor = self.get_cursor()
         self.cursor.execute(f"INSERT INTO {self.table_name}\
         (name, surname, kw, nr, year, unit, start_date, end_date, sign_date, Bcontent, Scontent, BScontent) \
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (name, surname, kw, nr, year, unit, start_date, end_date, sign_date, Bcontent, Scontent, BScontent))
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (
+            name, surname, kw, nr, year, unit, start_date, end_date, sign_date, Bcontent, Scontent, BScontent))
         self.connection.commit()
-
 
     def get_content(self):
         self.cursor = self.get_cursor()
@@ -260,10 +267,9 @@ class ContentDB():
 
     def get_content_by_id(self, id):
         self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT * FROM {self.table_name} WHERE id=?", (id, ))
+        self.cursor.execute(f"SELECT * FROM {self.table_name} WHERE id=?", (id,))
         content = self.cursor.fetchone()
         return content
-
 
     def update(self, data, id):
         self.cursor = self.get_cursor()
