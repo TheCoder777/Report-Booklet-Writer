@@ -30,6 +30,7 @@ import os
 import re
 import sys
 import time
+import functools
 
 #  flask modules and extensions
 from flask import Flask, render_template, request, redirect, send_file, session, url_for
@@ -39,12 +40,12 @@ from flask_session import Session
 from gevent.pywsgi import WSGIServer
 
 # load internal modules
-from defines.colors import RESET, BOLD, ERROR, WARNING, SUCCESS, MSG_NORMAL, MSG_SUCCESS, MSG_WARNING
+from defines.colors import RESET, BOLD, ERROR, WARNING, SUCCESS
 from defines import paths
 from defines import messages
 from handlers import pdfhandler, todolisthandler, dbhandler
-from models.user import User
 from models.message import Message
+
 
 def checkup():
     """
@@ -111,6 +112,19 @@ def checkup():
     diff = time.time() - start_time
 
     print(console + BOLD + SUCCESS + f"Checkup finished succuessfully in {diff:.4f} seconds!\n" + RESET)
+
+
+def login_required(func):
+    """
+    Decorator for pages that need a login
+    """
+    @functools.wraps(func)
+    def login_wrapper(*args, **kwargs):
+        value = func(*args, **kwargs)
+        if not session.get("user"):
+            return redirect(url_for("login"))
+        return value
+    return login_wrapper()
 
 
 app = Flask(__name__)
@@ -283,8 +297,6 @@ def pws_equal(pw1, pw2):
 
 
 def check_register_credentials(credentials):
-    # This will use the msg system soon!
-
     # List for missing credentials (for the msg system)
     msg = Message()
 
@@ -327,6 +339,7 @@ def check_login_credentials(credentials):
         msg.add(messages.MISSING_PASSWORD)
 
     return msg
+
 
 # REGISTER
 
@@ -508,6 +521,8 @@ def export_all():
     else:
         return render_template("index.html", notify="login_required")
 
+
+# TODO: add a @app.errorhandler(404) page
 
 if __name__ == "__main__":
     HOST = 'localhost'
