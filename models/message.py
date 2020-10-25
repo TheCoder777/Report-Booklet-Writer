@@ -1,21 +1,8 @@
 
-class Message:
+class MSG:
     """
-    This class provides a basic custom messaging system to interact with the user
+    Simple msg object that acts as a message for the messagequeue.
     """
-    def __init__(self):
-        self.messages = []
-
-    def add(self, msg):
-        self.messages.append(msg)
-
-    def get(self):
-        msg_list = self.messages.copy()
-        self.clear()
-        return msg_list
-
-    def is_empty(self):
-        return (len(self.messages) > 0)
-
-    def clear(self):
-        self.messages.clear()
+    def __init__(self, content, color):
+        self.content = content
+        self.color = color

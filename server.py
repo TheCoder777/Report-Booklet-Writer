@@ -44,7 +44,7 @@ from defines.colors import RESET, BOLD, ERROR, WARNING, SUCCESS
 from defines import paths
 from defines import messages
 from handlers import pdfhandler, todolisthandler, dbhandler
-from models.message import Message
+from models.messagequeue import MessageQueue
 
 
 def checkup():
@@ -97,7 +97,7 @@ def checkup():
     else:
         print(console + SUCCESS + "Todolist template found!" + RESET)
 
-    # garbadge cleaning (delete all pdf in tmp file)
+    # garbage cleaning (delete all pdf in tmp file)
     filelist = [f for f in os.listdir(paths.TMP_PATH) if f.endswith(".pdf")]
     if filelist:
         print(console + "Cleaning cache...")
@@ -111,20 +111,7 @@ def checkup():
     # Calculate time difference (just because we can)
     diff = time.time() - start_time
 
-    print(console + BOLD + SUCCESS + f"Checkup finished succuessfully in {diff:.4f} seconds!\n" + RESET)
-
-
-def login_required(func):
-    """
-    Decorator for pages that need a login
-    """
-    @functools.wraps(func)
-    def login_wrapper(*args, **kwargs):
-        value = func(*args, **kwargs)
-        if not session.get("user"):
-            return redirect(url_for("login"))
-        return value
-    return login_wrapper()
+    print(console + BOLD + SUCCESS + f"Checkup finished successfully in {diff:.4f} seconds!\n" + RESET)
 
 
 app = Flask(__name__)
@@ -268,6 +255,19 @@ def get_new_config():
 # Login/Register related functions
 
 
+def login_required(func):
+    """
+    Decorator for pages that need a login
+    """
+    @functools.wraps(func)
+    def login_wrapper(*args, **kwargs):
+        value = func(*args, **kwargs)
+        if not session.get("user"):
+            return redirect(url_for("login"))
+        return value
+    return login_wrapper()
+
+
 def is_email(email):
     # Email regex (x@x.x where x is element from all characters)
     return re.match(r"[^@]+@[^@]+\.[^@]+", email)
@@ -298,7 +298,7 @@ def pws_equal(pw1, pw2):
 
 def check_register_credentials(credentials):
     # List for missing credentials (for the msg system)
-    msg = Message()
+    msg = MessageQueue()
 
     # validate name/surname (not empty)
     if not len(credentials["name"]) > 0:
@@ -321,22 +321,25 @@ def check_register_credentials(credentials):
 
     # check if passwords are equal
     if not pws_equal(credentials["password"], credentials["password_re"]):
-        msg.add(messages.PASSWORD_MISSMATCH)
+        msg.add(messages.PASSWORD_MISMATCH)
 
     return msg
 
 
 def check_login_credentials(credentials):
-    msg = Message()
+    msg = MessageQueue()
 
     if not len(credentials["email"]) > 0:
         msg.add(messages.MISSING_EMAIL)
+        print("add email")
 
     elif not is_email(credentials["email"]):
         msg.add(messages.INVALID_EMAIL)
+        print("regex")
 
     if not len(credentials["password"]) > 0:
         msg.add(messages.MISSING_PASSWORD)
+        print("pw")
 
     return msg
 
@@ -356,11 +359,11 @@ def get_user():
         # copy the user credentials to a python dict and check them
         credentials = dict(request.form.copy())
         msg = check_register_credentials(credentials)
-        if len(msg.messages) == 0:
+        if msg.is_empty():
             # create a password hash
             pwd_and_salt = hashpw(request.form["password"])
             session["user"] = UserDB.new_user(credentials, pwd_and_salt)
-            # TODO: move df initalization to /todolist
+            # TODO: move df initialization to /todolist
             global df
             df = todolisthandler.open_todolist(session["user"].id)
             return redirect(url_for("user"))
@@ -386,7 +389,8 @@ def user_login():
         # copy the user credentials to a python dict and check them
         credentials = dict(request.form.copy())
         msg = check_login_credentials(credentials)
-        if len(msg.messages) == 0:
+        if msg.is_empty():
+            print("login")
             hash_and_salt = UserDB.get_pw(credentials["email"])
             # validate password with hash from db
             if not validate_pw(credentials["password"], hash_and_salt):
@@ -395,6 +399,7 @@ def user_login():
             # Login user
             session["user"] = UserDB.get_user(credentials["email"])
             return redirect(url_for("user"))
+        print("normal")
         return render_template("security/login.html", data=credentials, msg=msg.get())
     # Check if the "Use as guest" button is pressed
     elif request.form.get("use_as_guest"):

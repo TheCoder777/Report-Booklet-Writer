@@ -27,7 +27,7 @@
                     </li>
                     <li class="icon edit">
                         <a class="nav_link" href="{{ url_for('edit') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg"viewBox="0 0 32 31.996">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 31.996">
                                 <defs id="defs899">
                                     <style id="style897">.cls-1{fill:none;stroke:#1d1d1b;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px}</style>
                                 </defs>
@@ -46,7 +46,7 @@
                     <li class="icon user">
                         <div class="nav_link">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-                                <path class="icon_color" d="M16 6.25a5.507 5.507 0 00-5.5 5.5c0 3.033 2.468 5.5 5.5 5.5s5.5-2.467 5.5-5.5-2.468-5.5-5.5-5.5zm0 2c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5zm0 11c-6.729 0-12 2.855-12 6.5h2c0-2.128 4.106-4.5 10-4.5s10 2.372 10 4.5h2c0-3.645-5.271-6.5-12-6.5z", fill="#eee"/>
+                                <path class="icon_color" d="M16 6.25a5.507 5.507 0 00-5.5 5.5c0 3.033 2.468 5.5 5.5 5.5s5.5-2.467 5.5-5.5-2.468-5.5-5.5-5.5zm0 2c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5zm0 11c-6.729 0-12 2.855-12 6.5h2c0-2.128 4.106-4.5 10-4.5s10 2.372 10 4.5h2c0-3.645-5.271-6.5-12-6.5z" fill="#eee"/>
                             </svg>
                             <span class="link_text icon_text">{{ session["user"].name }}</span>
                         </div>
@@ -84,7 +84,7 @@
                     <li class="icon login">
                         <a class="nav_link" href="{{ url_for('login') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-                                <path class="icon_color" d="M16 6.25a5.507 5.507 0 00-5.5 5.5c0 3.033 2.468 5.5 5.5 5.5s5.5-2.467 5.5-5.5-2.468-5.5-5.5-5.5zm0 2c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5zm0 11c-6.729 0-12 2.855-12 6.5h2c0-2.128 4.106-4.5 10-4.5s10 2.372 10 4.5h2c0-3.645-5.271-6.5-12-6.5z", fill="#eee"/>
+                                <path class="icon_color" d="M16 6.25a5.507 5.507 0 00-5.5 5.5c0 3.033 2.468 5.5 5.5 5.5s5.5-2.467 5.5-5.5-2.468-5.5-5.5-5.5zm0 2c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5zm0 11c-6.729 0-12 2.855-12 6.5h2c0-2.128 4.106-4.5 10-4.5s10 2.372 10 4.5h2c0-3.645-5.271-6.5-12-6.5z" fill="#eee"/>
                             </svg>
                             <span class="link_text icon_text">Login</span>
                         </a>
@@ -139,11 +139,13 @@
         <div class="headline">
             <h1 class="header">{% block headline %}{% endblock %}</h1>
         </div>
-        <div class="bodybody">
-            <p class="simple_header" style="{% block statusstyle %}{% endblock %}">{% block statusmessage %}{% endblock %}</p>
-            {% block statuscontent %}
-            {% endblock %}
-        </div>
+        {% for message in msg: %}
+            <div class="messages">
+                <p class="msg" style="color: var({{ message.color }});">{{ message.content }}</p>
+            </div>
+        {% endfor %}
+        {% block messages %}
+        {% endblock %}
         {% block content %}
         {% endblock %}
     </body>

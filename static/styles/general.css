@@ -328,7 +328,7 @@ body::-webkit-scrollbar-thumb {
     width: 5rem;
 }
 
-.bodybody {
+.messages {
     align-items: center;
     justify-content: center;
     margin-top: 2rem;
