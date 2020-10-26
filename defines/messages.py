@@ -25,6 +25,7 @@ UNFULFILLED_PASSWORD_REQUIREMENTS = MSG("Your Password doesn't match the require
                                       One capital character,<br> \
                                       one number,<br> \
                                       and one Special character.", MSG_WARNING)
+INVALID_DATE = MSG("The date you entered is in the wrong format!", MSG_WARNING)
 
 # successful
 LOGGED_IN = MSG("Successfully logged in!", MSG_SUCCESS)

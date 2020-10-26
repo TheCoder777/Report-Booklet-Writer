@@ -45,8 +45,8 @@ class UserDB:
 
     def initialize(self):
         try:
-            self.cursor = self.get_cursor()
-            self.cursor.execute(f"CREATE TABLE if not exists {self.table_name} \
+            cursor = self.get_cursor()
+            cursor.execute(f"CREATE TABLE if not exists {self.table_name} \
             (id INTEGER PRIMARY KEY, \
             name TEXT, \
             surname TEXT, \
@@ -89,18 +89,12 @@ class UserDB:
 
         return User(user_entry)
 
-    def update_config(self, user, data):
-        self.cursor = self.get_cursor()
-        try:
-            data["kw"] = int(data["kw"])
-            data["nr"] = int(data["nr"])
-            data["year"] = int(data["year"])
-        except ValueError:
-            pass
+    def update_user_config(self, user, data):
+        cursor = self.get_cursor()
         vals = list(data.values())
         vals.append(user.email)
-        self.cursor.execute(f"UPDATE {self.table_name} SET \
-        name=?, surname=?, nickname=?, email=?, unit=?, kw=?, nr=?, year=? WHERE email=?", vals)
+        cursor.execute(f"UPDATE {self.table_name} SET \
+        name=?, surname=?, nickname=?, email=?, unit=?, kw=?, nr=?, year=? WHERE id=?", vals)
         self.connection.commit()
         return True
 

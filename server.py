@@ -132,6 +132,21 @@ def write_many_pdfs():
     return pdfhandler.create_many(content)
 
 
+def login_required(func):
+    """
+    Decorator for pages that need a login
+    """
+
+    @functools.wraps(func)
+    def login_wrapper(*args, **kwargs):
+        value = func(*args, **kwargs)
+        if not session.get("user"):
+            return redirect(url_for("login"))
+        return value
+
+    return login_wrapper
+
+
 @app.route("/")
 def index():
     if not session.get("mode"):
@@ -213,59 +228,39 @@ def get_and_return():
             return render_template("edit.html", data=data, start_date=start_date, end_date=end_date)
 
 
+def validate_settings(data):
+    msg = MessageQueue()
+
+
+
+    return msg
+
+
+@login_required
 @app.route("/settings")
 def settings():
-    if session.get("user"):
-        data = UserDB.get_settings_data(session.get("user"))
-    else:
-        data = confighandler.parse_config()
-    return render_template("settings.html", data=data, action="none")
+    return render_template("settings.html", user=session["user"].copy())
 
 
+@login_required
 @app.route("/settings", methods=["POST"])
-def get_new_config():
-    if request.method == "POST":
+def update_settings():
+    if request.form.get("save"):
         data = dict(request.form.copy())
-        if session.get("user"):
-            if request.form.get("save"):
-                del data["save"]
-                if UserDB.update_config(session.get("user"), data):
-                    new_data = UserDB.get_settings_data(session.get("user"))
-                    return render_template("settings.html", data=new_data, action="success")
-                else:
-                    return render_template("settings.html", data=data, action="fail")
+        msg = validate_settings(data)
+        # TODO: Continue db request for settings
+        if msg.is_empty():
+            del data["save"]
+            if UserDB.update_user_config(session.get["user"].uid, data):
+                new_data = UserDB.get_settings_data(session.get("user"))
+                return render_template("settings.html", data=new_data)
             else:
                 return render_template("settings.html", data=data, action="fail")
-        else:
-            try:
-                if data.get("hard_reset"):
-                    confighandler.reset_config()
-                    new_data = confighandler.parse_config()
-                    return render_template("settings.html", data=new_data, action="success_reset")
-                elif data.get("save"):
-                    confighandler.update_config(data)
-                    new_data = confighandler.parse_config()
-                    return render_template("settings.html", data=new_data, action="success")
-                else:
-                    return render_template("settings.html", data=data, action="fail")
-            except KeyError:
-                return render_template("settings.html", data=data, action="fail")
+    elif request.form.get("hard_reset"):
+        return render_template("settings.html", data=new_data, action="success_reset")
 
 
 # Login/Register related functions
-
-
-def login_required(func):
-    """
-    Decorator for pages that need a login
-    """
-    @functools.wraps(func)
-    def login_wrapper(*args, **kwargs):
-        value = func(*args, **kwargs)
-        if not session.get("user"):
-            return redirect(url_for("login"))
-        return value
-    return login_wrapper()
 
 
 def is_email(email):
