@@ -23,23 +23,50 @@
 
 # load system modules
 import io
+import re
 import time
 from datetime import date
 from textwrap import wrap
 
+# load internal modules
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from defines import paths
 
 
-def check_start_date(date):
-    day, month, year = date.split(".")
+def validate_html_date(html_date):
+    """
+    Validates a date (yyyy-mm-dd) roughly
+    (yes, it's not the greatest date validation ever)
+    """
+    if re.match(r"[\d][\d][\d][\d]-[\d]?[\d]-[\d]?[\d]", html_date):
+        year, month, day = html_date.split("-")
+        if not int(year) > 1500:
+            return False
+        if not int(month) < 12:
+            return False
+        if not day < 31:
+            return False
+    else:
+        return False
+
+
+def validate_print_date(html_date):
+    """
+    Validates a date for display on the frontend.
+    This should be an exact match of dd.mm.yyyy
+    """
+    return re.match(r"[\d][\d].[\d][\d].[\d][\d][\d][\d]", html_date)
+
+
+def check_start_date(check_date):
+    day, month, year = check_date.split(".")
     tdate = ".".join([day, month])
     if tdate == "31.08":
         return "01.09." + year
     else:
-        return date
+        return check_date
 
 
 def reformat_date(date):
@@ -57,7 +84,7 @@ def get_a_date(type=""):
 
 def get_date(kw, type, nr, year):
     kw = int(kw)
-    nr = int(nr) -1
+    nr = int(nr) - 1
 
     year = int(year) - 1
     year = int(time.strftime("%Y")) + year
@@ -77,7 +104,7 @@ def get_kw_from_date(d):
     year, month, day = d.split("-")
     dateobj = date(int(year), int(month), int(day))
     iso_date = dateobj.isocalendar()
-    return iso_date[1] # only kw
+    return iso_date[1]  # only kw
 
 
 def draw(data, uinput, packet):
@@ -186,7 +213,6 @@ def create_many(content):
         del packet
         del template_page
         del new_pdf
-
 
     filename = paths.TMP_PATH + "save.pdf"
     out_stream = open(filename, "wb")

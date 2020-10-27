@@ -40,12 +40,13 @@ class UserDB:
         self.initialize()
 
     def get_cursor(self):
-        self.connection = sqlite3.connect(self.db_path)
-        return self.connection.cursor()
+        connection = sqlite3.connect(self.db_path)
+        return connection.cursor(), connection
 
     def initialize(self):
         try:
-            cursor = self.get_cursor()
+            cursor, connection = self.get_cursor()
+
             cursor.execute(f"CREATE TABLE if not exists {self.table_name} \
             (id INTEGER PRIMARY KEY, \
             name TEXT, \
@@ -58,61 +59,132 @@ class UserDB:
             nr INTEGER, \
             year INTEGER, \
             color_mode TEXT)")
+            cursor.close()
+            connection.close()
             return True
 
-        except FileNotFoundError as e:
+        except FileNotFoundError:
             print(f"Database file '{self.db_path}' not found!", file=sys.stderr)
             return False
 
     def new_user(self, cr, pwd):
-        cursor = self.get_cursor()
+        cursor, connection = self.get_cursor()
 
         # default nickname is the username
         nickname = cr["name"]
-        week = configs.KW
+        week = configs.WEEK
         nr = configs.NR
         year = configs.YEAR
         unit = configs.UNIT
+        color_mode = Colormode.DARK
 
         # list for both the db and the User object
-        db_entry = [cr["name"], cr["surname"], nickname, cr["email"], pwd, unit, week, nr, year, Colormode.DARK]
+        db_entry = [cr["name"],
+                    cr["surname"],
+                    nickname,
+                    cr["email"],
+                    pwd,
+                    unit,
+                    week,
+                    nr,
+                    year,
+                    color_mode]
 
         # add user to db
         cursor.execute(f"INSERT INTO {self.table_name}\
         (name, surname, nickname, email, pwd_and_salt, unit, week, nr, year, color_mode) \
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", db_entry)
-        self.connection.commit()
+        connection.commit()
+        # self.cursor.close()
 
-        # add current uid to entry (last used id by the current cursor
-        user_entry = [cursor.lastrowid, cr["name"], cr["surname"], nickname, cr["email"], unit, week, nr, year,
+        # add current uid to entry (last used id by the current cursor)
+        user_entry = [cursor.lastrowid,
+                      cr["name"],
+                      cr["surname"],
+                      nickname,
+                      cr["email"],
+                      unit,
+                      week,
+                      nr,
+                      year,
                       Colormode.DARK]
 
         return User(user_entry)
 
     def update_user_config(self, user, data):
-        cursor = self.get_cursor()
-        vals = list(data.values())
-        vals.append(user.email)
+        """
+        Create db entry entirely from data (except uid)
+        (this is only to preserve the db order)
+        """
+
+        db_entry = [data["name"],
+                    data["surname"],
+                    data["nickname"],
+                    data["email"],
+                    data["unit"],
+                    data["week"],
+                    data["nr"],
+                    data["year"],
+                    data["color_mode"],
+                    user.uid]
+
+        cursor, connection = self.get_cursor()
+
         cursor.execute(f"UPDATE {self.table_name} SET \
-        name=?, surname=?, nickname=?, email=?, unit=?, kw=?, nr=?, year=? WHERE id=?", vals)
-        self.connection.commit()
-        return True
+        name=?, surname=?, nickname=?, email=?, unit=?, week=?, nr=?, year=?, color_mode=? WHERE id=?", db_entry)
+
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        # remove last element (uid) and insert at first position
+        db_entry.insert(0, db_entry.pop())
+        return User(db_entry)
 
     def get_pw(self, email):
-        cursor = self.get_cursor()
-        cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE email=?", email)
-        return self.cursor.fetchone()[0]
+        """
+        Return the password hash if the email is found in the database
+        """
+        cursor, connection = self.get_cursor()
+        cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE email=?", (email,))
+        # pw_hash = cursor.fetchone()[0]
+        return cursor.fetchone()[0]
 
     def get_user(self, email):
-        self.connection.Row = sqlite3.Row
-        cursor = self.get_cursor()
-        cursor.execute(f"SELECT * FROM {self.table_name} WHERE email=?", email)
+        cursor, connection = self.get_cursor()
+        del cursor
+        connection.row_factory = sqlite3.Row
+
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT * FROM {self.table_name} WHERE email=?", (email,))
         udict = dict(cursor.fetchall()[0])
 
-        del self.connection.Row
+        del connection.row_factory
         del udict["pwd_and_salt"]
 
         return User(udict.values())
+
+    def email_exists(self, email):
+        # check if email is already in db
+        cursor, connection = self.get_cursor()
+        cursor.execute(f"SELECT email FROM {self.table_name} WHERE email=?", (email,))
+        return cursor.fetchone()
+
+    def reset_to_default(self, user):
+        cursor = self.connection.cursor()
+
+        week = configs.WEEK
+        nr = configs.NR
+        year = configs.YEAR
+        unit = configs.UNIT
+        color_mode = Colormode.DARK
+
+        user.update_defaults(week, nr, year, unit, color_mode)
+
+        cursor.execute(f"UPDATE {self.table_name} SET \
+                unit=?, week=?, nr=?, year=?, color_mode=? WHERE id=?", (week, nr, year, color_mode, user.uid))
+
+        return user
 
     def get_pw_by_nickname(self, nickname):
         self.cursor = self.get_cursor()
@@ -201,21 +273,21 @@ class UserDB:
         return True
 
 
-class ContentDB():
+class ContentDB:
     def __init__(self, uid):
         self.table_name = "content"
         self.uid = uid
         self.db_path = os.path.join(paths.USER_PATH, str(uid), paths.CONTENT_DB_PATH)
+        self.connection = sqlite3.connect(self.db_path)
         self.initialize()
 
     def get_cursor(self):
-        self.connection = sqlite3.connect(self.db_path)
         return self.connection.cursor()
 
     def initialize(self):
         try:
-            self.cursor = self.get_cursor()
-            self.cursor.execute(f"CREATE TABLE if not exists {self.table_name} \
+            cursor = self.get_cursor()
+            cursor.execute(f"CREATE TABLE if not exists {self.table_name} \
             (id INTEGER PRIMARY KEY, \
             name TEXT, surname TEXT, \
             kw INTEGER, \

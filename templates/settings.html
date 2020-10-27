@@ -28,48 +28,46 @@
         <div class="form_wrapper">
             <div class="manual_input">
                 <p class="input_hint">Name:</p>
-                <input class="input_field" type="text" name="name" value="{{ data['name'] }}">
+                <input class="input_field" type="text" name="name" value="{{ user.name }}">
             </div>
             <div class="manual_input">
                 <p class="input_hint">Surname:</p>
-                <input class="input_field" type="text" name="surname" value="{{ data['surname'] }}">
+                <input class="input_field" type="text" name="surname" value="{{ user.surname }}">
             </div>
-            {% if data.get("nickname"): %}
             <div class="manual_input">
                 <p class="input_hint">Nickname:</p>
-                <input class="input_field" type="text" name="nickname" value="{{ data['nickname'] }}">
+                <input class="input_field" type="text" name="nickname" value="{{ user.nickname }}">
             </div>
-            {% endif %}
-            {% if data.get("email"): %}
             <div class="manual_input">
                 <p class="input_hint">Email:</p>
-                <input class="input_field" type="text" name="email" value="{{ data['email'] }}">
+                <input class="input_field" type="text" name="email" value="{{ user.email }}">
             </div>
-            {% endif %}
             <div class="manual_input">
                 <p class="input_hint">Unit:</p>
-                <input class="input_field" type="text" name="unit" value="{{ data['unit'] }}">
+                <input class="input_field" type="text" name="unit" value="{{ user.unit }}">
             </div>
             <div class="manual_input">
                 <p class="input_hint">Week of first Year:</p>
-                <input class="input_field" type="number" name="kw" value="{{ data['kw'] }}">
+                <input class="input_field" type="number" name="week" value="{{ user.week }}">
             </div>
             <div class="manual_input">
                 <p class="input_hint">Current Number:</p>
-                <input class="input_field" type="number" name="nr" value="{{ data['nr'] }}">
+                <input class="input_field" type="number" name="nr" value="{{ user.nr }}">
             </div>
             <div class="manual_input">
                 <p class="input_hint">Year:</p>
-                <input class="input_field" type="number" name="year" value="{{ data['year'] }}">
+                <input class="input_field" type="number" name="year" value="{{ user.year }}">
+            </div>
+            <div class="manual_input">
+                <p class="input_hint">Color Mode:</p>
+                <input class="input_field" type="text" name="color_mode" value="{{ user.color_mode }}">
             </div>
 
         </div>
         <div class="buttons">
             <input class="button" type="submit" name="save" value="Save changes" form=configform>
             <input class="secondary_button" type="reset" name="reset" value="Reset changed values" form=configform>
-            {% if not session.get("user"): %}
             <input class="secondary_button" type="submit" name="hard_reset" value="Reset to default">
-            {% endif %}
         </div>
     </form>
 {% endblock %}

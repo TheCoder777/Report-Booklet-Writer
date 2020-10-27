@@ -13,6 +13,7 @@ MISSING_NAME = MSG("Missing name!", MSG_WARNING)
 MISSING_SURNAME = MSG("Missing surname!", MSG_WARNING)
 MISSING_PASSWORD = MSG("Missing password!", MSG_WARNING)
 MISSING_EMAIL = MSG("Missing email address!", MSG_WARNING)
+EMAIL_DOESNT_EXIST = MSG("This account doesn't exist!", MSG_WARNING)
 
 # wrong/invalid fields
 INVALID_EMAIL = MSG("Your email is invalid!<br>Did you spell it right?", MSG_WARNING)
@@ -31,3 +32,6 @@ INVALID_DATE = MSG("The date you entered is in the wrong format!", MSG_WARNING)
 LOGGED_IN = MSG("Successfully logged in!", MSG_SUCCESS)
 REGISTERED = MSG("Successfully registered!", MSG_SUCCESS)
 SAVED = MSG("Yes, we saved it!", MSG_SUCCESS)
+
+# reset
+RESET_USER_TO_DEFAULT = MSG("Successfully reset user to defaults!", MSG_NORMAL)

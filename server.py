@@ -41,6 +41,7 @@ from gevent.pywsgi import WSGIServer
 
 # load internal modules
 from defines.colors import RESET, BOLD, ERROR, WARNING, SUCCESS
+from defines.colormode import Colormode
 from defines import paths
 from defines import messages
 from handlers import pdfhandler, todolisthandler, dbhandler
@@ -135,26 +136,26 @@ def write_many_pdfs():
 def login_required(func):
     """
     Decorator for pages that need a login
+    (redirects to login if not logged in)
     """
 
     @functools.wraps(func)
     def login_wrapper(*args, **kwargs):
-        value = func(*args, **kwargs)
         if not session.get("user"):
             return redirect(url_for("login"))
-        return value
+        return func(*args, **kwargs)
 
     return login_wrapper
 
 
 @app.route("/")
 def index():
-    if not session.get("mode"):
-        session["mode"] = "Dark"
+
     if session.get("user"):
         return redirect("user")
-    else:
-        return render_template("index.html")
+
+    session["color_mode"] = Colormode.DARK
+    return render_template("index.html")
 
 
 @app.route("/edit")
@@ -231,33 +232,30 @@ def get_and_return():
 def validate_settings(data):
     msg = MessageQueue()
 
-
-
     return msg
 
 
-@login_required
 @app.route("/settings")
-def settings():
-    return render_template("settings.html", user=session["user"].copy())
-
-
 @login_required
+def settings():
+    return render_template("settings.html", user=session.get("user"))
+
+
 @app.route("/settings", methods=["POST"])
+@login_required
 def update_settings():
     if request.form.get("save"):
         data = dict(request.form.copy())
         msg = validate_settings(data)
-        # TODO: Continue db request for settings
         if msg.is_empty():
             del data["save"]
-            if UserDB.update_user_config(session.get["user"].uid, data):
-                new_data = UserDB.get_settings_data(session.get("user"))
-                return render_template("settings.html", data=new_data)
-            else:
-                return render_template("settings.html", data=data, action="fail")
+            session["user"] = UserDB.update_user_config(session.get("user"), data)
+            return render_template("settings.html", user=session.get("user"), msg=msg.get())
     elif request.form.get("hard_reset"):
-        return render_template("settings.html", data=new_data, action="success_reset")
+        msg = MessageQueue()
+        session["user"] = UserDB.reset_to_default(session.get("user"))
+        msg.add(messages.RESET_USER_TO_DEFAULT)
+        return render_template("settings.html", data=session.get("user"))
 
 
 # Login/Register related functions
@@ -306,9 +304,12 @@ def check_register_credentials(credentials):
         msg.add(messages.MISSING_EMAIL)
 
     # check email with regex
-    # TODO: check if the email is already used in db
     elif not is_email(credentials["email"]):
         msg.add(messages.INVALID_EMAIL)
+
+    # chek if email is already in db
+    elif UserDB.email_exists(credentials["email"]):
+        msg.add(messages.EMAIL_DOESNT_EXIST)
 
     # check password match
     if not is_password(credentials["password"]):
@@ -322,19 +323,20 @@ def check_register_credentials(credentials):
 
 
 def check_login_credentials(credentials):
+    # Same as check_register_credentials, but for login
     msg = MessageQueue()
 
     if not len(credentials["email"]) > 0:
         msg.add(messages.MISSING_EMAIL)
-        print("add email")
 
     elif not is_email(credentials["email"]):
         msg.add(messages.INVALID_EMAIL)
-        print("regex")
+
+    elif not UserDB.email_exists(credentials["email"]):
+        msg.add(messages.EMAIL_DOESNT_EXIST)
 
     if not len(credentials["password"]) > 0:
         msg.add(messages.MISSING_PASSWORD)
-        print("pw")
 
     return msg
 
@@ -359,10 +361,15 @@ def get_user():
             pwd_and_salt = hashpw(request.form["password"])
             session["user"] = UserDB.new_user(credentials, pwd_and_salt)
             # TODO: move df initialization to /todolist
-            global df
-            df = todolisthandler.open_todolist(session["user"].id)
+            # global df
+            # df = todolisthandler.open_todolist(session["user"].id)
             return redirect(url_for("user"))
         else:
+            print("Im here")
+            print(msg.is_empty())
+            for m in msg.messages:
+                print(m.content)
+            print(len(msg.get()))
             return render_template("security/register.html", data=credentials, msg=msg.get())
     # Check if the "Use as guest" button is pressed
     elif request.form.get("use_as_guest"):
@@ -385,7 +392,6 @@ def user_login():
         credentials = dict(request.form.copy())
         msg = check_login_credentials(credentials)
         if msg.is_empty():
-            print("login")
             hash_and_salt = UserDB.get_pw(credentials["email"])
             # validate password with hash from db
             if not validate_pw(credentials["password"], hash_and_salt):
@@ -394,7 +400,7 @@ def user_login():
             # Login user
             session["user"] = UserDB.get_user(credentials["email"])
             return redirect(url_for("user"))
-        print("normal")
+        print(credentials)
         return render_template("security/login.html", data=credentials, msg=msg.get())
     # Check if the "Use as guest" button is pressed
     elif request.form.get("use_as_guest"):
@@ -405,11 +411,9 @@ def user_login():
 
 
 @app.route("/user")
+@login_required
 def user():
-    if session.get("user"):
-        return render_template("user.html")
-    else:
-        redirect(url_for("index"))
+    return render_template("user.html")
 
 
 @app.route("/logout")
@@ -431,11 +435,15 @@ def change_password():
 
 @app.route("/change-mode")
 def change_mode():
-    if session["mode"] == "Dark":
-        session["mode"] = "Light"
+    """
+    This function switches between the Dark and the Light color mode.
+    (Defaults to Darkmode)
+    """
+    if session["color_mode"] == Colormode.DARK:
+        session["color_mode"] = Colormode.LIGHT
         return redirect(request.referrer)
     else:
-        session["mode"] = "Dark"
+        session["color_mode"] = Colormode.DARK
         return redirect(request.referrer)
 
 
@@ -523,6 +531,14 @@ def export_all():
 
 
 # TODO: add a @app.errorhandler(404) page
+
+
+@app.before_request
+def set_color_mode():
+    # setting default colormode for new users if not already set
+    if not session.get("color_mode"):
+        session["color_mode"] = Colormode.DARK
+
 
 if __name__ == "__main__":
     HOST = 'localhost'

@@ -16,16 +16,16 @@
             <div class="form_fields">
                 <div class="manual_input">
                     <p class="input_hint">Email:</p>
-                    {% if name: %}
-                    <input class="input_field" type="text" name="email" value="{{ data['email'] }}" placeholder="name@example.com">
+                    {% if data.get('email'): %}
+                    <input class="input_field" type="text" name="email" value="{{ data.get('email') }}" placeholder="name@example.com">
                     {% else: %}
                     <input class="input_field" type="text" name="email" placeholder="name@example.com">
                     {% endif %}
                 </div>
                 <div class="manual_input">
                     <p class="input_hint">Password:</p>
-                    {% if pw: %}
-                    <input class="input_field" type="password" value="{{ data['password'] }}" name="password">
+                    {% if data.get('password'): %}
+                    <input class="input_field" type="password" value="{{ data.get('password') }}" name="password">
                     {% else: %}
                     <input class="input_field" type="password" name="password">
                     {% endif %}

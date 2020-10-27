@@ -1,4 +1,4 @@
 
 class Colormode:
-    DARK = "Dark"
-    LIGHT = "Light"
+    DARK = "Darkmode"
+    LIGHT = "Lightmode"

@@ -15,7 +15,7 @@ class MessageQueue:
         return msg_list
 
     def is_empty(self):
-        return len(self.messages) < 0
+        return (len(self.messages) <= 0)
 
     def clear(self):
         self.messages.clear()
