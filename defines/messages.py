@@ -31,7 +31,8 @@ INVALID_DATE = MSG("The date you entered is in the wrong format!", MSG_WARNING)
 # successful
 LOGGED_IN = MSG("Successfully logged in!", MSG_SUCCESS)
 REGISTERED = MSG("Successfully registered!", MSG_SUCCESS)
-SAVED = MSG("Yes, we saved it!", MSG_SUCCESS)
+SAVED_TODO = MSG("Yes, we saved it!", MSG_SUCCESS)
+SAVED_SETTINGS = MSG("Your settings are save!", MSG_SUCCESS)
 
 # reset
 RESET_USER_TO_DEFAULT = MSG("Successfully reset user to default settings!", MSG_NORMAL)

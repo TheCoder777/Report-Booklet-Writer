@@ -250,6 +250,7 @@ def update_settings():
         if msg.is_empty():
             del data["save"]
             UserDB.update_user_config(session.get("user"), data)
+            msg.add(messages.SAVED_SETTINGS)
             return render_template("settings.html", user=session.get("user"), msg=msg.get())
     elif request.form.get("hard_reset"):
         msg = MessageQueue()
