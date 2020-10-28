@@ -67,6 +67,13 @@ class UserDB:
             print(f"Database file '{self.db_path}' not found!", file=sys.stderr)
             return False
 
+    def update_custom(self, field, value, user):
+        cursor, connection = self.get_cursor()
+        cursor.execute(f"UPDATE {self.table_name} SET {field}=? WHERE id=?", (value, user.uid))
+        connection.commit()
+        cursor.close()
+        connection.close()
+
     def new_user(self, cr, pwd):
         cursor, connection = self.get_cursor()
 
@@ -113,6 +120,7 @@ class UserDB:
 
     def update_user_config(self, user, data):
         """
+        Updates the user.db with new values (changed in /settings)
         Create db entry entirely from data (except uid)
         (this is only to preserve the db order)
         """
@@ -139,6 +147,7 @@ class UserDB:
 
         # remove last element (uid) and insert at first position
         db_entry.insert(0, db_entry.pop())
+        # TODO: add .update() to user obj to update all vals, so no need to return user
         return User(db_entry)
 
     def get_pw(self, email):
@@ -160,6 +169,8 @@ class UserDB:
         udict = dict(cursor.fetchall()[0])
 
         del connection.row_factory
+        cursor.close()
+        connection.close()
         del udict["pwd_and_salt"]
 
         return User(udict.values())
@@ -171,7 +182,7 @@ class UserDB:
         return cursor.fetchone()
 
     def reset_to_default(self, user):
-        cursor = self.connection.cursor()
+        cursor, connection = self.get_cursor()
 
         week = configs.WEEK
         nr = configs.NR
@@ -182,9 +193,20 @@ class UserDB:
         user.update_defaults(week, nr, year, unit, color_mode)
 
         cursor.execute(f"UPDATE {self.table_name} SET \
-                unit=?, week=?, nr=?, year=?, color_mode=? WHERE id=?", (week, nr, year, color_mode, user.uid))
-
+                unit=?, week=?, nr=?, year=?, color_mode=? WHERE id=?", (unit, week, nr, year, color_mode, user.uid))
+        connection.commit()
+        cursor.close()
+        connection.close()
         return user
+
+    def update_color_mode(self, colormode, user):
+        cursor, connection = self.get_cursor()
+        cursor.execute(f"UPDATE {self.table_name} SET color_mode=? WHERE id=?", (colormode, user.uid))
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        user.update_color_mode(colormode)
 
     def get_pw_by_nickname(self, nickname):
         self.cursor = self.get_cursor()

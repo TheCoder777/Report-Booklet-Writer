@@ -34,4 +34,4 @@ REGISTERED = MSG("Successfully registered!", MSG_SUCCESS)
 SAVED = MSG("Yes, we saved it!", MSG_SUCCESS)
 
 # reset
-RESET_USER_TO_DEFAULT = MSG("Successfully reset user to defaults!", MSG_NORMAL)
+RESET_USER_TO_DEFAULT = MSG("Successfully reset user to default settings!", MSG_NORMAL)

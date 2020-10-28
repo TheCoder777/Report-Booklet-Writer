@@ -130,7 +130,7 @@
                                 <path class="dark_moon" fill="#eee" stroke="#none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.24" d="M15.925.62A15.38 15.38 0 00.62 16 15.38 15.38 0 0016 31.38a15.38 15.38 0 0012.995-7.153 12.113 12.113 0 01-4.752.971A12.113 12.113 0 0112.13 13.085a12.113 12.113 0 018.803-11.653A15.38 15.38 0 0016 .62a15.38 15.38 0 00-.075 0z"/>
                                 {% endif %}
                             </svg>
-                            <span class="link_text icon_text">{{ session['color_mode'] }}</span>
+                            <span class="link_text icon_text">{{ session.get('color_mode') }}</span>
                         </a>
                     </li>
                 </ul>
@@ -139,13 +139,14 @@
         <div class="headline">
             <h1 class="header">{% block headline %}{% endblock %}</h1>
         </div>
+        <div class="second_title">
+            <p>{% block second_title %}{% endblock %}</p>
+        </div>
         {% for message in msg: %}
             <div class="messages">
                 <p class="msg" style="color: var({{ message.color }});">{{ message.content }}</p>
             </div>
         {% endfor %}
-        {% block messages %}
-        {% endblock %}
         {% block content %}
         {% endblock %}
     </body>

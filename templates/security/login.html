@@ -5,10 +5,10 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/general.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/security/login.css') }}">
 {% endblock %}
+
 {% block title %}Login{% endblock %}
 
 {% block headline %}Login{% endblock %}
-
 
 {% block content %}
     <form class="form" action="" method="post" id="loginform">
@@ -16,7 +16,7 @@
             <div class="form_fields">
                 <div class="manual_input">
                     <p class="input_hint">Email:</p>
-                    {% if data.get('email'): %}
+                    {% if data: %}
                     <input class="input_field" type="text" name="email" value="{{ data.get('email') }}" placeholder="name@example.com">
                     {% else: %}
                     <input class="input_field" type="text" name="email" placeholder="name@example.com">
@@ -24,7 +24,7 @@
                 </div>
                 <div class="manual_input">
                     <p class="input_hint">Password:</p>
-                    {% if data.get('password'): %}
+                    {% if data: %}
                     <input class="input_field" type="password" value="{{ data.get('password') }}" name="password">
                     {% else: %}
                     <input class="input_field" type="password" name="password">

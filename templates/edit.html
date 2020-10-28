@@ -5,11 +5,12 @@
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/edit.css') }}">
 {% endblock %}
+
 {% block title %}Edit Berichtsheft{% endblock %}
 
 {% block headline %}Python Berichtsheft Auto Writer{% endblock %}
 
-{% block statusmessage %}Fill out the form below, and doublecheck if everything is correct:{% endblock %}
+{% block second_title %}Fill out the form below, and doublecheck if everything is correct:{% endblock %}
 
 {% block content %}
     <form class="form" action="" method="post" id="editform">

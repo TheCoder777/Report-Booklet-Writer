@@ -154,7 +154,6 @@ def index():
     if session.get("user"):
         return redirect("user")
 
-    session["color_mode"] = Colormode.DARK
     return render_template("index.html")
 
 
@@ -231,7 +230,7 @@ def get_and_return():
 
 def validate_settings(data):
     msg = MessageQueue()
-
+    # TODO: validate date format, email change, ...
     return msg
 
 
@@ -244,6 +243,7 @@ def settings():
 @app.route("/settings", methods=["POST"])
 @login_required
 def update_settings():
+    # TODO: make msg if saved successfully
     if request.form.get("save"):
         data = dict(request.form.copy())
         msg = validate_settings(data)
@@ -255,7 +255,7 @@ def update_settings():
         msg = MessageQueue()
         session["user"] = UserDB.reset_to_default(session.get("user"))
         msg.add(messages.RESET_USER_TO_DEFAULT)
-        return render_template("settings.html", data=session.get("user"))
+        return render_template("settings.html", user=session.get("user"), msg=msg.get())
 
 
 # Login/Register related functions
@@ -311,8 +311,11 @@ def check_register_credentials(credentials):
     elif UserDB.email_exists(credentials["email"]):
         msg.add(messages.EMAIL_DOESNT_EXIST)
 
+    # check if password is given
+    if not len(credentials["password"]) > 0:
+        msg.add(messages.MISSING_PASSWORD)
     # check password match
-    if not is_password(credentials["password"]):
+    elif not is_password(credentials["password"]):
         msg.add(messages.UNFULFILLED_PASSWORD_REQUIREMENTS)
 
     # check if passwords are equal
@@ -365,11 +368,6 @@ def get_user():
             # df = todolisthandler.open_todolist(session["user"].id)
             return redirect(url_for("user"))
         else:
-            print("Im here")
-            print(msg.is_empty())
-            for m in msg.messages:
-                print(m.content)
-            print(len(msg.get()))
             return render_template("security/register.html", data=credentials, msg=msg.get())
     # Check if the "Use as guest" button is pressed
     elif request.form.get("use_as_guest"):
@@ -439,7 +437,17 @@ def change_mode():
     This function switches between the Dark and the Light color mode.
     (Defaults to Darkmode)
     """
-    if session["color_mode"] == Colormode.DARK:
+
+    # if user is logged in and colormode is DARK
+    if session.get("user") and session.get("color_mode") == Colormode.DARK:
+        UserDB.update_color_mode(Colormode.LIGHT, session.get("user"))
+        return redirect(request.referrer)
+
+    elif session.get("user") and session.get("color_mode") == Colormode.LIGHT:
+        UserDB.update_color_mode(Colormode.DARK, session.get("user"))
+        return redirect(request.referrer)
+
+    if session.get("color_mode") == Colormode.DARK:
         session["color_mode"] = Colormode.LIGHT
         return redirect(request.referrer)
     else:
@@ -448,6 +456,7 @@ def change_mode():
 
 
 @app.route("/todolist")
+@login_required
 def todolist():
     if session.get("user"):
         df = todolisthandler.open_todolist(session["user"].id)
@@ -457,6 +466,7 @@ def todolist():
 
 
 @app.route("/todolist", methods=["POST"])
+@login_required
 def save_todos():
     if session.get("user"):
         if not "df" in globals():
@@ -507,6 +517,7 @@ def save_todos():
 
 
 @app.route("/content-overview")
+@login_required
 def content_overview():
     if session.get("user"):
         if not session.get("content_mode"):
@@ -521,6 +532,7 @@ def content_overview():
 
 
 @app.route("/content-overview", methods=["POST"])
+@login_required
 def export_all():
     if session.get("user"):
         if request.form.get("export"):
@@ -541,6 +553,8 @@ def set_color_mode():
 
 
 if __name__ == "__main__":
+    # TODO: make a server config file in root for HOST and PORT (and maybe debug ?)
+    # TODO: make a installer to install deps on server start (if not found)
     HOST = 'localhost'
     PORT = 8000
     SESSION_TYPE = "filesystem"

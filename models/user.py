@@ -67,3 +67,6 @@ class User:
         self.year = year
         self.unit = unit
         self.color_mode = color_mode
+
+    def update_color_mode(self, color_mode):
+        self.color_mode = color_mode

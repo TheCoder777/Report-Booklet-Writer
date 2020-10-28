@@ -5,22 +5,12 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/general.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/todolist.css') }}">
 {% endblock %}
+
 {% block title %}Berichtsheft Auto Writer{% endblock %}
 
 {% block headline %}Python Berichtsheft Auto Writer{% endblock %}
 
-{% block statusstyle %}
-    {% if notify=="fail": %}color: var(--warning-color);
-    {% elif notify=="success": %}color: var(--accent-color);
-    {% endif %}
-{% endblock %}
-
-{% block statusmessage %}
-    {% if notify=="fail": %}Something went wrong, but it's not your fault!
-    {% elif notify=="success": %}Yes! We did it! It's save now!
-    {% else: %}That's your todolist!<br>Impressive, right?
-    {% endif %}
-{% endblock %}
+{% block second_title %}That's your todolist!<br>Impressive, right?{% endblock %}
 
 {% block content %}
 <div class="todolist">

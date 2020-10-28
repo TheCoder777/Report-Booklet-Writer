@@ -7,21 +7,7 @@
 {% endblock %}
 {% block title %}Config Berichtsheft{% endblock %}
 
-{% block statusstyle %}
-    {% if( action == "success" or action == "success_reset"): %}color:var(--accent-color);
-    {% elif action == "fail": %}color:var(--warning-color);
-    {% endif %}
-{% endblock %}
-
 {% block headline %}Python Berichtsheft Auto Writer{% endblock %}
-
-{% block statusmessage %}
-    {% if action == "success": %}Successfully saved config!
-    {% elif action == "fail": %}Failed to write config!
-    {% elif action == "success_reset": %}Successfully reseted config to default!
-    {% else: %}Here you can edit your config:
-    {% endif %}
-{% endblock %}
 
 {% block content %}
     <form class="form" action="" method="post" id="configform">
@@ -66,7 +52,7 @@
         </div>
         <div class="buttons">
             <input class="button" type="submit" name="save" value="Save changes" form=configform>
-            <input class="secondary_button" type="reset" name="reset" value="Reset changed values" form=configform>
+            <input class="secondary_button" type="reset" name="reset" value="Reset edited values" form=configform>
             <input class="secondary_button" type="submit" name="hard_reset" value="Reset to default">
         </div>
     </form>
