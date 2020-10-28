@@ -249,11 +249,11 @@ def update_settings():
         msg = validate_settings(data)
         if msg.is_empty():
             del data["save"]
-            session["user"] = UserDB.update_user_config(session.get("user"), data)
+            UserDB.update_user_config(session.get("user"), data)
             return render_template("settings.html", user=session.get("user"), msg=msg.get())
     elif request.form.get("hard_reset"):
         msg = MessageQueue()
-        session["user"] = UserDB.reset_to_default(session.get("user"))
+        UserDB.reset_to_default(session.get("user"))
         msg.add(messages.RESET_USER_TO_DEFAULT)
         return render_template("settings.html", user=session.get("user"), msg=msg.get())
 

@@ -147,8 +147,7 @@ class UserDB:
 
         # remove last element (uid) and insert at first position
         db_entry.insert(0, db_entry.pop())
-        # TODO: add .update() to user obj to update all vals, so no need to return user
-        return User(db_entry)
+        user.update_all(db_entry)
 
     def get_pw(self, email):
         """

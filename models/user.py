@@ -29,9 +29,10 @@ from defines import paths
 
 class User:
     def __init__(self, vals):
+        # write all values to object
         self.uid, self.name, self.surname, self.nickname, self.email, self.unit, self.week, self.nr, self.year, self.color_mode = vals
 
-        # do this everytime
+        # check user files everytime
         self.check_user_files()
 
     def check_user_files(self):
@@ -60,6 +61,9 @@ class User:
             print(console + SUCCESS + "copied!" + RESET)
         else:
             print(console + SUCCESS + "User directory found!" + RESET)
+
+    def update_all(self, vals):
+        self.uid, self.name, self.surname, self.nickname, self.email, self.unit, self.week, self.nr, self.year, self.color_mode = vals
 
     def update_defaults(self, week, nr, year, unit, color_mode):
         self.week = week
