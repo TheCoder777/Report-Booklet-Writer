@@ -252,6 +252,7 @@ def update_settings():
             UserDB.update_user_config(session.get("user"), data)
             msg.add(messages.SAVED_SETTINGS)
             return render_template("settings.html", user=session.get("user"), msg=msg.get())
+        # TODO: add render_template if settings not validate (some wrong email entered)
     elif request.form.get("hard_reset"):
         msg = MessageQueue()
         UserDB.reset_to_default(session.get("user"))
