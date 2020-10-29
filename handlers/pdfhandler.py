@@ -28,10 +28,12 @@ import time
 from datetime import date
 from textwrap import wrap
 
-# load internal modules
+# load external modules
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
+
+# load internal modules
 from defines import paths
 
 
@@ -53,6 +55,7 @@ def validate_html_date(html_date):
 
 
 def validate_print_date(html_date):
+    # TODO: rename html_date to print_date
     """
     Validates a date for display on the frontend.
     This should be an exact match of dd.mm.yyyy
@@ -75,36 +78,12 @@ def reformat_date(date):
     return date
 
 
-def get_a_date(type=""):
-    if type == "html":
-        return time.strftime("%Y-%m-%d")
-    else:
-        return time.strftime("%d.%m.%Y")
-
-
-def get_date(kw, type, nr, year):
-    kw = int(kw)
-    nr = int(nr) - 1
-
-    year = int(year) - 1
-    year = int(time.strftime("%Y")) + year
-    kw = (kw + nr) % 52
-    start_date = date.fromisocalendar(year, kw, 1)
-    end_date = date.fromisocalendar(year, kw, 5)
-
-    if type == "server":
-        start_date = start_date.strftime("%Y-%m-%d")
-        end_date = end_date.strftime("%Y-%m-%d")
-
-    return start_date, end_date
-
-
 def get_kw_from_date(d):
     # date formatted as: yyyy-mm-dd
     year, month, day = d.split("-")
     dateobj = date(int(year), int(month), int(day))
     iso_date = dateobj.isocalendar()
-    return iso_date[1]  # only kw
+    return iso_date[1]  # only week
 
 
 def draw(data, uinput, packet):

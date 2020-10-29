@@ -30,7 +30,7 @@ from defines import paths
 class User:
     def __init__(self, vals):
         # write all values to object
-        self.uid, self.name, self.surname, self.nickname, self.email, self.unit, self.week, self.nr, self.year, self.color_mode = vals
+        self.uid, self.name, self.surname, self.nickname, self.email, self.unit, self.week, self.nr, self.year, self.beginning_year, self.color_mode = vals
 
         # check user files everytime
         self.check_user_files()

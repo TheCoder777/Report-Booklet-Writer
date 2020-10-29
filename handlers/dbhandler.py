@@ -27,13 +27,31 @@ import sqlite3
 import sys
 
 # load internal modules
+import handlers.datecalc
 from defines import configs
 from defines import paths
 from defines.colormode import Colormode
 from models.user import User
+from handlers.datecalc import calc_start, calc_end, calc_sign, calc_beginning_year
+
+
+def get_default_config(nr=configs.NR, year=configs.YEAR, unit=configs.UNIT):
+    """
+    Calculates the default /quickedit values, if they aren't returned (re-calculated)
+    """
+    return {
+        # calculate start/end with given values for anonymous user
+        "start": calc_start(configs.WEEK, nr, year, calc_beginning_year()),
+        "end": calc_end(configs.WEEK, nr, year, calc_beginning_year()),
+        "sign": calc_sign(),
+        "year": year,
+        "unit": unit,
+        "nr": nr
+    }
 
 
 class UserDB:
+    # TODO: unify all comments (""" """/ #)
     def __init__(self):
         self.table_name = "users"
         self.db_path = paths.USER_DB_PATH
@@ -58,6 +76,7 @@ class UserDB:
             week INTEGER, \
             nr INTEGER, \
             year INTEGER, \
+            beginning_year INTEGER \
             color_mode TEXT)")
             cursor.close()
             connection.close()
@@ -82,6 +101,7 @@ class UserDB:
         week = configs.WEEK
         nr = configs.NR
         year = configs.YEAR
+        beginning_year = calc_beginning_year()
         unit = configs.UNIT
         color_mode = Colormode.DARK
 
@@ -95,26 +115,18 @@ class UserDB:
                     week,
                     nr,
                     year,
+                    beginning_year,
                     color_mode]
 
         # add user to db
         cursor.execute(f"INSERT INTO {self.table_name}\
-        (name, surname, nickname, email, pwd_and_salt, unit, week, nr, year, color_mode) \
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", db_entry)
+        (name, surname, nickname, email, pwd_and_salt, unit, week, nr, year, beginning_year, color_mode) \
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", db_entry)
         connection.commit()
         # self.cursor.close()
 
         # add current uid to entry (last used id by the current cursor)
-        user_entry = [cursor.lastrowid,
-                      cr["name"],
-                      cr["surname"],
-                      nickname,
-                      cr["email"],
-                      unit,
-                      week,
-                      nr,
-                      year,
-                      Colormode.DARK]
+        user_entry = db_entry.insert(0, cursor.lastrowid)
 
         return User(user_entry)
 
@@ -133,13 +145,14 @@ class UserDB:
                     data["week"],
                     data["nr"],
                     data["year"],
+                    data["beginning_year"],
                     data["color_mode"],
                     user.uid]
 
         cursor, connection = self.get_cursor()
 
         cursor.execute(f"UPDATE {self.table_name} SET \
-        name=?, surname=?, nickname=?, email=?, unit=?, week=?, nr=?, year=?, color_mode=? WHERE id=?", db_entry)
+        name=?, surname=?, nickname=?, email=?, unit=?, week=?, nr=?, year=?, beginning_year=?, color_mode=? WHERE id=?", db_entry)
 
         connection.commit()
         cursor.close()
@@ -155,7 +168,6 @@ class UserDB:
         """
         cursor, connection = self.get_cursor()
         cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE email=?", (email,))
-        # pw_hash = cursor.fetchone()[0]
         return cursor.fetchone()[0]
 
     def get_user(self, email):
@@ -206,6 +218,17 @@ class UserDB:
         connection.close()
 
         user.update_color_mode(colormode)
+
+    def get_data(self, user):
+        """
+        This fetches the needed info for /edit from the db
+        """
+        cursor, connection = self.get_cursor()
+        cursor.execute(f"SELECT name, surname, unit, kw, nr, year FROM {self.table_name} WHERE id=?", (user.uid,))
+        data = {"name": (cursor.fetchone())[0], "surname": (cursor.fetchone())[1], "unit": (cursor.fetchone())[2],
+                "kw": (cursor.fetchone())[3], "nr": (cursor.fetchone())[4], "year": (cursor.fetchone())[5]}
+        return data
+
 
     def get_pw_by_nickname(self, nickname):
         self.cursor = self.get_cursor()

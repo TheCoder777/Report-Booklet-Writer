@@ -157,6 +157,33 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/quickedit")
+def quickedit():
+    # Check if user is logged in (maybe somehow?)
+    if session.get("user"):
+        redirect(url_for("edit"))
+    # calls a db function that returns the values from defines.configs as dict
+    defaults = dbhandler.get_default_config()
+    return render_template("quickedit.html", data=defaults)
+
+
+@app.route("/quickedit", methods=["POST"])
+def quickedit_reload():
+    if request.form.get("refresh"):
+        data = dict(request.form.copy())
+        print("response")
+        # re-calculate from given data
+        defaults = dbhandler.get_default_config(nr=data["nr"],
+                                                year=data["year"],
+                                                unit=data["unit"])
+        defaults = {**defaults, **data}
+        print(defaults)
+        return render_template("quickedit.html", data=defaults)
+    if request.form.get("submit"):
+        return "hello from submit"
+    return "fail"
+
+
 @app.route("/edit")
 def edit():
     if session.get("user"):
@@ -243,7 +270,6 @@ def settings():
 @app.route("/settings", methods=["POST"])
 @login_required
 def update_settings():
-    # TODO: make msg if saved successfully
     if request.form.get("save"):
         data = dict(request.form.copy())
         msg = validate_settings(data)
