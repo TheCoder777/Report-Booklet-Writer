@@ -155,13 +155,6 @@ def compile_packet(packet):
     return out_stream
 
 
-def writepdf(data):
-    packet = io.BytesIO()
-    packet = draw(data, packet)
-    packet.seek(0)
-    return compile_packet(packet)
-
-
 def create_many(content):
     pages = PdfFileWriter()
     data = {}
@@ -195,3 +188,18 @@ def create_many(content):
     out_stream = open(filename, "wb")
     pages.write(out_stream)
     return filename
+
+
+def writepdf(data):
+    packet = io.BytesIO()
+    packet = draw(data, packet)
+    packet.seek(0)
+    return compile_packet(packet)
+
+
+def write_many_pdfs():
+    packet = io.BytesIO()
+    if not "ContentDB" in globals():
+        ContentDB = dbhandler.ContentDB(session["user"].id)
+    content = ContentDB.get_content()
+    return pdfhandler.create_many(content)

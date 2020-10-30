@@ -14,6 +14,7 @@ MISSING_SURNAME = MSG("Missing surname!", MSG_WARNING)
 MISSING_PASSWORD = MSG("Missing password!", MSG_WARNING)
 MISSING_EMAIL = MSG("Missing email address!", MSG_WARNING)
 EMAIL_DOESNT_EXIST = MSG("This account doesn't exist!", MSG_WARNING)
+EMAIL_ALREADY_EXISTS = MSG("This email address is already in use!", MSG_NORMAL)
 
 # wrong/invalid fields
 INVALID_EMAIL = MSG("Your email is invalid!<br>Did you spell it right?", MSG_WARNING)

@@ -25,6 +25,7 @@
                             <span class="link_text icon_text">Home</span>
                         </a>
                     </li>
+                    {% if session.get("user"): %}
                     <li class="icon edit">
                         <a class="nav_link" href="{{ url_for('edit') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 31.996">
@@ -39,10 +40,9 @@
                                     </g>
                                 </g>
                             </svg>
-                            <span class="link_text icon_text">Quick Edit</span>
+                            <span class="link_text icon_text">Edit</span>
                         </a>
                     </li>
-                    {% if session.get("user"): %}
                     <li class="icon user">
                         <div class="nav_link">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
@@ -81,6 +81,23 @@
                         </a>
                     </li>
                     {% else: %}
+                    <li class="icon quickedit">
+                        <a class="nav_link" href="{{ url_for('quickedit') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 31.996">
+                                <defs id="defs899">
+                                    <style id="style897">.cls-1{fill:none;stroke:#1d1d1b;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px}</style>
+                                </defs>
+                                <g id="g916" transform="matrix(1.67851 0 0 1.67851 -5.858 -2.43)">
+                                    <path class="icon_color_stroke" id="_Path_" fill="none" stroke="#eee" stroke-opacity="1" d="M19.51 12v4.29a3.22 3.22 0 01-3.22 3.22H7.71a3.22 3.22 0 01-3.22-3.22V7.71a3.22 3.22 0 013.22-3.22H12" class="cls-1" data-name="&lt;Path&gt;"/>
+                                    <g id="_Group_" fill="none" stroke="#eee" stroke-opacity="1" data-name="&lt;Group&gt;">
+                                        <path class="icon_color_stroke" id="_Rectangle_" fill="none" stroke="#eee" stroke-opacity="1" d="M17.64 3.14h3.28v3.17h-3.28z" class="cls-1" data-name="&lt;Rectangle&gt;" transform="rotate(-45 19.28 4.734)"/>
+                                        <path class="icon_color_stroke" id="_Path_2" fill="none" stroke="#eee" stroke-opacity="1" d="M19.24 7.01l-4.43 4.43-2.27.03.03-2.28L17 4.77z" class="cls-1" data-name="&lt;Path&gt;"/>
+                                    </g>
+                                </g>
+                            </svg>
+                            <span class="link_text icon_text">Quick Edit</span>
+                        </a>
+                    </li>
                     <li class="icon login">
                         <a class="nav_link" href="{{ url_for('login') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">

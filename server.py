@@ -25,7 +25,6 @@
 
 # load system modules
 import bcrypt
-import io
 import os
 import re
 import sys
@@ -72,19 +71,19 @@ def checkup():
     else:
         print(console + SUCCESS + "Cookie directory found!" + RESET)
 
-    if not os.path.isdir(paths.USER_PATH):
-        print(console + f"User directory {paths.USER_PATH} doesn't exist...", end="")
-        os.mkdir(paths.USER_PATH)
-        print(SUCCESS + "created!" + RESET)
-    else:
-        print(console + SUCCESS + "User directory found!" + RESET)
-
     if not os.path.isdir(paths.DB_PATH):
         print(console + f"DB directory {paths.DB_PATH} doesn't exist...", end="")
         os.mkdir(paths.DB_PATH)
         print(SUCCESS + "created!" + RESET)
     else:
         print(console + SUCCESS + "DB directory found!" + RESET)
+
+    if not os.path.isdir(paths.USER_PATH):
+        print(console + f"User directory {paths.USER_PATH} doesn't exist...", end="")
+        os.mkdir(paths.USER_PATH)
+        print(SUCCESS + "created!" + RESET)
+    else:
+        print(console + SUCCESS + "User directory found!" + RESET)
 
     if not os.path.exists(paths.PDF_TEMPLATE_PATH):
         print(console + ERROR + "PDF Template not found! Please add a pdf template!" + RESET)
@@ -116,14 +115,6 @@ def checkup():
 
 
 app = Flask(__name__)
-
-
-def write_many_pdfs():
-    packet = io.BytesIO()
-    if not "ContentDB" in globals():
-        ContentDB = dbhandler.ContentDB(session["user"].id)
-    content = ContentDB.get_content()
-    return pdfhandler.create_many(content)
 
 
 def login_required(func):
@@ -163,6 +154,8 @@ def quickedit():
 # TODO: add checkups for date vailidation and stuff like 'if name given'
 def quickedit_reload():
     if request.form.get("refresh"):
+        # Reload button is pressed
+        # TODO unify names (refresh, reload, recalculate)
         data = dict(request.form.copy())
         # re-calculate from given data
         defaults = dbhandler.get_default_config(nr=data["nr"],
@@ -172,8 +165,8 @@ def quickedit_reload():
         defaults = {**defaults, **data}
         return render_template("quickedit.html", data=defaults)
     if request.form.get("download"):
+        # Download button is pressed
         data = dict(request.form.copy())
-        print("before sendfile")
         # TODO: set attachment_filename to save_week_xx.pdf (maybe?)
         # Note that this needs a week here
         return send_file(pdfhandler.writepdf(data),
@@ -334,7 +327,7 @@ def check_register_credentials(credentials):
 
     # chek if email is already in db
     elif UserDB.email_exists(credentials["email"]):
-        msg.add(messages.EMAIL_DOESNT_EXIST)
+        msg.add(messages.EMAIL_ALREADY_EXISTS)
 
     # check if password is given
     if not len(credentials["password"]) > 0:
@@ -378,6 +371,7 @@ def register():
 
 
 @app.route("/register", methods=["POST"])
+# TODO: strip whitespace before and after usernames (also in login)
 def get_user():
     # Check if the register button is pressed (this will be a 'next' button soon)
     if request.form.get("register"):
@@ -462,7 +456,7 @@ def change_mode():
     This function switches between the Dark and the Light color mode.
     (Defaults to Darkmode)
     """
-
+    # TODO: apply changes directly to database!
     # if user is logged in and colormode is DARK
     if session.get("user") and session.get("color_mode") == Colormode.DARK:
         UserDB.update_color_mode(Colormode.LIGHT, session.get("user"))
@@ -580,6 +574,8 @@ def set_color_mode():
 if __name__ == "__main__":
     # TODO: make a server config file in root for HOST and PORT (and maybe debug ?)
     # TODO: make a installer to install deps on server start (if not found)
+    # TODO: add --clean/-c flag to delete all db/user/tmp files at startup, but ask for confirmation
+    # TODO: maybe add a --reload flag to load cookies, and make it standard to delete cookies at startup?
     HOST = 'localhost'
     PORT = 8000
     SESSION_TYPE = "filesystem"
