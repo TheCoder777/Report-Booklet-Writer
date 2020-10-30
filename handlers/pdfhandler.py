@@ -89,7 +89,7 @@ def draw(data, packet):
     LINE_DISTANCE = 30
     # TODO: move LINE_DISTANCE to defines.configs.py
 
-    # gen fullname
+    # generate fullname
     fullname = data.get("surname") + ", " + data.get("name")
 
     c = canvas.Canvas(packet, pagesize=A4)

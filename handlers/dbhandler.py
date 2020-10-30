@@ -49,6 +49,23 @@ def get_default_config(nr=configs.NR, year=configs.YEAR, unit=configs.UNIT):
     }
 
 
+def get_advanced_config(user, nr=None, year=None):
+    """
+    Calculates /edit values for logged in users (will get more advanced soon)
+    """
+    if not nr:
+        nr = user.nr
+    if not year:
+        year = user.year
+
+    return {
+        # calculate start/end with given values for anonymous user
+        "start": calc_start(user.week, nr, year, user.beginning_year),
+        "end": calc_end(user.week, nr, year, user.beginning_year),
+        "sign": calc_sign()
+    }
+
+
 class UserDB:
     # TODO: unify all comments (""" """/ #)
     def __init__(self):
@@ -182,7 +199,13 @@ class UserDB:
         cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE email=?", (email,))
         return cursor.fetchone()[0]
 
-    def get_user(self, email):
+    def get_user(self, email) -> object:
+        """
+        Gets all user data form db (except the password)
+        and returns a new User obj.
+        This is used in /login
+        """
+        # TODO: select all items that are needed, except pwd, and don't delete pwd later
         cursor, connection = self.get_cursor()
         del cursor
         connection.row_factory = sqlite3.Row
@@ -197,6 +220,26 @@ class UserDB:
         del udict["pwd_and_salt"]
 
         return User(udict.values())
+
+    def get_dict(self, email) -> dict:
+        """
+        Gets all user data form db (except the password)
+        and returns a dict with the corresponding table headers.
+        """
+        # do the same as needed in get_user (don't fetch pwd from db)
+        cursor, connection = self.get_cursor()
+        del cursor
+        connection.row_factory = sqlite3.Row
+
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT * FROM {self.table_name} WHERE email=?", (email,))
+        udict = dict(cursor.fetchall()[0])
+
+        del connection.row_factory
+        cursor.close()
+        connection.close()
+        del udict["pwd_and_salt"]
+        return udict
 
     def email_exists(self, email):
         # check if email is already in db
@@ -240,6 +283,23 @@ class UserDB:
         data = {"name": (cursor.fetchone())[0], "surname": (cursor.fetchone())[1], "unit": (cursor.fetchone())[2],
                 "kw": (cursor.fetchone())[3], "nr": (cursor.fetchone())[4], "year": (cursor.fetchone())[5]}
         return data
+
+    def increase_nr(self, user):
+        """
+        Increse number of contentdb records
+        """
+        cursor, connection = self.get_cursor()
+        # fetch number from db
+        cursor.execute(f"SELECT nr FROM {self.table_name} WHERE id=?", (user.uid,))
+        nr = cursor.fetchone()
+        # increase actual number
+        nr = nr[0] + 1
+        # write increased number back into db
+        cursor.execute(f"UPDATE {self.table_name} SET nr=? WHERE id =?", (nr, user.uid))
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return True
 
     def get_pw_by_nickname(self, nickname):
         self.cursor = self.get_cursor()
@@ -317,16 +377,6 @@ class UserDB:
             "year"] = self.cursor.fetchone()
         return data
 
-    def increase_nr(self, user):
-        # Increse number of db records on download
-        self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT nr FROM {self.table_name} WHERE id =?", (user.id,))
-        nr = self.cursor.fetchone()
-        nr = nr[0] + 1
-        self.cursor.execute(f"UPDATE {self.table_name} SET nr=? WHERE id =?", ([nr, user.id]))
-        self.connection.commit()
-        return True
-
 
 class ContentDB:
     def __init__(self, uid):
@@ -349,12 +399,12 @@ class ContentDB:
             nr INTEGER, \
             year INTEGER, \
             unit TEXT, \
-            start_date TEXT, \
-            end_date TEXT, \
-            sign_date TEXT, \
+            start TEXT, \
+            end TEXT, \
+            sign TEXT, \
             Bcontent TEXT, \
             Scontent TEXT, \
-            BScontent TEXT)")
+            BScontent TEXT)")  # changed date names!! (removed _date suffix)
             return True
 
         except FileNotFoundError as e:

@@ -9,7 +9,7 @@
 
 {% block headline %}Python Berichtsheft Auto Writer{% endblock %}
 
-{% block second_title %}Loaded Berichtsheft from Week {{ data[3] }}: {% endblock %}
+{% block second_title %}Loaded Berichtsheft from Week {{ data.get('week', '') }}: {% endblock %}
 
 {% block content %}
     <form class="form" action="" method="post" id="editform">
@@ -17,47 +17,39 @@
             <div class="input_container">
                 <div class="manual_input">
                     <p class="input_hint">Name:</p>
-                    <input class="input_field" type="text" name="name" value="{{ data[0] }}">
+                    <input class="input_field" type="text" name="name" value="{{ data.get('name', '') }}">
                 </div>
                 <div class="manual_input">
                     <p class="input_hint">Surname:</p>
-                    <input class="input_field" type="text" name="surname" value="{{ data[1] }}">
+                    <input class="input_field" type="text" name="surname" value="{{ data.get('surname', '') }}">
                 </div>
                 <div class="manual_input">
                     <p class="input_hint">Week:</p>
-                    <input class="input_field" type="number" name="kw" value="{{ data[2] }}">
+                    <input class="input_field" type="number" name="kw" value="{{ data.get('week', '') }}">
                 </div>
                 <div class="manual_input">
                     <p class="input_hint">Number:</p>
-                    <input class="input_field" type="number" name="nr" value="{{ data[3] }}">
+                    <input class="input_field" type="number" name="nr" value="{{ data.get('number', '') }}">
                 </div>
                 <div class="manual_input">
                     <p class="input_hint">Year:</p>
-                    <input class="input_field" type="number" name="year" value="{{ data[4] }}">
+                    <input class="input_field" type="number" name="year" value="{{ data.get('year', '') }}">
                 </div>
                 <div class="manual_input">
                     <p class="input_hint">Unit:</p>
-                    <input class="input_field" type="text" name="unit" value="{{ data[5] }}">
+                    <input class="input_field" type="text" name="unit" value="{{ data.get('unit', '') }}">
                 </div>
                 <div class="manual_input">
                     <p class="input_hint">Start date:</p>
-                    {% if start_date: %}
-                        <input class="input_field" type="date" name="start_date" value="{{ start_date }}">
-                    {% else: %}
-                        <input class="input_field" type="date" name="start_date" value="{{ data[6] }}">
-                    {% endif %}
+                        <input class="input_field" type="date" name="start_date" value="{{ data.get('start', '') }}">
                 </div>
                 <div class="manual_input">
                     <p class="input_hint">End date:</p>
-                    {% if end_date: %}
-                        <input class="input_field" type="date" name="end_date" value="{{ end_date }}">
-                    {% else: %}
-                        <input class="input_field" type="date" name="end_date" value="{{ data[7] }}">
-                    {% endif %}
+                        <input class="input_field" type="date" name="end_date" value="{{ data.get('end', '') }}">
                 </div>
                 <div class="manual_input">
                     <p class="input_hint">Sign date:</p>
-                    <input class="input_field" type="date" name="sign_date" value="{{ data[8] }}">
+                    <input class="input_field" type="date" name="sign_date" value="{{ data.get('sign', '') }}">
                 </div>
             </div>
             <button class="icon_button" title="re-calculate" type="submit" name="refresh_custom" value="Refresh" form=editform>
@@ -66,9 +58,9 @@
                 </svg>
             </button>
             <div class="textarea_container">
-                <textarea name="Bcontent" rows="8" cols="100" form="editform">{{ data[9] }}</textarea>
-                <textarea name="Scontent" rows="8" cols="100" form="editform">{{ data[10] }}</textarea>
-                <textarea name="BScontent" rows="8" cols="100" form="editform">{{ data[11] }}</textarea>
+                <textarea name="Bcontent" rows="8" cols="100" form="editform">{{ data.get('Bcontent', '') }}</textarea>
+                <textarea name="Scontent" rows="8" cols="100" form="editform">{{ data.get('Scontent', '') }}</textarea>
+                <textarea name="BScontent" rows="8" cols="100" form="editform">{{ data.get('BScontent', '') }}</textarea>
                 <input class="button" type="submit" name="save_custom" value="Save" form=editform>
             </div>
         </div>

@@ -151,7 +151,7 @@ def quickedit():
 
 
 @app.route("/quickedit", methods=["POST"])
-# TODO: add checkups for date vailidation and stuff like 'if name given'
+# TODO: add checkups for date vailidation and stuff like 'if name given' (/quickedit)
 def quickedit_reload():
     if request.form.get("refresh"):
         # Reload button is pressed
@@ -161,8 +161,9 @@ def quickedit_reload():
         defaults = dbhandler.get_default_config(nr=data["nr"],
                                                 year=data["year"],
                                                 unit=data["unit"])
-        # merge dicts
-        defaults = {**defaults, **data}
+        # merge dicts (the second one overwrites existing values in the first)
+        defaults = {**data, **defaults}
+        print(defaults)
         return render_template("quickedit.html", data=defaults)
     if request.form.get("download"):
         # Download button is pressed
@@ -178,71 +179,73 @@ def quickedit_reload():
 
 
 @app.route("/edit")
+@login_required
 def edit():
-    if session.get("user"):
-        data = UserDB.get_user_data(session.get("user"))
-    else:
-        data = confighandler.parse_config()
+    data = UserDB.get_dict(session["user"].email)
+    dates = dbhandler.get_advanced_config(session.get("user"))
 
-    if request.args.get("id"):
-        if not "ContentDB" in globals():
-            ContentDB = dbhandler.ContentDB(session["user"].id)
-        data = ContentDB.get_content_by_id(request.args.get("id"))
-        data = list(data)
-        data.pop(0)
-        return render_template("edit_custom.html", data=data)
-    start_date, end_date = pdfhandler.get_date(kw=data["kw"], type="server", nr=data["nr"], year=data["year"])
-    data["sign_date"] = pdfhandler.get_a_date(type="html")
-    return render_template("edit.html", data=data, start_date=start_date, end_date=end_date)
+    # merge both together
+    data = {**data, **dates}
+
+    # this is for custom edits (db entries from contentdb)
+    # if request.args.get("id"):
+    #     if not "ContentDB" in globals():
+    #         ContentDB = dbhandler.ContentDB(session["user"].id)
+    #     data = ContentDB.get_content_by_id(request.args.get("id"))
+    #     data = list(data)
+    #     data.pop(0)
+    #     return render_template("edit_custom.html", data=data)
+    return render_template("edit.html", data=data)
 
 
 @app.route("/edit", methods=["POST"])
-def get_and_return():
-    if request.method == "POST":
-        uinput = dict(request.form.copy())
-        if request.form.get("submit"):
-            uinput = dict(request.form.copy())
-            del uinput["submit"]
-            if session.get("user"):
-                data = UserDB.get_settings_data(session.get("user"))
-            else:
-                data = confighandler.parse_config()
+@login_required
+def edit_reload():
+    # TODO: add checkups for date vailidation and stuff like 'if name given' (/edit)
+    if request.form.get("download"):
+        data = dict(request.form.copy())
+        UserDB.increase_nr(session.get("user"))
+        # This needs to be done..
+        # contentdb = dbhandler.ContentDB(session["user"].uid)
+        # contentdb.add_record(data)
+        return send_file(pdfhandler.writepdf(data),
+                         mimetype="application/pdf",
+                         attachment_filename="save.pdf",
+                         as_attachment=True)
 
-            pdf = writepdf(data, uinput)
-            # confighandler.add_config_nr()  # only for local usage without users
-            UserDB.increase_nr(session.get("user"))
-            if not "ContentDB" in globals():
-                ContentDB = dbhandler.ContentDB(session["user"].id)
-            ContentDB.add_record(uinput, data)
-            return send_file(pdf, as_attachment=True)
+    elif request.form.get("save"):
+        # new feature:
+        # only save the record to contentdb, but don't download or export anything
+        pass
 
-        elif request.form.get("refresh"):
-            del uinput["refresh"]
-            udata = UserDB.get_user_data(session.get("user"))
-            start_date, end_date = pdfhandler.get_date(kw=udata["kw"], type="server", nr=uinput["nr"],
-                                                       year=uinput["year"])
-            return render_template("edit.html", data=data, start_date=start_date, end_date=end_date)
+    elif request.form.get("refresh"):
+        data = dict(request.form.copy())
+        dates = dbhandler.get_advanced_config(session.get("user"),
+                                              nr=data.get("nr"),
+                                              year=data.get("year"))
+        # merge dicts
+        data = {**data, **dates}
+        return render_template("edit.html", data=data)
 
-        elif request.form.get("save_custom"):
-            data = dict(request.form.copy())
-            del data["save_custom"]
-            if not "ContentDB" in globals():
-                ContentDB = dbhandler.ContentDB(session["user"].id)
-            ContentDB.update(list(data.values()), request.args.get("id"))
-            return redirect("content-overview")
+    # we'll find out what to do about this here later:
+    # elif request.form.get("save_custom"):
+    #     data = dict(request.form.copy())
+    #     del data["save_custom"]
+    #     if not "ContentDB" in globals():
+    #         ContentDB = dbhandler.ContentDB(session["user"].id)
+    #     ContentDB.update(list(data.values()), request.args.get("id"))
+    #     return redirect("content-overview")
 
-        if request.form.get("refresh_custom"):
-            del uinput["refresh_custom"]
-            start_date, end_date = pdfhandler.get_date(kw=uinput["kw"], type="server", nr=uinput["nr"],
-                                                       year=uinput["year"])
-            uinput = list(uinput.values())
-            return render_template("edit_custom.html", data=uinput, start_date=start_date, end_date=end_date)
+    # if request.form.get("refresh_custom"):
+    #     del uinput["refresh_custom"]
+    #     start_date, end_date = pdfhandler.get_date(kw=uinput["kw"], type="server", nr=uinput["nr"],
+    #                                                year=uinput["year"])
+    #     uinput = list(uinput.values())
+    #     return render_template("edit_custom.html", data=uinput, start_date=start_date, end_date=end_date)
 
-        else:
-            data = dict(request.form.copy())
-            udata = UserDB.get_user_data(session.get("user"))
-            start_date, end_date = pdfhandler.get_date(kw=udata["kw"], type="server", nr=data["nr"], year=data["year"])
-            return render_template("edit.html", data=data, start_date=start_date, end_date=end_date)
+    else:
+        # raise 'not implemented' error on bad request (or maybe 400 for bad request?)
+        abort(501)
 
 
 def validate_settings(data):
