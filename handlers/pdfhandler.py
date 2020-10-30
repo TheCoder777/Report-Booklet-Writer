@@ -24,7 +24,6 @@
 # load system modules
 import io
 import re
-import time
 from datetime import date
 from textwrap import wrap
 
@@ -86,32 +85,26 @@ def get_kw_from_date(d):
     return iso_date[1]  # only week
 
 
-def draw(data, uinput, packet):
+def draw(data, packet):
     LINE_DISTANCE = 30
-    nr = int(uinput["nr"])
-    nr -= 1
-    kw = data["kw"]
-    kw = int(kw)
-    kw = (kw + nr) % 52
-    fullname = uinput["surname"] + " " + uinput["name"]
-    start_date = reformat_date(uinput["start_date"])
-    start_date = check_start_date(start_date)
+    # TODO: move LINE_DISTANCE to defines.configs.py
 
-    end_date = reformat_date(uinput["end_date"])
-    sign_date = reformat_date(uinput["sign_date"])
+    # gen fullname
+    fullname = data.get("surname") + ", " + data.get("name")
 
     c = canvas.Canvas(packet, pagesize=A4)
 
+    # Don't ever touch these coordinates I dare you!
     c.drawString(313, 795, fullname)
-    c.drawString(386, 778, uinput["unit"])
-    c.drawString(231, 748, str(nr + 1))
-    c.drawString(260, 748, start_date)
-    c.drawString(365, 748, end_date)
-    c.drawString(530, 748, uinput["year"])
+    c.drawString(386, 778, data.get("unit"))
+    c.drawString(231, 748, data.get("nr"))
+    c.drawString(260, 748, data.get("start"))
+    c.drawString(365, 748, data.get("end"))
+    c.drawString(530, 748, data.get("year"))
 
     # Betrieblich
     height = 680
-    bcontent = uinput["Bcontent"].split("\n")
+    bcontent = data.get("Bcontent").split("\n")
     for cont in bcontent:
         t = c.beginText()
         bcontent = "\n".join(wrap(cont, 80))
@@ -122,7 +115,7 @@ def draw(data, uinput, packet):
 
     # Schulungen
     height = 515
-    scontent = uinput["Scontent"].split("\n")
+    scontent = data.get("Scontent").split("\n")
     for scont in scontent:
         st = c.beginText()
         scontent = "\n".join(wrap(scont, 80))
@@ -131,9 +124,9 @@ def draw(data, uinput, packet):
         c.drawText(st)
         height -= LINE_DISTANCE
 
-    # Berufschule
+    # Berufsschule
     height = 302
-    bscontent = uinput["BScontent"].split("\n")
+    bscontent = data.get("BScontent").split("\n")
     for bscont in bscontent:
         bt = c.beginText()
         bscontent = "\n".join(wrap(bscont, 80))
@@ -142,26 +135,31 @@ def draw(data, uinput, packet):
         c.drawText(bt)
         height -= LINE_DISTANCE
 
-    c.drawString(95, 148, sign_date)
-    c.drawString(260, 148, sign_date)
-    c.drawString(430, 148, sign_date)
+    c.drawString(95, 148, data.get("sign"))
+    c.drawString(260, 148, data.get("sign"))
+    c.drawString(430, 148, data.get("sign"))
     c.save()
     return packet
 
 
-def compile(packet):
+def compile_packet(packet):
     new_pdf = PdfFileReader(packet)
     template = PdfFileReader(open(paths.PDF_TEMPLATE_PATH, "rb"))
     out = PdfFileWriter()
     page = template.getPage(0)
     page.mergePage(new_pdf.getPage(0))
     out.addPage(page)
-    # filename = "./tmp/" + str(time.strftime("%H-%M_%d%m%Y")) + ".pdf"  # for unique filenames
-    filename = paths.TMP_PATH + "save.pdf"
-    out_stream = open(filename, "wb")
+    out_stream = io.BytesIO()
     out.write(out_stream)
-    out_stream.close()
-    return filename
+    out_stream.seek(0)
+    return out_stream
+
+
+def writepdf(data):
+    packet = io.BytesIO()
+    packet = draw(data, packet)
+    packet.seek(0)
+    return compile_packet(packet)
 
 
 def create_many(content):

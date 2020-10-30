@@ -33,7 +33,7 @@ import time
 import functools
 
 #  flask modules and extensions
-from flask import Flask, render_template, request, redirect, send_file, session, url_for
+from flask import Flask, render_template, request, redirect, send_file, session, url_for, abort
 from flask_session import Session
 
 #  WSGI server for better performance
@@ -118,13 +118,6 @@ def checkup():
 app = Flask(__name__)
 
 
-def writepdf(data, uinput):
-    packet = io.BytesIO()
-    packet = pdfhandler.draw(data, uinput, packet)
-    packet.seek(0)
-    return pdfhandler.compile(packet)
-
-
 def write_many_pdfs():
     packet = io.BytesIO()
     if not "ContentDB" in globals():
@@ -150,7 +143,6 @@ def login_required(func):
 
 @app.route("/")
 def index():
-
     if session.get("user"):
         return redirect("user")
 
@@ -168,20 +160,28 @@ def quickedit():
 
 
 @app.route("/quickedit", methods=["POST"])
+# TODO: add checkups for date vailidation and stuff like 'if name given'
 def quickedit_reload():
     if request.form.get("refresh"):
         data = dict(request.form.copy())
-        print("response")
         # re-calculate from given data
         defaults = dbhandler.get_default_config(nr=data["nr"],
                                                 year=data["year"],
                                                 unit=data["unit"])
+        # merge dicts
         defaults = {**defaults, **data}
-        print(defaults)
         return render_template("quickedit.html", data=defaults)
-    if request.form.get("submit"):
-        return "hello from submit"
-    return "fail"
+    if request.form.get("download"):
+        data = dict(request.form.copy())
+        print("before sendfile")
+        # TODO: set attachment_filename to save_week_xx.pdf (maybe?)
+        # Note that this needs a week here
+        return send_file(pdfhandler.writepdf(data),
+                         mimetype="application/pdf",
+                         attachment_filename="save.pdf",
+                         as_attachment=True)
+    # raise 'not implemented' error on bad request (or maybe 400 for bad request?)
+    abort(501)
 
 
 @app.route("/edit")
@@ -221,9 +221,6 @@ def get_and_return():
             if not "ContentDB" in globals():
                 ContentDB = dbhandler.ContentDB(session["user"].id)
             ContentDB.add_record(uinput, data)
-            # TODO: set a mimetype
-            # TODO: use a fileobject not a path
-            # TODO: set attachment_filename to save_kw_xx.pdf (maybe?)
             return send_file(pdf, as_attachment=True)
 
         elif request.form.get("refresh"):
