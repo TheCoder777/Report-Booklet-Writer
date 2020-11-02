@@ -21,10 +21,12 @@
 # SOFTWARE.
 
 
+# load system modules
 import os
 import shutil
 from defines.colors import RESET, BOLD, ERROR, SUCCESS
 
+# load internal modules
 from defines import paths
 
 

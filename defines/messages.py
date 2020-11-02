@@ -1,4 +1,4 @@
-
+# load internal modules
 from defines.colors import MSG_NORMAL, MSG_SUCCESS, MSG_WARNING
 from models.message import MSG
 

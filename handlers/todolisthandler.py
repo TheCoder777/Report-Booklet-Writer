@@ -21,9 +21,11 @@
 # SOFTWARE.
 
 
+# load system modules
 import os
 import pandas as pd
 
+# load internal modules
 from defines import paths
 from models.messagequeue import MessageQueue
 from defines import messages
