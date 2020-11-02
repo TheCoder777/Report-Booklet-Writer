@@ -489,24 +489,20 @@ def save_todos():
     df = todolisthandler.open_todolist(session["user"].uid)
     data = dict(request.form.copy())
     if data.get("save"):
+        # Save button is pressed
         df, msg = todolisthandler.update(session["user"].uid, df, data.keys())
         return render_template("todolist.html", data=df, msg=msg.get())
+    # raise 'not implemented' error on bad request (or maybe 400 for bad request?)
     abort(501)
 
 
 @app.route("/content-overview")
 @login_required
 def content_overview():
-    if session.get("user"):
-        if not session.get("content_mode"):
-            session["content_mode"] = "cards"  # set default, read from Userdb later
-        if not "ContentDB" in globals():
-            ContentDB = dbhandler.ContentDB(session["user"].id)
-        content = ContentDB.get_content()
-        return render_template("content_overview.html", mode=session.get("content_mode"), content=content)
+    # initialize content db with user id
+    contentdb = dbhandler.ContentDB(session["user"].uid)
 
-    else:
-        return render_template("index.html", notify="login_required")
+    return render_template("content_overview.html", content=contentdb.get_all())
 
 
 @app.route("/content-overview", methods=["POST"])

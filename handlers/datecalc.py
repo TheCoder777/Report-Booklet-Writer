@@ -47,6 +47,18 @@ def __subtract_one(*argv) -> List[int]:
     return _subtracted
 
 
+def __week_from_date(origin_date: str) -> int:
+    # get year, month and day as int
+    year, month, day = __to_int(origin_date.split("-"))
+    # convert to datetime.date object
+    date_obj = date(year, month, day)
+    # get the isocalender list from it
+    isocal = date_obj.isocalendar()
+    # we only need the week
+    week = isocal[1]
+    return week
+
+
 def __calc_week(week, nr) -> int:
     week: int
     nr: int
@@ -145,3 +157,7 @@ def calc_sign():
 
 def calc_beginning_year():
     return __calc_beginning_year()
+
+
+def week_from_html_date(*argv):
+    return __week_from_date(*argv)

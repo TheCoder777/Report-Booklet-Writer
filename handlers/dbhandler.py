@@ -31,7 +31,7 @@ from defines import configs
 from defines import paths
 from defines.colormode import Colormode
 from models.user import User
-from handlers.datecalc import calc_start, calc_end, calc_sign, calc_beginning_year
+from handlers.datecalc import calc_start, calc_end, calc_sign, calc_beginning_year, week_from_html_date
 
 
 def get_default_config(nr=configs.NR, year=configs.YEAR, unit=configs.UNIT):
@@ -383,15 +383,15 @@ class ContentDB:
         self.table_name = "content"
         self.uid = uid
         self.db_path = os.path.join(paths.USER_PATH, str(uid), paths.CONTENT_DB_PATH)
-        self.connection = sqlite3.connect(self.db_path)
         self.initialize()
 
     def get_cursor(self):
-        return self.connection.cursor()
+        connection = sqlite3.connect(self.db_path)
+        return connection.cursor(), connection
 
     def initialize(self):
         try:
-            cursor = self.get_cursor()
+            cursor, connection = self.get_cursor()
             cursor.execute(f"CREATE TABLE if not exists {self.table_name} \
             (id INTEGER PRIMARY KEY, \
             name TEXT, surname TEXT, \
@@ -405,14 +405,16 @@ class ContentDB:
             Bcontent TEXT, \
             Scontent TEXT, \
             BScontent TEXT)")  # changed date names!! (removed _date suffix)
+            cursor.close()
+            connection.close()
             return True
 
-        except FileNotFoundError as e:
+        except FileNotFoundError:
             print(f"Database file '{self.db_path}' not found!", file=sys.stderr)
             return False
 
     def add_record(self, uinput, data):
-        kw = pdfhandler.get_kw_from_date(uinput["start_date"])
+        week = week_from_html_date()  # rethink this later
         name = uinput["name"]
         surname = uinput["surname"]
         nr = uinput["nr"]
@@ -431,17 +433,11 @@ class ContentDB:
             name, surname, kw, nr, year, unit, start_date, end_date, sign_date, Bcontent, Scontent, BScontent))
         self.connection.commit()
 
-    def get_content(self):
-        self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT * FROM {self.table_name}")
-        content = self.cursor.fetchall()
-        new_content = []
-        for c in content:
-            c = list(c)
-            c[7] = pdfhandler.reformat_date(c[7])
-            c[8] = pdfhandler.reformat_date(c[8])
-            new_content.append(c)
-        return new_content
+    def get_all(self):
+        cursor, connection = self.get_cursor()
+        cursor.execute(f"SELECT * FROM {self.table_name}")
+        content = cursor.fetchall()
+        return content
 
     def get_content_by_id(self, id):
         self.cursor = self.get_cursor()
