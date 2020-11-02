@@ -480,62 +480,18 @@ def change_mode():
 @app.route("/todolist")
 @login_required
 def todolist():
-    if session.get("user"):
-        df = todolisthandler.open_todolist(session["user"].id)
-        return render_template("todolist.html", data=df)
-    else:
-        return render_template("index.html", notify="login_required")
+    return render_template("todolist.html", data=todolisthandler.open_todolist(session["user"].uid))
 
 
 @app.route("/todolist", methods=["POST"])
 @login_required
 def save_todos():
-    if session.get("user"):
-        if not "df" in globals():
-            df = todolisthandler.open_todolist(session["user"].id)
-        data = dict(request.form.copy())
-        # TODO: move this to todolisthandler
-        if data.get("save"):
-            del data["save"]
-
-            # reset all
-            for i in range(len(df.columns)):
-                df[i]["done"] = False
-                for j in range(len(df[i]["blocks"])):
-                    df[i]["blocks"][j]["done"] = False
-                    for k in range(len(df[i]["blocks"][j]["body"])):
-                        df[i]["blocks"][j]["body"][k]["done"] = False
-
-            # insert only returned
-            for key in data.keys():
-                if len(key) == 1:
-                    key = int(key)
-                    df[key]["done"] = True
-                    for j in range(len(df[key]["blocks"])):
-                        df[key]["blocks"][j]["done"] = True
-                        for k in range(len(df[key]["blocks"][j]["body"])):
-                            df[key]["blocks"][j]["body"][k]["done"] = True
-
-                elif len(key) == 3:
-                    l1, l2 = key.split(".")
-                    l1, l2 = int(l1), int(l2)
-                    df[l1]["blocks"][l2]["done"] = True
-                    for k in range(len(df[l1]["blocks"][l2]["body"])):
-                        df[l1]["blocks"][l2]["body"][k]["done"] = True
-
-                elif len(key) == 5:
-                    l1, l2, l3 = key.split(".")
-                    l1, l2, l3 = int(l1), int(l2), int(l3)
-                    df[l1]["blocks"][l2]["body"][l3]["done"] = True
-
-            todolisthandler.save_todolist(session["user"].id, df)
-            df = todolisthandler.open_todolist(session["user"].id)
-            return render_template("todolist.html", data=df, notify="success")
-        else:
-            df = todolisthandler.open_todolist(session["user"].id)
-            return render_template("todolist.html", data=df, notify="fail")
-    else:
-        return render_template("index.html", notify="login_required")
+    df = todolisthandler.open_todolist(session["user"].uid)
+    data = dict(request.form.copy())
+    if data.get("save"):
+        df, msg = todolisthandler.update(session["user"].uid, df, data.keys())
+        return render_template("todolist.html", data=df, msg=msg.get())
+    abort(501)
 
 
 @app.route("/content-overview")

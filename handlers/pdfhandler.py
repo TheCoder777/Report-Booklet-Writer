@@ -87,9 +87,8 @@ def get_kw_from_date(d):
 
 
 def draw(data, packet):
-    # TODO: move LINE_DISTANCE to defines.configs.py
 
-    # generate fullname
+    # generate full name
     fullname = data.get("surname") + ", " + data.get("name")
 
     c = canvas.Canvas(packet, pagesize=A4)

@@ -24,6 +24,7 @@
 import os
 import shutil
 from defines.colors import RESET, BOLD, ERROR, SUCCESS
+
 from defines import paths
 
 
