@@ -34,6 +34,7 @@ from reportlab.pdfgen import canvas
 
 # load internal modules
 from defines import paths
+from defines.configs import LINE_DISTANCE
 
 
 def validate_html_date(html_date):
@@ -86,7 +87,6 @@ def get_kw_from_date(d):
 
 
 def draw(data, packet):
-    LINE_DISTANCE = 30
     # TODO: move LINE_DISTANCE to defines.configs.py
 
     # generate fullname

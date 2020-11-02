@@ -8,3 +8,4 @@ WEEK = "36"
 NR = "1"
 YEAR = "1"
 UNIT = "Ausbildung"
+LINE_DISTANCE = 30
