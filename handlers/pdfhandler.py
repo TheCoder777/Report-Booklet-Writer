@@ -65,45 +65,32 @@ def validate_print_date(html_date):
     return re.match(r"[\d][\d].[\d][\d].[\d][\d][\d][\d]", html_date)
 
 
-def __join_dot(*argv):
-    return ".".join(str(i) for i in argv)
+def __convert_to_print_date(html_date):
+    return ".".join([html_date.split("-")[2],
+                     html_date.split("-")[1],
+                     html_date.split("-")[0]])
 
 
 def reformat_html_to_print(html_date: str) -> str:
     # reformats and validates html and print date
     if validate_html_date(html_date):
-        # date_list = html_date.split("-")
-        print_date = __join_dot(html_date.split("-"))
+        print_date = __convert_to_print_date(html_date)
         if validate_print_date(print_date):
             return print_date
     return "ERROR"  # return empty string if something goes wrong
 
 
-def check_start_date(check_date):
-    day, month, year = check_date.split(".")
-    tdate = ".".join([day, month])
-    if tdate == "31.08":
-        return "01.09." + year
-    else:
-        return check_date
-
-
-def reformat_date(date):
-    year, month, day = date.split("-")
-    date = ".".join([day, month, year])
-    return date
-
-
-def get_kw_from_date(d):
-    # date formatted as: yyyy-mm-dd
-    year, month, day = d.split("-")
-    dateobj = date(int(year), int(month), int(day))
-    iso_date = dateobj.isocalendar()
-    return iso_date[1]  # only week
+# we need to implement this slightly different
+# def check_start_date(check_date):
+#     day, month, year = check_date.split(".")
+#     tdate = ".".join([day, month])
+#     if tdate == "31.08":
+#         return "01.09." + year
+#     else:
+#         return check_date
 
 
 def draw(data, packet):
-
     # generate full name
     fullname = data.get("surname") + ", " + data.get("name")
 
@@ -113,14 +100,14 @@ def draw(data, packet):
     start_date = reformat_html_to_print(data.get("start"))
     end_date = reformat_html_to_print(data.get("end"))
     sign_date = reformat_html_to_print(data.get("sign"))
-
+    # TODO: convert first into single variables like nr, year.. then draw
     # Don't ever touch these coordinates I dare you!
     c.drawString(313, 795, fullname)
     c.drawString(386, 778, data.get("unit"))
-    c.drawString(231, 748, data.get("nr"))
+    c.drawString(231, 748, str(data.get("nr")))
     c.drawString(260, 748, start_date)
     c.drawString(365, 748, end_date)
-    c.drawString(530, 748, data.get("year"))
+    c.drawString(530, 748, str(data.get("year")))
 
     # Betrieblich
     height = 680

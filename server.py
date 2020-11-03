@@ -146,29 +146,18 @@ def quickedit():
     if session.get("user"):
         redirect(url_for("edit"))
     # calls a db function that returns the values from defines.configs as dict
-    defaults = dbhandler.get_default_config()
+    defaults = dbhandler.quickedit_defaults()
     return render_template("quickedit.html", data=defaults)
 
 
 @app.route("/quickedit", methods=["POST"])
-# TODO: add checkups for date vailidation and stuff like 'if name given' (/quickedit)
+# TODO: add checkups for date validation and stuff like 'if name given' (/quickedit)
 def quickedit_reload():
-    if request.form.get("refresh"):
-        # Reload button is pressed
-        # TODO unify names (refresh, reload, recalculate)
-        data = dict(request.form.copy())
-        # re-calculate from given data
-        defaults = dbhandler.calculate_quickedit(data["week"],
-                                                 data["year"])
-        # merge dicts (the second one overwrites existing values in the first)
-        defaults = {**data, **defaults}
-        return render_template("quickedit.html", data=defaults)
     if request.form.get("download"):
         # Download button is pressed
         data = dict(request.form.copy())
-        defaults = dbhandler.get_default_config(nr=data["nr"],
-                                                year=data["year"],
-                                                unit=data["unit"])
+        defaults = dbhandler.calculate_quickedit(data.get("year"),
+                                                 data.get("week"))
         data = {**data, **defaults}
         # TODO: set attachment_filename to save_week_xx.pdf (maybe?)
         # Note that this needs a week here

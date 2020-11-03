@@ -31,30 +31,27 @@ from defines import configs
 from defines import paths
 from defines.colormode import Colormode
 from models.user import User
-from handlers.datecalc import calc_start, calc_end, calc_sign, calc_beginning_year, week_from_html_date
+from handlers import datecalc
 
 
-def get_default_config(nr=configs.NR, year=configs.YEAR, unit=configs.UNIT):
+def quickedit_defaults():
     """
     Calculates the default /quickedit values, if they aren't returned (re-calculated)
     """
     return {
         # calculate start/end with given values for anonymous user
-        # "start": calc_start(configs.WEEK, nr, year, calc_beginning_year()),
-        # "end": calc_end(configs.WEEK, nr, year, calc_beginning_year()),
-        # "sign": calc_sign(),
-        "year": year,
-        "unit": unit,
-        "nr": nr
+        "sign": datecalc.calc_sign_date(),
+        "year": datecalc.get_current_year(),
+        "week": datecalc.get_current_week(),
+        "unit": configs.UNIT,
     }
 
-def calculate_quickedit(week, year):
+
+def calculate_quickedit(year, week):
     """
-    Calculates start/end date based only on current week and current year
+    Calculates all values needed to export the final pdf
     """
-    return {
-        "start": calc_start()
-    }
+    return datecalc.calc_all_from_config(int(year), int(week))
 
 
 def get_advanced_config(user, nr=None, year=None):
@@ -123,7 +120,7 @@ class UserDB:
         # default nickname is the username
         nickname = cr["name"]
         # get defaults from config
-        week = configs.WEEK
+        week = configs.START_WEEK
         nr = configs.NR
         year = configs.YEAR
         beginning_year = calc_beginning_year()
@@ -258,7 +255,7 @@ class UserDB:
     def reset_to_default(self, user):
         cursor, connection = self.get_cursor()
 
-        week = configs.WEEK
+        week = configs.START_WEEK
         nr = configs.NR
         year = configs.YEAR
         unit = configs.UNIT

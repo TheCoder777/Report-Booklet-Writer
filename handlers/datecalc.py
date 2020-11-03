@@ -23,141 +23,79 @@
 
 # load system modules
 import time
-from datetime import date
-from typing import List
+import datetime
+
+# load internal config
+from defines import configs
 
 
-def __to_int(*argv) -> List[int]:
-    """
-    Simple function to convert all args into ints and return
-    """
-    _new_ints: List[int] = []
-    for arg in argv:
-        _new_ints.append(int(arg))
-    return _new_ints
-
-
-def __subtract_one(*argv) -> List[int]:
-    """
-    Subtracts one from all args
-    """
-    _subtracted: List[int] = []
-    for arg in argv:
-        _subtracted.append(int(arg) - 1)
-    return _subtracted
-
-
-def __week_from_date(origin_date: str) -> int:
-    # get year, month and day as int
-    year, month, day = __to_int(origin_date.split("-"))
-    # convert to datetime.date object
-    date_obj = date(year, month, day)
-    # get the isocalender list from it
-    isocal = date_obj.isocalendar()
-    # we only need the week
-    week = isocal[1]
-    return week
-
-
-def __calc_week(week, nr) -> int:
-    week: int
-    nr: int
-    # calculate calender week in dependence of years (cw > 52)
-    return (week + nr) % 52
-
-
-def __calc_year(year_using, beginning_year) -> int:
-    year_using: int
-    beginning_year: int
-    return year_using + beginning_year
-
-
-def __calc_week_year(week, nr, years_using, beginning_year):
-    week: int
-    nr: int
-    year_using: int
-    beginning_year: int
-    week = __calc_week(week, nr)
-    year = __calc_year(years_using, beginning_year)
-    return week, year
-
-
-def __calc_start_date(week, year):
-    week: int
-    year: int
-    """
-    They're all itegers already, no need to convert again
-
-    get the start date of the week using isocalender and
-    reformat to yyyy-mm-dd format (for html)
-    """
-    return date.fromisocalendar(year, week, 1).strftime("%Y-%m-%d")
-
-
-def __calc_end_date(week, year):
-    week: int
-    year: int
-    """
-    Same as __calc_start_date, but for the end of the week
-    """
-    return date.fromisocalendar(year, week, 5).strftime("%Y-%m-%d")
-
-
-def __calc_sign_date():
-    return time.strftime("%Y-%m-%d")
-
-
-def __calc_beginning_year():
-    # this could also be in defines.config.py, but we'll leave it here for now
+def __current_year():
     return int(time.strftime("%Y"))
 
 
-def __pre_format(week, nr, years_using, beginning_year):
-    # make sure everythink is an int
-    week, nr, years_using, beginning_year = __to_int(week, nr, years_using, beginning_year)
-
-    # decrease number and year (0 index)
-    nr, years_using = __subtract_one(nr, years_using)
-
-    return week, nr, years_using, beginning_year
-
-
-# non private functions
+def __calc_start(week: int, year: int) -> str:
+    """
+    Calculates the start date using an iso calender
+    """
+    start_date = datetime.datetime.strptime(f"{str(year)}-W{str(week)}-D1",
+                                            "%G-W%V-D%w")
+    # return in yyyy-mm-dd (html) format
+    return start_date.strftime("%Y-%m-%d")
 
 
-def calc_all(week, nr, years_using, beginning_year):
-    # preformat (convert to int, subtract stuff)
-    week, nr, years_using, beginning_year = __pre_format(week, nr, years_using, beginning_year)
-
-    # take the beginning year and add the period of years using, to get the total years
-    total_year = beginning_year + years_using
-
-    # get the calender week of the current number
-    week = __calc_week(week, nr)
-
-    # TODO: find an alternative to isocalender that works for python 3.7 or lower
-    return __calc_start_date(week, total_year), __calc_end_date(week, total_year), __calc_sign_date()
+def __calc_end(week: int, year: int) -> str:
+    """
+    Almost same as above, but D5 instead of D1 (Friday instead of Monday)
+    """
+    start_date = datetime.datetime.strptime(f"{str(year)}-W{str(week)}-D5",
+                                            "%G-W%V-D%w")
+    return start_date.strftime("%Y-%m-%d")
 
 
-def calc_start(week, nr, years_using, beginning_year):
-    week, nr, years_using, beginning_year = __pre_format(week, nr, years_using, beginning_year)
-    week, year = __calc_week_year(week, nr, years_using, beginning_year)
-    return __calc_start_date(week, year)
+def __calc_year(entered_year: int, beginning_year: int) -> int:
+    """
+    Calculates the year as a single digit (0 for first year, 2 for 3rd year)
+    (+1 because it's zero indexed)
+    """
+    return entered_year - beginning_year + 1
 
 
-def calc_end(week, nr, years_using, beginning_year):
-    week, nr, years_using, beginning_year = __pre_format(week, nr, years_using, beginning_year)
-    week, year = __calc_week_year(week, nr, years_using, beginning_year)
-    return __calc_end_date(week, year)
+def __calc_nr(entered_week: int, beginning_week: int, year: int) -> int:
+    """
+    Calculates the nr (number). This is more or less the count of how many Berichtshefte are done!
+    (+1 because it's also zero indexed)
+    """
+    return (year - 1) * 52 + entered_week - beginning_week + 1
 
 
-def calc_sign():
-    return __calc_sign_date()
+def calc_sign_date():
+    return time.strftime("%Y-%m-%d")
 
 
-def calc_beginning_year():
-    return __calc_beginning_year()
+def get_current_year():
+    return __current_year()
 
 
-def week_from_html_date(*argv):
-    return __week_from_date(*argv)
+def get_current_week():
+    return time.strftime("%V")
+
+
+def calc_all_from_config(entered_year: int, entered_week: int):
+
+    # calculate start and end date (strptime format is: year-calender_week-week_day(1-7))
+    start_date = datetime.datetime.strptime(f"{entered_year}-{entered_week}-{configs.START_OF_WEEK}", "%G-%V-%w").strftime("%Y-%m-%d")
+    end_date = datetime.datetime.strptime(f"{entered_year}-{entered_week}-{configs.END_OF_WEEK}", "%G-%V-%w").strftime("%Y-%m-%d")
+    
+    # calculate single digit year
+    beginning_year = __current_year()
+    year = __calc_year(entered_year, beginning_year)
+
+    # calculate number (see description)
+    nr = __calc_nr(entered_week, configs.START_WEEK, year)
+
+    return {
+        "start": start_date,
+        "end": end_date,
+        "nr": nr,
+        "year": year
+    }
