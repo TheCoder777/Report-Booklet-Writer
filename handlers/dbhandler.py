@@ -40,12 +40,20 @@ def get_default_config(nr=configs.NR, year=configs.YEAR, unit=configs.UNIT):
     """
     return {
         # calculate start/end with given values for anonymous user
-        "start": calc_start(configs.WEEK, nr, year, calc_beginning_year()),
-        "end": calc_end(configs.WEEK, nr, year, calc_beginning_year()),
-        "sign": calc_sign(),
+        # "start": calc_start(configs.WEEK, nr, year, calc_beginning_year()),
+        # "end": calc_end(configs.WEEK, nr, year, calc_beginning_year()),
+        # "sign": calc_sign(),
         "year": year,
         "unit": unit,
         "nr": nr
+    }
+
+def calculate_quickedit(week, year):
+    """
+    Calculates start/end date based only on current week and current year
+    """
+    return {
+        "start": calc_start()
     }
 
 

@@ -25,19 +25,11 @@
                     <input class="input_field" type="text" name="surname" value="{{ data.get('surname', '') }}">
                 </div>
                 <div class="manual_input">
-                    <p class="input_hint">Start date:</p>
-                    <input class="input_field" type="date" name="start" value="{{ data.get('start', '') }}">
+                    <p class="input_hint">Current Week:</p>
+                    <input class="input_field" type="number" name="nr" value="{{ data.get('week', '') }}">
                 </div>
                 <div class="manual_input">
-                    <p class="input_hint">End date:</p>
-                    <input class="input_field" type="date" name="end" value="{{ data.get('end', '') }}">
-                </div>
-                <div class="manual_input">
-                    <p class="input_hint">Number:</p>
-                    <input class="input_field" type="number" name="nr" value="{{ data.get('nr', '') }}">
-                </div>
-                <div class="manual_input">
-                    <p class="input_hint">Year:</p>
+                    <p class="input_hint">Current Year:</p>
                     <input class="input_field" type="number" name="year" value="{{ data.get('year', '') }}">
                 </div>
                 <div class="manual_input">
@@ -45,7 +37,7 @@
                     <input class="input_field" type="text" name="unit" value="{{ data.get('unit', '') }}">
                 </div>
                 <div class="manual_input">
-                    <p class="input_hint">Sign date:</p>
+                    <p class="input_hint">Sign Date:</p>
                     <input class="input_field" type="date" name="sign" value="{{ data.get('sign', '') }}">
                 </div>
             </div>

@@ -135,7 +135,7 @@ def calc_all(week, nr, years_using, beginning_year):
     # get the calender week of the current number
     week = __calc_week(week, nr)
 
-    # TODO: find an alternative to isocalender that works for pyhton 3.7 or lower
+    # TODO: find an alternative to isocalender that works for python 3.7 or lower
     return __calc_start_date(week, total_year), __calc_end_date(week, total_year), __calc_sign_date()
 
 

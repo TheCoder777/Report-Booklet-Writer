@@ -158,16 +158,18 @@ def quickedit_reload():
         # TODO unify names (refresh, reload, recalculate)
         data = dict(request.form.copy())
         # re-calculate from given data
-        defaults = dbhandler.get_default_config(nr=data["nr"],
-                                                year=data["year"],
-                                                unit=data["unit"])
+        defaults = dbhandler.calculate_quickedit(data["week"],
+                                                 data["year"])
         # merge dicts (the second one overwrites existing values in the first)
         defaults = {**data, **defaults}
-        print(defaults)
         return render_template("quickedit.html", data=defaults)
     if request.form.get("download"):
         # Download button is pressed
         data = dict(request.form.copy())
+        defaults = dbhandler.get_default_config(nr=data["nr"],
+                                                year=data["year"],
+                                                unit=data["unit"])
+        data = {**data, **defaults}
         # TODO: set attachment_filename to save_week_xx.pdf (maybe?)
         # Note that this needs a week here
         return send_file(pdfhandler.writepdf(data),

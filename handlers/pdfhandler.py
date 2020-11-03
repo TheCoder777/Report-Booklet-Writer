@@ -48,8 +48,10 @@ def validate_html_date(html_date):
             return False
         if not int(month) < 12:
             return False
-        if not day < 31:
+        if not int(day) < 31:
             return False
+        # only if nothing returned False
+        return True
     else:
         return False
 
@@ -61,6 +63,20 @@ def validate_print_date(html_date):
     This should be an exact match of dd.mm.yyyy
     """
     return re.match(r"[\d][\d].[\d][\d].[\d][\d][\d][\d]", html_date)
+
+
+def __join_dot(*argv):
+    return ".".join(str(i) for i in argv)
+
+
+def reformat_html_to_print(html_date: str) -> str:
+    # reformats and validates html and print date
+    if validate_html_date(html_date):
+        # date_list = html_date.split("-")
+        print_date = __join_dot(html_date.split("-"))
+        if validate_print_date(print_date):
+            return print_date
+    return "ERROR"  # return empty string if something goes wrong
 
 
 def check_start_date(check_date):
@@ -93,12 +109,17 @@ def draw(data, packet):
 
     c = canvas.Canvas(packet, pagesize=A4)
 
+    # reformat for printing
+    start_date = reformat_html_to_print(data.get("start"))
+    end_date = reformat_html_to_print(data.get("end"))
+    sign_date = reformat_html_to_print(data.get("sign"))
+
     # Don't ever touch these coordinates I dare you!
     c.drawString(313, 795, fullname)
     c.drawString(386, 778, data.get("unit"))
     c.drawString(231, 748, data.get("nr"))
-    c.drawString(260, 748, data.get("start"))
-    c.drawString(365, 748, data.get("end"))
+    c.drawString(260, 748, start_date)
+    c.drawString(365, 748, end_date)
     c.drawString(530, 748, data.get("year"))
 
     # Betrieblich
@@ -134,9 +155,9 @@ def draw(data, packet):
         c.drawText(bt)
         height -= LINE_DISTANCE
 
-    c.drawString(95, 148, data.get("sign"))
-    c.drawString(260, 148, data.get("sign"))
-    c.drawString(430, 148, data.get("sign"))
+    c.drawString(95, 148, sign_date)
+    c.drawString(260, 148, sign_date)
+    c.drawString(430, 148, sign_date)
     c.save()
     return packet
 
