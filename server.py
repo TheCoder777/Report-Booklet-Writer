@@ -190,12 +190,11 @@ def edit():
 
     # this is for custom edits (db entries from contentdb)
     # if an id to a custom edit is provided:
-    # if request.args.get("id"):
-    #     contentdb = dbhandler.ContentDB(session["user"].uid)
-    #     data = contentdb.get_content_by_id(request.args.get("id"))
-    #     data = list(data)
-    #     data.pop(0)
-    #     return render_template("edit_custom.html", data=data)
+    if request.args.get("id"):
+        contentdb = dbhandler.ContentDB(session["user"].uid)
+        data = contentdb.get_content_by_id(request.args.get("id"))
+        return render_template("customedit.html", data=data)
+
     return render_template("edit.html", data=data)
 
 
@@ -228,20 +227,12 @@ def edit_reload():
         return redirect(url_for("content_overview"))
 
     # we'll find out what to do about this here later:
-    # elif request.form.get("save_custom"):
-    #     data = dict(request.form.copy())
-    #     del data["save_custom"]
-    #     if not "ContentDB" in globals():
-    #         ContentDB = dbhandler.ContentDB(session["user"].id)
-    #     ContentDB.update(list(data.values()), request.args.get("id"))
-    #     return redirect("content-overview")
-
-    # if request.form.get("refresh_custom"):
-    #     del uinput["refresh_custom"]
-    #     start_date, end_date = pdfhandler.get_date(kw=uinput["kw"], type="server", nr=uinput["nr"],
-    #                                                year=uinput["year"])
-    #     uinput = list(uinput.values())
-    #     return render_template("edit_custom.html", data=uinput, start_date=start_date, end_date=end_date)
+    elif request.form.get("save_custom"):
+        # only update the record in the contentdb
+        data = dict(request.form.copy())
+        contentdb = dbhandler.ContentDB(session["user"].uid)
+        contentdb.update(data, request.args.get("id"))
+        return redirect(url_for("content_overview"))
 
     else:
         # raise 'not implemented' error on bad request (or maybe 400 for bad request?)
@@ -508,12 +499,11 @@ def content_overview():
 @app.route("/content-overview", methods=["POST"])
 @login_required
 def content_overview_export():
-    if session.get("user"):
-        if request.form.get("export"):
-            pdf = write_many_pdfs()
-            return send_file(pdf, as_attachment=True)
-    else:
-        return render_template("index.html", notify="login_required")
+    if request.form.get("export"):
+        # fix pdf export
+        # pdf = write_many_pdfs()
+        # return send_file(pdf, as_attachment=True)
+        pass
 
 
 # TODO: add a @app.errorhandler(404) page

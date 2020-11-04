@@ -408,28 +408,52 @@ class ContentDB:
 
         # fetch everything from the database
         query = cursor.execute(f"SELECT * FROM {self.table_name}")
+        # get the names from the table headers
         colnames = [d[0] for d in query.description]
         results = []
         for row in cursor:
+            # merge table headers and actual row together
             results.append(dict(zip(colnames, row)))
-        print(results)
         return results
 
     def get_content_by_id(self, cid):
+        # initialize cursor with a row_factory
         cursor, connection = self.get_cursor()
+        del cursor
+        connection.row_factory = sqlite3.Row
+        cursor = connection.cursor()
+        # get specified record from db using content id
         cursor.execute(f"SELECT * FROM {self.table_name} WHERE id=?", (cid,))
-        content = cursor.fetchone()
+        content = dict(cursor.fetchall()[0])
+        cursor.close()
+        connection.close()
         return content
 
     def update(self, data, id):
         cursor, connection = self.get_cursor()
-        data = list(data)
-        # append id to end of list (because of sql statement)
-        data.append(id)
+        db_entry = [
+            data["name"],
+            data["surname"],
+            data["week"],
+            data["year"],
+            data["unit"],
+            data["sign"],
+            data["Bcontent"],
+            data["Scontent"],
+            data["BScontent"],
+            id]
+
         cursor.execute(f"UPDATE {self.table_name} SET \
-        name=?, surname=?, week=?, year=?, unit=?,\
-        sign=?, Bcontent=?, \
-        Scontent=?, BScontent=? WHERE id=?", (data))
+        name=?, \
+        surname=?, \
+        week=?, \
+        year=?, \
+        unit=?,\
+        sign=?, \
+        Bcontent=?, \
+        Scontent=?, \
+        BScontent=? WHERE id=?", db_entry)
+
         connection.commit()
         cursor.close()
         connection.close()
