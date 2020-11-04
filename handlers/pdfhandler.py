@@ -24,7 +24,6 @@
 # load system modules
 import io
 import re
-from datetime import date
 from textwrap import wrap
 
 # load external modules
@@ -82,6 +81,7 @@ def reformat_html_to_print(html_date: str) -> str:
     return ""
 
 
+# TODO: move this edge case to handlers.datecalc.py ?
 # we need to implement this slightly different
 # def check_start_date(check_date):
 #     day, month, year = check_date.split(".")
@@ -195,4 +195,3 @@ def writepdf(data):
     packet = draw(data, packet)
     packet.seek(0)
     return compile_packet(packet)
-

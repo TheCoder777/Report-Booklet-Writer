@@ -179,8 +179,16 @@ class UserDB:
         cursor, connection = self.get_cursor()
 
         cursor.execute(f"UPDATE {self.table_name} SET \
-        name=?, surname=?, nickname=?, email=?, unit=?, week=?, start_week=?, year=?, beginning_year=?, color_mode=? WHERE id=?",
-                       db_entry)
+        name=?, \
+        surname=?, \
+        nickname=?, \
+        email=?, \
+        unit=?, \
+        week=?, \
+        start_week=?, \
+        year=?, \
+        beginning_year=?, \
+        color_mode=? WHERE id=?", db_entry)
 
         connection.commit()
         cursor.close()
@@ -274,82 +282,6 @@ class UserDB:
 
         user.update_color_mode(colormode)
 
-    def get_pw_by_nickname(self, nickname):
-        self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE nickname=?", (nickname,))
-        pwd_and_salt = self.cursor.fetchone()
-        if pwd_and_salt:
-            return pwd_and_salt[0]
-        else:
-            return False
-
-    def get_id_by_email(self, email):
-        self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT id FROM {self.table_name} WHERE email=?", (email,))
-        id = self.cursor.fetchone()
-        if id:
-            return id[0]
-        else:
-            return False
-
-    def get_id_by_nickname(self, nickname):
-        self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT id FROM {self.table_name} WHERE nickname=?", (nickname,))
-        id = self.cursor.fetchone()
-        if id:
-            return id[0]
-        else:
-            return False
-
-    def fetch_by_id(self, id):
-        self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT name, nickname, email FROM {self.table_name} WHERE id=?", (id,))
-        data = self.cursor.fetchone()
-        if data:
-            return data
-        else:
-            return False
-
-    def get_name_nickname_by_email(self, email):
-        self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT name, nickname FROM {self.table_name} WHERE email =?", (email,))
-        data = self.cursor.fetchone()
-        return data
-
-    def get_email_by_nickname(self, nickname):
-        self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT email FROM {self.table_name} WHERE nickname =?", (nickname,))
-        data = self.cursor.fetchone()
-        if data:
-            return data[0]
-        else:
-            return False
-
-    def get_name_email_by_nickname(self, nickname):
-        self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT name, email FROM {self.table_name} WHERE nickname =?", (nickname,))
-        data = self.cursor.fetchone()
-        if data:
-            return data
-        else:
-            return False
-
-    def get_user_data(self, user):
-        self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT name, surname, unit, kw, nr, year FROM {self.table_name} WHERE id =?", (user.id,))
-        data = {}
-        data["name"], data["surname"], data["unit"], data["kw"], data["nr"], data["year"] = self.cursor.fetchone()
-        return data
-
-    def get_settings_data(self, user):
-        self.cursor = self.get_cursor()
-        self.cursor.execute(
-            f"SELECT name, surname, nickname, email, unit, kw, nr, year FROM {self.table_name} WHERE id =?", (user.id,))
-        data = {}
-        data["name"], data["surname"], data["nickname"], data["email"], data["unit"], data["kw"], data["nr"], data[
-            "year"] = self.cursor.fetchone()
-        return data
-
 
 class ContentDB:
     def __init__(self, uid):
@@ -429,7 +361,7 @@ class ContentDB:
         connection.close()
         return content
 
-    def update(self, data, id):
+    def update(self, data, cid):
         cursor, connection = self.get_cursor()
         db_entry = [
             data["name"],
@@ -441,7 +373,7 @@ class ContentDB:
             data["Bcontent"],
             data["Scontent"],
             data["BScontent"],
-            id]
+            cid]
 
         cursor.execute(f"UPDATE {self.table_name} SET \
         name=?, \
