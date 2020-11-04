@@ -179,17 +179,20 @@ def quickedit_reload():
 @app.route("/edit")
 @login_required
 def edit():
+    # get all user data that's available
     data = UserDB.get_dict(session["user"].email)
+    # get dynamic content (year, sign date)
     calculated = dbhandler.edit_defaults(data.get("year"))
     # week = last used week in contentdb! **week (merge at position 3)
 
+    # merge them together
     data = {**data, **calculated}
 
     # this is for custom edits (db entries from contentdb)
+    # if an id to a custom edit is provided:
     # if request.args.get("id"):
-    #     if not "ContentDB" in globals():
-    #         ContentDB = dbhandler.ContentDB(session["user"].id)
-    #     data = ContentDB.get_content_by_id(request.args.get("id"))
+    #     contentdb = dbhandler.ContentDB(session["user"].uid)
+    #     data = contentdb.get_content_by_id(request.args.get("id"))
     #     data = list(data)
     #     data.pop(0)
     #     return render_template("edit_custom.html", data=data)
@@ -203,22 +206,26 @@ def edit_reload():
     if request.form.get("download"):
         data = dict(request.form.copy())
 
+        contentdb = dbhandler.ContentDB(session["user"].uid)
+        contentdb.add_record(data)
+
         data = {**data, **dbhandler.edit_data(data.get("year"),
                                               session["user"].beginning_year,
                                               data.get("week"),
                                               session["user"].start_week)}
-        # This needs to be done..
-        # contentdb = dbhandler.ContentDB(session["user"].uid)
-        # contentdb.add_record(data)
+
         return send_file(pdfhandler.writepdf(data),
                          mimetype="application/pdf",
                          attachment_filename="save.pdf",
                          as_attachment=True)
 
     elif request.form.get("save"):
-        # new feature:
-        # only save the record to contentdb, but don't download or export anything
-        pass
+        # only save the record to contentdb, but don't download or export anything to PDF
+        data = dict(request.form.copy())
+
+        contentdb = dbhandler.ContentDB(session["user"].uid)
+        contentdb.add_record(data)
+        return redirect(url_for("content_overview"))
 
     # we'll find out what to do about this here later:
     # elif request.form.get("save_custom"):
@@ -478,7 +485,7 @@ def todolist():
 
 @app.route("/todolist", methods=["POST"])
 @login_required
-def save_todos():
+def todolist_save():
     df = todolisthandler.open_todolist(session["user"].uid)
     data = dict(request.form.copy())
     if data.get("save"):
@@ -500,7 +507,7 @@ def content_overview():
 
 @app.route("/content-overview", methods=["POST"])
 @login_required
-def export_all():
+def content_overview_export():
     if session.get("user"):
         if request.form.get("export"):
             pdf = write_many_pdfs()

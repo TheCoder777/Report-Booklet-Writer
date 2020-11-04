@@ -355,6 +355,7 @@ class ContentDB:
     def __init__(self, uid):
         self.table_name = "content"
         self.uid = uid
+        # ever user has his own contentdb
         self.db_path = os.path.join(paths.USER_PATH, str(uid), paths.CONTENT_DB_PATH)
         self.initialize()
 
@@ -368,16 +369,13 @@ class ContentDB:
             cursor.execute(f"CREATE TABLE if not exists {self.table_name} \
             (id INTEGER PRIMARY KEY, \
             name TEXT, surname TEXT, \
-            kw INTEGER, \
-            nr INTEGER, \
+            week INTEGER, \
             year INTEGER, \
             unit TEXT, \
-            start TEXT, \
-            end TEXT, \
             sign TEXT, \
             Bcontent TEXT, \
             Scontent TEXT, \
-            BScontent TEXT)")  # changed date names!! (removed _date suffix)
+            BScontent TEXT)")
             cursor.close()
             connection.close()
             return True
@@ -386,45 +384,52 @@ class ContentDB:
             print(f"Database file '{self.db_path}' not found!", file=sys.stderr)
             return False
 
-    def add_record(self, uinput, data):
-        week = week_from_html_date()  # rethink this later
-        name = uinput["name"]
-        surname = uinput["surname"]
-        nr = uinput["nr"]
-        year = uinput["year"]
-        unit = uinput["unit"]
-        start_date = uinput["start_date"]
-        end_date = uinput["end_date"]
-        sign_date = uinput["sign_date"]
-        Bcontent = uinput["Bcontent"]
-        Scontent = uinput["Scontent"]
-        BScontent = uinput["BScontent"]
-        self.cursor = self.get_cursor()
-        self.cursor.execute(f"INSERT INTO {self.table_name}\
-        (name, surname, kw, nr, year, unit, start_date, end_date, sign_date, Bcontent, Scontent, BScontent) \
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (
-            name, surname, kw, nr, year, unit, start_date, end_date, sign_date, Bcontent, Scontent, BScontent))
-        self.connection.commit()
+    def add_record(self, data):
+        cursor, connection = self.get_cursor()
+
+        cursor.execute(f"INSERT INTO {self.table_name}\
+        (name, surname, week, year, unit, sign, Bcontent, Scontent, BScontent) \
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", (
+            data["name"],
+            data["surname"],
+            data["week"],
+            data["year"],
+            data["unit"],
+            data["sign"],
+            data["Bcontent"],
+            data["Scontent"],
+            data["BScontent"]))
+        connection.commit()
+        cursor.close()
+        connection.close()
 
     def get_all(self):
         cursor, connection = self.get_cursor()
-        cursor.execute(f"SELECT * FROM {self.table_name}")
-        content = cursor.fetchall()
-        return content
 
-    def get_content_by_id(self, id):
-        self.cursor = self.get_cursor()
-        self.cursor.execute(f"SELECT * FROM {self.table_name} WHERE id=?", (id,))
-        content = self.cursor.fetchone()
+        # fetch everything from the database
+        query = cursor.execute(f"SELECT * FROM {self.table_name}")
+        colnames = [d[0] for d in query.description]
+        results = []
+        for row in cursor:
+            results.append(dict(zip(colnames, row)))
+        print(results)
+        return results
+
+    def get_content_by_id(self, cid):
+        cursor, connection = self.get_cursor()
+        cursor.execute(f"SELECT * FROM {self.table_name} WHERE id=?", (cid,))
+        content = cursor.fetchone()
         return content
 
     def update(self, data, id):
-        self.cursor = self.get_cursor()
+        cursor, connection = self.get_cursor()
         data = list(data)
-        # append id to end of list (because of sql statment)
+        # append id to end of list (because of sql statement)
         data.append(id)
-        self.cursor.execute(f"UPDATE {self.table_name} SET \
-        name=?, surname=?, kw=?, nr=?, year=?, unit=?,\
-        start_date=?, end_date=?, sign_date=?, Bcontent=?, \
+        cursor.execute(f"UPDATE {self.table_name} SET \
+        name=?, surname=?, week=?, year=?, unit=?,\
+        sign=?, Bcontent=?, \
         Scontent=?, BScontent=? WHERE id=?", (data))
-        self.connection.commit()
+        connection.commit()
+        cursor.close()
+        connection.close()

@@ -14,26 +14,20 @@
 
 {% block content %}
 
-{% if mode == "cards": %}
-    <form class="form" action="" method="post" id="contentform">
-        <input class="button" type="submit" name="export" value="Export all" form=contentform>
-    </form>
-    <section class="card_list">
-        {% for cont in content: %}
-        <a class="card_link" href="/edit?id={{ cont[0] }}">
-            <article class="card">
-                <header class="card_head">
-                    <p class="number">Number: {{ cont[4] }}</p>
-                    <h2 class="card_header">Week: {{ cont[3] }}, from {{ cont[7]}} to {{ cont[8] }}</h2>
-                </header>
-            </article>
-        </a>
-        {% endfor %}
-    </section>
-
-
-{% elif mode == "table": %}
-
-{% endif %}
+<form class="form" action="" method="post" id="contentform">
+    <input class="button" type="submit" name="export" value="Export all" form=contentform>
+</form>
+<section class="card_list">
+    {% for cont in content: %}
+    <a class="card_link" href="/edit?id={{ cont.get('id', '') }}">
+        <article class="card">
+            <header class="card_head">
+                <p class="number">Week: {{ cont.get('week', '') }}</p>
+                <h2 class="card_header">Unit: {{ cont.get('unit', '') }}, Year: {{ cont.get('year', '') }}</h2>
+            </header>
+        </article>
+    </a>
+    {% endfor %}
+</section>
 
 {% endblock %}
