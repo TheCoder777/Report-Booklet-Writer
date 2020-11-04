@@ -28,6 +28,7 @@ UNFULFILLED_PASSWORD_REQUIREMENTS = MSG("Your Password doesn't match the require
                                       one number,<br> \
                                       and one Special character.", MSG_WARNING)
 INVALID_DATE = MSG("The date you entered is in the wrong format!", MSG_WARNING)
+INVALID_CALENDER_WEEK = MSG("Invalid calender week! (Too high)", MSG_WARNING)
 
 # successful
 LOGGED_IN = MSG("Successfully logged in!", MSG_SUCCESS)

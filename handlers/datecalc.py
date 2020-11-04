@@ -99,3 +99,7 @@ def calc_all_from_config(entered_year: int, entered_week: int):
         "nr": nr,
         "year": year
     }
+
+
+def calc_all_for_user(entered_year: int, entered_week: int):
+    pass

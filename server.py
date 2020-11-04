@@ -155,16 +155,21 @@ def quickedit():
 def quickedit_reload():
     if request.form.get("download"):
         # Download button is pressed
-        data = dict(request.form.copy())
-        defaults = dbhandler.calculate_quickedit(data.get("year"),
-                                                 data.get("week"))
-        data = {**data, **defaults}
+        defaults = dict(request.form.copy())
+        if int(defaults["week"]) >= 53:
+            msg = MessageQueue()
+            msg.add(messages.INVALID_CALENDER_WEEK)
+            return render_template("quickedit.html", data=defaults, msg=msg.get())
+        data = dbhandler.quickedit_data(defaults.get("year"),
+                                        defaults.get("week"))
+        data = {**defaults, **data}
         # TODO: set attachment_filename to save_week_xx.pdf (maybe?)
         # Note that this needs a week here
         return send_file(pdfhandler.writepdf(data),
                          mimetype="application/pdf",
                          attachment_filename="save.pdf",
                          as_attachment=True)
+    # TODO: make a defines.errors.py (name ok?) with NOT_IMPLEMENTED / BAD_REQUEST enums
     # raise 'not implemented' error on bad request (or maybe 400 for bad request?)
     abort(501)
 

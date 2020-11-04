@@ -47,28 +47,18 @@ def quickedit_defaults():
     }
 
 
-def calculate_quickedit(year, week):
+def quickedit_data(year, week):
     """
     Calculates all values needed to export the final pdf
     """
     return datecalc.calc_all_from_config(int(year), int(week))
 
 
-def get_advanced_config(user, nr=None, year=None):
+def edit_data(year, week):
     """
-    Calculates /edit values for logged in users (will get more advanced soon)
+    Calculates /edit values for logged in users
     """
-    if not nr:
-        nr = user.nr
-    if not year:
-        year = user.year
-
-    return {
-        # calculate start/end with given values for anonymous user
-        "start": calc_start(user.week, nr, year, user.beginning_year),
-        "end": calc_end(user.week, nr, year, user.beginning_year),
-        "sign": calc_sign()
-    }
+    return datecalc.calc_all_for_user(int(year), int(week))
 
 
 class UserDB:
