@@ -500,10 +500,23 @@ def content_overview():
 @login_required
 def content_overview_export():
     if request.form.get("export"):
-        # fix pdf export
-        # pdf = write_many_pdfs()
-        # return send_file(pdf, as_attachment=True)
-        pass
+        contentdb = dbhandler.ContentDB(session["user"].uid)
+
+        # get entire database
+        data = contentdb.get_all()
+
+        # calculate start/end dates for all
+        result = []
+        for row in data:
+            result.append({**row, **dbhandler.edit_data(row.get("year"),
+                                                        session["user"].beginning_year,
+                                                        row.get("week"),
+                                                        session["user"].start_week)})
+
+        return send_file(pdfhandler.write_many_pdfs(result),
+                         mimetype="application/pdf",
+                         attachment_filename="all.pdf",
+                         as_attachment=True)
 
 
 # TODO: add a @app.errorhandler(404) page

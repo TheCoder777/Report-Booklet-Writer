@@ -48,7 +48,7 @@ def validate_html_date(html_date):
             return False
         if not int(month) < 12:
             return False
-        if not int(day) < 31:
+        if not int(day) < 32:
             return False
         # only if nothing returned False
         return True
@@ -77,7 +77,9 @@ def reformat_html_to_print(html_date: str) -> str:
         print_date = __convert_to_print_date(html_date)
         if validate_print_date(print_date):
             return print_date
-    return "ERROR"  # return empty string if something goes wrong
+    # return empty string if something goes wrong
+    # (so that the user has the option to manually change it later)
+    return ""
 
 
 # we need to implement this slightly different
@@ -162,39 +164,30 @@ def compile_packet(packet):
     return out_stream
 
 
-def create_many(content):
-    pages = PdfFileWriter()
-    data = {}
-    uinput = {}
-    for c in content:
+def write_many_pdfs(data):
+
+    out = PdfFileWriter()
+
+    for row in data:
         packet = io.BytesIO()
+        packet = draw(row, packet)
+        packet.seek(0)
+
+        new_pdf = PdfFileReader(packet)
         template = PdfFileReader(open(paths.PDF_TEMPLATE_PATH, "rb"))
         template_page = template.getPage(0)
-        uinput["name"] = c[1]
-        uinput["surname"] = c[2]
-        data["kw"] = c[3]  # only for old draw method, CHANGE THIS SOON!!
-        uinput["nr"] = int(c[4]) - 1  # this is because the draw method increases the nr automatically
-        uinput["year"] = str(c[5])
-        uinput["unit"] = c[6]
-        uinput["start_date"] = c[7]
-        uinput["end_date"] = c[8]
-        uinput["sign_date"] = c[9]
-        uinput["Bcontent"] = c[10]
-        uinput["Scontent"] = c[11]
-        uinput["BScontent"] = c[12]
-        packet = draw(data, uinput, packet)
-        packet.seek(0)
-        new_pdf = PdfFileReader(packet)
+
         template_page.mergePage(new_pdf.getPage(0))
-        pages.addPage(template_page)
+        out.addPage(template_page)
+
         del packet
         del template_page
         del new_pdf
 
-    filename = paths.TMP_PATH + "save.pdf"
-    out_stream = open(filename, "wb")
-    pages.write(out_stream)
-    return filename
+    out_stream = io.BytesIO()
+    out.write(out_stream)
+    out_stream.seek(0)
+    return out_stream
 
 
 def writepdf(data):
@@ -203,10 +196,3 @@ def writepdf(data):
     packet.seek(0)
     return compile_packet(packet)
 
-
-def write_many_pdfs():
-    packet = io.BytesIO()
-    if not "ContentDB" in globals():
-        ContentDB = dbhandler.ContentDB(session["user"].id)
-    content = ContentDB.get_content()
-    return pdfhandler.create_many(content)
