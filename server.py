@@ -145,7 +145,8 @@ def quickedit():
     # Check if user is logged in (maybe somehow?)
     if session.get("user"):
         redirect(url_for("edit"))
-    # calls a db function that returns the values from defines.configs as dict
+    # calls a db function that returns the values from defines.configs
+    # as dict (also calculates current week and so on)
     defaults = dbhandler.quickedit_defaults()
     return render_template("quickedit.html", data=defaults)
 
@@ -157,6 +158,7 @@ def quickedit_reload():
         # Download button is pressed
         defaults = dict(request.form.copy())
         if int(defaults["week"]) >= 53:
+            # TODO: count year up if week is too high
             msg = MessageQueue()
             msg.add(messages.INVALID_CALENDER_WEEK)
             return render_template("quickedit.html", data=defaults, msg=msg.get())
@@ -178,10 +180,10 @@ def quickedit_reload():
 @login_required
 def edit():
     data = UserDB.get_dict(session["user"].email)
-    dates = dbhandler.get_advanced_config(session.get("user"))
+    calculated = dbhandler.edit_defaults(data.get("year"))
+    # week = last used week in contentdb! **week (merge at position 3)
 
-    # merge both together
-    data = {**data, **dates}
+    data = {**data, **calculated}
 
     # this is for custom edits (db entries from contentdb)
     # if request.args.get("id"):
@@ -200,7 +202,11 @@ def edit_reload():
     # TODO: add checkups for date vailidation and stuff like 'if name given' (/edit)
     if request.form.get("download"):
         data = dict(request.form.copy())
-        UserDB.increase_nr(session.get("user"))
+
+        data = {**data, **dbhandler.edit_data(data.get("year"),
+                                              session["user"].beginning_year,
+                                              data.get("week"),
+                                              session["user"].start_week)}
         # This needs to be done..
         # contentdb = dbhandler.ContentDB(session["user"].uid)
         # contentdb.add_record(data)
@@ -213,15 +219,6 @@ def edit_reload():
         # new feature:
         # only save the record to contentdb, but don't download or export anything
         pass
-
-    elif request.form.get("refresh"):
-        data = dict(request.form.copy())
-        dates = dbhandler.get_advanced_config(session.get("user"),
-                                              nr=data.get("nr"),
-                                              year=data.get("year"))
-        # merge dicts
-        data = {**data, **dates}
-        return render_template("edit.html", data=data)
 
     # we'll find out what to do about this here later:
     # elif request.form.get("save_custom"):

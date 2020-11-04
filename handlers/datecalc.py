@@ -76,22 +76,33 @@ def get_current_year():
     return __current_year()
 
 
+def calc_beginning_year():
+    return __current_year()
+
+
 def get_current_week():
     return time.strftime("%V")
 
 
-def calc_all_from_config(entered_year: int, entered_week: int):
+def calc_all(entered_year: int,
+             entered_week: int,
+             beginning_year: int = __current_year(),
+             start_week: int = configs.START_WEEK):
+    """
+    Unified function to calculate pdf params either from config or from given values
+    """
 
     # calculate start and end date (strptime format is: year-calender_week-week_day(1-7))
-    start_date = datetime.datetime.strptime(f"{entered_year}-{entered_week}-{configs.START_OF_WEEK}", "%G-%V-%w").strftime("%Y-%m-%d")
-    end_date = datetime.datetime.strptime(f"{entered_year}-{entered_week}-{configs.END_OF_WEEK}", "%G-%V-%w").strftime("%Y-%m-%d")
+    start_date = datetime.datetime.strptime(f"{entered_year}-{entered_week}-{configs.START_OF_WEEK}",
+                                            "%G-%V-%w").strftime("%Y-%m-%d")
+    end_date = datetime.datetime.strptime(f"{entered_year}-{entered_week}-{configs.END_OF_WEEK}",
+                                          "%G-%V-%w").strftime("%Y-%m-%d")
     
     # calculate single digit year
-    beginning_year = __current_year()
     year = __calc_year(entered_year, beginning_year)
 
     # calculate number (see description)
-    nr = __calc_nr(entered_week, configs.START_WEEK, year)
+    nr = __calc_nr(entered_week, start_week, year)
 
     return {
         "start": start_date,
@@ -101,5 +112,10 @@ def calc_all_from_config(entered_year: int, entered_week: int):
     }
 
 
-def calc_all_for_user(entered_year: int, entered_week: int):
-    pass
+def calc_user_defaults(year_from_db: int):
+    year = __current_year() + year_from_db
+
+    return {
+        "sign": calc_sign_date(),
+        "year": year
+    }

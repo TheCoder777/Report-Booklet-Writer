@@ -43,22 +43,26 @@ def quickedit_defaults():
         "sign": datecalc.calc_sign_date(),
         "year": datecalc.get_current_year(),
         "week": datecalc.get_current_week(),
-        "unit": configs.UNIT,
+        "unit": configs.UNIT
     }
+
+
+def edit_defaults(year):
+    return datecalc.calc_user_defaults(int(year))
 
 
 def quickedit_data(year, week):
     """
     Calculates all values needed to export the final pdf
     """
-    return datecalc.calc_all_from_config(int(year), int(week))
+    return datecalc.calc_all(int(year), int(week))
 
 
-def edit_data(year, week):
+def edit_data(year, beginning_year, week, start_week):
     """
     Calculates /edit values for logged in users
     """
-    return datecalc.calc_all_for_user(int(year), int(week))
+    return datecalc.calc_all(int(year), int(week), int(beginning_year), int(start_week))
 
 
 class UserDB:
@@ -85,7 +89,7 @@ class UserDB:
             pwd_and_salt TEXT, \
             unit TEXT, \
             week INTEGER, \
-            nr INTEGER, \
+            start_week INTEGER, \
             year INTEGER, \
             beginning_year INTEGER, \
             color_mode TEXT)")
@@ -111,9 +115,9 @@ class UserDB:
         nickname = cr["name"]
         # get defaults from config
         week = configs.START_WEEK
-        nr = configs.NR
+        start_week = configs.START_WEEK
         year = configs.YEAR
-        beginning_year = calc_beginning_year()
+        beginning_year = datecalc.calc_beginning_year()
         unit = configs.UNIT
         color_mode = Colormode.DARK
 
@@ -125,14 +129,14 @@ class UserDB:
                     pwd,
                     unit,
                     week,
-                    nr,
+                    start_week,
                     year,
                     beginning_year,
                     color_mode]
 
         # add user to db
         cursor.execute(f"INSERT INTO {self.table_name}\
-        (name, surname, nickname, email, pwd_and_salt, unit, week, nr, year, beginning_year, color_mode) \
+        (name, surname, nickname, email, pwd_and_salt, unit, week, start_week, year, beginning_year, color_mode) \
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", db_entry)
         connection.commit()
         # self.cursor.close()
@@ -146,7 +150,7 @@ class UserDB:
                       # Without pwd now!
                       unit,
                       week,
-                      nr,
+                      start_week,
                       year,
                       beginning_year,
                       color_mode]
@@ -166,7 +170,7 @@ class UserDB:
                     data["email"],
                     data["unit"],
                     data["week"],
-                    data["nr"],
+                    data["start_week"],
                     data["year"],
                     data["beginning_year"],
                     data["color_mode"],
@@ -175,7 +179,7 @@ class UserDB:
         cursor, connection = self.get_cursor()
 
         cursor.execute(f"UPDATE {self.table_name} SET \
-        name=?, surname=?, nickname=?, email=?, unit=?, week=?, nr=?, year=?, beginning_year=?, color_mode=? WHERE id=?",
+        name=?, surname=?, nickname=?, email=?, unit=?, week=?, start_week=?, year=?, beginning_year=?, color_mode=? WHERE id=?",
                        db_entry)
 
         connection.commit()
@@ -246,15 +250,16 @@ class UserDB:
         cursor, connection = self.get_cursor()
 
         week = configs.START_WEEK
-        nr = configs.NR
+        start_week = configs.START_WEEK
         year = configs.YEAR
         unit = configs.UNIT
         color_mode = Colormode.DARK
 
-        user.update_defaults(week, nr, year, unit, color_mode)
+        user.update_defaults(week, start_week, year, unit, color_mode)
 
         cursor.execute(f"UPDATE {self.table_name} SET \
-                unit=?, week=?, nr=?, year=?, color_mode=? WHERE id=?", (unit, week, nr, year, color_mode, user.uid))
+                       unit=?, week=?, start_week=?, year=?, color_mode=? WHERE id=?",
+                       (unit, week, start_week, year, color_mode, user.uid))
         connection.commit()
         cursor.close()
         connection.close()
@@ -268,33 +273,6 @@ class UserDB:
         connection.close()
 
         user.update_color_mode(colormode)
-
-    def get_data(self, user):
-        """
-        This fetches the needed info for /edit from the db
-        """
-        cursor, connection = self.get_cursor()
-        cursor.execute(f"SELECT name, surname, unit, kw, nr, year FROM {self.table_name} WHERE id=?", (user.uid,))
-        data = {"name": (cursor.fetchone())[0], "surname": (cursor.fetchone())[1], "unit": (cursor.fetchone())[2],
-                "kw": (cursor.fetchone())[3], "nr": (cursor.fetchone())[4], "year": (cursor.fetchone())[5]}
-        return data
-
-    def increase_nr(self, user):
-        """
-        Increse number of contentdb records
-        """
-        cursor, connection = self.get_cursor()
-        # fetch number from db
-        cursor.execute(f"SELECT nr FROM {self.table_name} WHERE id=?", (user.uid,))
-        nr = cursor.fetchone()
-        # increase actual number
-        nr = nr[0] + 1
-        # write increased number back into db
-        cursor.execute(f"UPDATE {self.table_name} SET nr=? WHERE id =?", (nr, user.uid))
-        connection.commit()
-        cursor.close()
-        connection.close()
-        return True
 
     def get_pw_by_nickname(self, nickname):
         self.cursor = self.get_cursor()
