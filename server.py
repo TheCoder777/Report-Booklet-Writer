@@ -183,10 +183,16 @@ def edit():
     data = UserDB.get_dict(session["user"].email)
     # get dynamic content (year, sign date)
     calculated = dbhandler.edit_defaults(data.get("year"))
-    # week = last used week in contentdb! **week (merge at position 3)
+
+    contentdb = dbhandler.ContentDB(session["user"].uid)
+
+    # calculate week and make a dict out of it
+    week = {"week": contentdb.count_rows() + data.get("week")}
+
 
     # merge them together
-    data = {**data, **calculated}
+    # this merges data, the new calculated data and the precalculated week
+    data = {**data, **calculated, **week}
 
     # this is for custom edits (db entries from contentdb)
     # if an id to a custom edit is provided:

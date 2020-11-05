@@ -391,3 +391,9 @@ class ContentDB:
         connection.commit()
         cursor.close()
         connection.close()
+
+    def count_rows(self):
+        cursor, connection = self.get_cursor()
+        cursor.execute(f"SELECT id from {self.table_name} ORDER BY id DESC LIMIT 1")
+
+        return cursor.fetchone()[0]
