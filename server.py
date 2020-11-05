@@ -189,7 +189,6 @@ def edit():
     # calculate week and make a dict out of it
     week = {"week": contentdb.count_rows() + data.get("week")}
 
-
     # merge them together
     # this merges data, the new calculated data and the precalculated week
     data = {**data, **calculated, **week}
@@ -199,6 +198,8 @@ def edit():
     if request.args.get("id"):
         contentdb = dbhandler.ContentDB(session["user"].uid)
         data = contentdb.get_content_by_id(request.args.get("id"))
+        # TODO: add a Download button to the custom page (to make single exports possible)
+        # TODO: add a mask to select the weeks from which to export (custom export range)
         return render_template("customedit.html", data=data)
 
     return render_template("edit.html", data=data)
@@ -382,9 +383,6 @@ def get_user():
             # create a password hash
             pwd_and_salt = hashpw(request.form["password"])
             session["user"] = UserDB.new_user(credentials, pwd_and_salt)
-            # TODO: move df initialization to /todolist
-            # global df
-            # df = todolisthandler.open_todolist(session["user"].id)
             return redirect(url_for("user"))
         else:
             return render_template("security/register.html", data=credentials, msg=msg.get())
@@ -434,6 +432,8 @@ def user():
 
 
 @app.route("/logout")
+# can only logout if logged in
+@login_required
 def logout():
     # Logout user
     del session["user"]
@@ -456,17 +456,29 @@ def change_mode():
     This function switches between the Dark and the Light color mode.
     (Defaults to Darkmode)
     """
-    # TODO: apply changes directly to database!
-    # if user is logged in and colormode is DARK
-    if session.get("user") and session.get("color_mode") == Colormode.DARK:
-        UserDB.update_color_mode(Colormode.LIGHT, session.get("user"))
-        return redirect(request.referrer)
+    if session.get("user"):
+        # delete color cookie if he exists
+        if session.get("color_mode"):
+            del session["color_mode"]
 
-    elif session.get("user") and session.get("color_mode") == Colormode.LIGHT:
-        UserDB.update_color_mode(Colormode.DARK, session.get("user"))
-        return redirect(request.referrer)
+        # if user is logged in and colormode is DARK
+        if session["user"].color_mode == Colormode.DARK:
+            # update database
+            UserDB.update_color_mode(Colormode.LIGHT, session.get("user"))
+            # update user
+            session["user"].update_color_mode(Colormode.LIGHT)
+            return redirect(request.referrer)
 
-    if session.get("color_mode") == Colormode.DARK:
+        # if user is logged in and colormode is LIGHT
+        if session["user"].color_mode == Colormode.LIGHT:
+            # update database
+            UserDB.update_color_mode(Colormode.DARK, session.get("user"))
+            # update user
+            session["user"].update_color_mode(Colormode.DARK)
+            return redirect(request.referrer)
+
+    # user isn't logged in and colormode is DARK
+    elif session.get("color_mode") == Colormode.DARK:
         session["color_mode"] = Colormode.LIGHT
         return redirect(request.referrer)
     else:
@@ -487,6 +499,7 @@ def todolist_save():
     data = dict(request.form.copy())
     if data.get("save"):
         # Save button is pressed
+        # TODO: if a parent todo is uncheckd again, uncheck all child elements too
         df, msg = todolisthandler.update(session["user"].uid, df, data.keys())
         return render_template("todolist.html", data=df, msg=msg.get())
     # raise 'not implemented' error on bad request (or maybe 400 for bad request?)
@@ -505,6 +518,7 @@ def content_overview():
 @app.route("/content-overview", methods=["POST"])
 @login_required
 def content_overview_export():
+    # TODO: add a button 'continue editing' or 'edit another one to make the workflow easier
     if request.form.get("export"):
         contentdb = dbhandler.ContentDB(session["user"].uid)
 
@@ -531,7 +545,7 @@ def content_overview_export():
 @app.before_request
 def set_color_mode():
     # setting default colormode for new users if not already set
-    if not session.get("color_mode"):
+    if not session.get("color_mode") and not session.get("user"):
         session["color_mode"] = Colormode.DARK
 
 

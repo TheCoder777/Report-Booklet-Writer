@@ -282,8 +282,6 @@ class UserDB:
         cursor.close()
         connection.close()
 
-        user.update_color_mode(colormode)
-
 
 class ContentDB:
     def __init__(self, uid):
@@ -392,8 +390,11 @@ class ContentDB:
         cursor.close()
         connection.close()
 
-    def count_rows(self):
+    def count_rows(self) -> int:
         cursor, connection = self.get_cursor()
         cursor.execute(f"SELECT id from {self.table_name} ORDER BY id DESC LIMIT 1")
-
-        return cursor.fetchone()[0]
+        res = cursor.fetchone()
+        if res:
+            return res[0]
+        # return 0 db records if there aren't any
+        return 0

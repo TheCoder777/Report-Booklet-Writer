@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
     <head>
         {% block head %}
-        {% if session.get("color_mode") == "Lightmode": %}
+        {% if session.get("color_mode") == "Lightmode" or session.get("user").color_mode == "Lightmode": %}
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/color/light.css') }}">
         {% else: %}
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/color/dark.css') }}">
@@ -141,7 +141,7 @@
                     <li class="icon mode">
                         <a class="nav_link" href="{{ url_for('change_mode') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29.614 32">
-                                {% if session.get("color_mode") == "Lightmode": %}
+                                {% if session.get("color_mode") == "Lightmode" or session.get("user").color_mode == "Lightmode": %}
                                 <path class="light_moon" fill="none" stroke="#181a1b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.24" d="M15.925.62A15.38 15.38 0 00.62 16 15.38 15.38 0 0016 31.38a15.38 15.38 0 0012.995-7.153 12.113 12.113 0 01-4.752.971A12.113 12.113 0 0112.13 13.085a12.113 12.113 0 018.803-11.653A15.38 15.38 0 0016 .62a15.38 15.38 0 00-.075 0z"/>
                                 {% else: %}
                                 <path class="dark_moon" fill="#eee" stroke="#none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.24" d="M15.925.62A15.38 15.38 0 00.62 16 15.38 15.38 0 0016 31.38a15.38 15.38 0 0012.995-7.153 12.113 12.113 0 01-4.752.971A12.113 12.113 0 0112.13 13.085a12.113 12.113 0 018.803-11.653A15.38 15.38 0 0016 .62a15.38 15.38 0 00-.075 0z"/>
