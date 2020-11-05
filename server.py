@@ -519,6 +519,7 @@ def content_overview():
 @login_required
 def content_overview_export():
     # TODO: add a button 'continue editing' or 'edit another one to make the workflow easier
+    # TODO: add a delete button for all and one for single items
     if request.form.get("export"):
         contentdb = dbhandler.ContentDB(session["user"].uid)
 
