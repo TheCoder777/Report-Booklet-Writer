@@ -68,8 +68,9 @@ class User:
     def update_all(self, vals):
         self.uid, self.name, self.surname, self.nickname, self.email, self.unit, self.week, self.start_week, self.year, self.beginning_year, self.color_mode = vals
 
-    def update_defaults(self, week, year, unit, color_mode):
+    def update_defaults(self, week, start_week, year, unit, color_mode):
         self.week = week
+        self.start_week = start_week
         self.year = year
         self.unit = unit
         self.color_mode = color_mode

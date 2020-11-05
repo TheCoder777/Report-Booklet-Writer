@@ -81,17 +81,6 @@ def reformat_html_to_print(html_date: str) -> str:
     return ""
 
 
-# TODO: move this edge case to handlers.datecalc.py ?
-# we need to implement this slightly different
-# def check_start_date(check_date):
-#     day, month, year = check_date.split(".")
-#     tdate = ".".join([day, month])
-#     if tdate == "31.08":
-#         return "01.09." + year
-#     else:
-#         return check_date
-
-
 def draw(data, packet):
     # generate full name
     fullname = data.get("surname") + ", " + data.get("name")

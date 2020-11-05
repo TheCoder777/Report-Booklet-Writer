@@ -260,14 +260,16 @@ class UserDB:
         week = configs.START_WEEK
         start_week = configs.START_WEEK
         year = configs.YEAR
+        # This only resets beginning_year to the current year
+        beginning_year = datecalc.calc_beginning_year()
         unit = configs.UNIT
         color_mode = Colormode.DARK
 
         user.update_defaults(week, start_week, year, unit, color_mode)
 
         cursor.execute(f"UPDATE {self.table_name} SET \
-                       unit=?, week=?, start_week=?, year=?, color_mode=? WHERE id=?",
-                       (unit, week, start_week, year, color_mode, user.uid))
+                       unit=?, week=?, start_week=?, year=?, beginning_year=?, color_mode=? WHERE id=?",
+                       (unit, week, start_week, year, beginning_year, color_mode, user.uid))
         connection.commit()
         cursor.close()
         connection.close()

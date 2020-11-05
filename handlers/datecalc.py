@@ -68,6 +68,18 @@ def __calc_nr(entered_week: int, beginning_week: int, year: int) -> int:
     return (year - 1) * 52 + entered_week - beginning_week + 1
 
 
+def __start_date_edge_cases(start_date):
+
+    # first edge case:
+    # first week of apprenticeship is only 4 days long, beginning on tuesday!
+    day, month, year = start_date.split("-")
+    part_date = "-".join([month, day])
+    if part_date == "08-31":
+        start_date = year + "-09-01"
+
+    return start_date
+
+
 def calc_sign_date():
     return time.strftime("%Y-%m-%d")
 
@@ -97,6 +109,8 @@ def calc_all(entered_year: int,
                                             "%G-%V-%w").strftime("%Y-%m-%d")
     end_date = datetime.datetime.strptime(f"{entered_year}-{entered_week}-{configs.END_OF_WEEK}",
                                           "%G-%V-%w").strftime("%Y-%m-%d")
+    # some edge cases for the start_date
+    start_date = __start_date_edge_cases(start_date)
     
     # calculate single digit year
     year = __calc_year(entered_year, beginning_year)

@@ -21,11 +21,11 @@ INVALID_EMAIL = MSG("Your email is invalid!<br>Did you spell it right?", MSG_WAR
 WRONG_EMAIL = MSG("This email is wrong!<I'm sure there is a typo somewhere.", MSG_WARNING)
 INVALID_PASSWORD = MSG("Wrong password!", MSG_WARNING)
 PASSWORD_MISMATCH = MSG("The given passwords don't match!", MSG_WARNING)
-USERNAME_NOT_AVAILABLE = MSG("This username is not aviable", MSG_WARNING)
-UNFULFILLED_PASSWORD_REQUIREMENTS = MSG("Your Password doesn't match the requirements:<br> \
-                                      At least 8 characters total<br> \
-                                      One capital character,<br> \
-                                      one number,<br> \
+USERNAME_NOT_AVAILABLE = MSG("This username is not available", MSG_WARNING)
+UNFULFILLED_PASSWORD_REQUIREMENTS = MSG("Your Password doesn't match the requirements: <br/> \
+                                      At least 8 characters total <br/> \
+                                      One capital character, <br/> \
+                                      one number, <br/> \
                                       and one Special character.", MSG_WARNING)
 INVALID_DATE = MSG("The date you entered is in the wrong format!", MSG_WARNING)
 INVALID_CALENDER_WEEK = MSG("Invalid calender week! (Too high)", MSG_WARNING)

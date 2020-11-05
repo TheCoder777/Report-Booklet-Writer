@@ -33,15 +33,15 @@
                 <input class="input_field" type="text" name="unit" value="{{ user.unit }}">
             </div>
             <div class="manual_input">
-                <p class="input_hint">Week of first Year:</p>
+                <p class="input_hint">Current Week:</p>
                 <input class="input_field" type="number" name="week" value="{{ user.week }}">
             </div>
             <div class="manual_input">
-                <p class="input_hint">Current Number:</p>
-                <input class="input_field" type="number" name="nr" value="{{ user.nr }}">
+                <p class="input_hint">Beginning Week:</p>
+                <input class="input_field" type="number" name="start_week" value="{{ user.start_week }}">
             </div>
             <div class="manual_input">
-                <p class="input_hint">Year:</p>
+                <p class="input_hint">Years in apprenticeship:</p>
                 <input class="input_field" type="number" name="year" value="{{ user.year }}">
             </div>
             <div class="manual_input">
@@ -50,7 +50,15 @@
             </div>
             <div class="manual_input">
                 <p class="input_hint">Color Mode:</p>
-                <input class="input_field" type="text" name="color_mode" value="{{ user.color_mode }}">
+                <select class="input_field" type="text" name="color_mode">
+                    {% if user.color_mode == "Darkmode": %}
+                        <option value="{{ user.color_mode }}">Darkmode</option>
+                        <option value="Lightmode">Lightmode</option>
+                    {% else: %}
+                        <option value="{{ user.color_mode }}">Lightmode</option>
+                        <option value="Darkmode">Darkmode</option>
+                    {% endif %}
+                </select>
             </div>
 
         </div>

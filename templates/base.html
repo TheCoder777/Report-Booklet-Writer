@@ -159,11 +159,13 @@
         <div class="second_title">
             <p>{% block second_title %}{% endblock %}</p>
         </div>
+        {% autoescape false %}
         {% for message in msg: %}
             <div class="messages">
                 <p class="msg" style="color: var({{ message.color }});">{{ message.content }}</p>
             </div>
         {% endfor %}
+        {% endautoescape %}
         {% block content %}
         {% endblock %}
     </body>
