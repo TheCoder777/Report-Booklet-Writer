@@ -1,5 +1,8 @@
 # Python Berichtsheft Auto Writer
 
+[![CodeFactor](https://www.codefactor.io/repository/github/thecoder777/python-berichtsheft-auto-writer/badge/master)](https://www.codefactor.io/repository/github/thecoder777/python-berichtsheft-auto-writer/overview/master)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+
 Just let someone else write your Berichtsheft, don't do it by yourself, that's boring!
 
 Start using Python Berichtsheft Auto Writer now!
