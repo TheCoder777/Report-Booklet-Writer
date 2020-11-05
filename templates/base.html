@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
     <head>
         {% block head %}
-        {% if session.get("mode") == "Light" %}
+        {% if session.get("color_mode") == "Lightmode" or session.get("user").color_mode == "Lightmode": %}
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/color/light.css') }}">
         {% else: %}
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/color/dark.css') }}">
@@ -25,9 +25,10 @@
                             <span class="link_text icon_text">Home</span>
                         </a>
                     </li>
+                    {% if session.get("user"): %}
                     <li class="icon edit">
                         <a class="nav_link" href="{{ url_for('edit') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg"viewBox="0 0 32 31.996">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 31.996">
                                 <defs id="defs899">
                                     <style id="style897">.cls-1{fill:none;stroke:#1d1d1b;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px}</style>
                                 </defs>
@@ -39,14 +40,13 @@
                                     </g>
                                 </g>
                             </svg>
-                            <span class="link_text icon_text">Quick Edit</span>
+                            <span class="link_text icon_text">Edit</span>
                         </a>
                     </li>
-                    {% if session.get("user"): %}
                     <li class="icon user">
                         <div class="nav_link">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-                                <path class="icon_color" d="M16 6.25a5.507 5.507 0 00-5.5 5.5c0 3.033 2.468 5.5 5.5 5.5s5.5-2.467 5.5-5.5-2.468-5.5-5.5-5.5zm0 2c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5zm0 11c-6.729 0-12 2.855-12 6.5h2c0-2.128 4.106-4.5 10-4.5s10 2.372 10 4.5h2c0-3.645-5.271-6.5-12-6.5z", fill="#eee"/>
+                                <path class="icon_color" d="M16 6.25a5.507 5.507 0 00-5.5 5.5c0 3.033 2.468 5.5 5.5 5.5s5.5-2.467 5.5-5.5-2.468-5.5-5.5-5.5zm0 2c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5zm0 11c-6.729 0-12 2.855-12 6.5h2c0-2.128 4.106-4.5 10-4.5s10 2.372 10 4.5h2c0-3.645-5.271-6.5-12-6.5z" fill="#eee"/>
                             </svg>
                             <span class="link_text icon_text">{{ session["user"].name }}</span>
                         </div>
@@ -81,10 +81,27 @@
                         </a>
                     </li>
                     {% else: %}
+                    <li class="icon quickedit">
+                        <a class="nav_link" href="{{ url_for('quickedit') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 31.996">
+                                <defs id="defs899">
+                                    <style id="style897">.cls-1{fill:none;stroke:#1d1d1b;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px}</style>
+                                </defs>
+                                <g id="g916" transform="matrix(1.67851 0 0 1.67851 -5.858 -2.43)">
+                                    <path class="icon_color_stroke" id="_Path_" fill="none" stroke="#eee" stroke-opacity="1" d="M19.51 12v4.29a3.22 3.22 0 01-3.22 3.22H7.71a3.22 3.22 0 01-3.22-3.22V7.71a3.22 3.22 0 013.22-3.22H12" class="cls-1" data-name="&lt;Path&gt;"/>
+                                    <g id="_Group_" fill="none" stroke="#eee" stroke-opacity="1" data-name="&lt;Group&gt;">
+                                        <path class="icon_color_stroke" id="_Rectangle_" fill="none" stroke="#eee" stroke-opacity="1" d="M17.64 3.14h3.28v3.17h-3.28z" class="cls-1" data-name="&lt;Rectangle&gt;" transform="rotate(-45 19.28 4.734)"/>
+                                        <path class="icon_color_stroke" id="_Path_2" fill="none" stroke="#eee" stroke-opacity="1" d="M19.24 7.01l-4.43 4.43-2.27.03.03-2.28L17 4.77z" class="cls-1" data-name="&lt;Path&gt;"/>
+                                    </g>
+                                </g>
+                            </svg>
+                            <span class="link_text icon_text">Quick Edit</span>
+                        </a>
+                    </li>
                     <li class="icon login">
                         <a class="nav_link" href="{{ url_for('login') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-                                <path class="icon_color" d="M16 6.25a5.507 5.507 0 00-5.5 5.5c0 3.033 2.468 5.5 5.5 5.5s5.5-2.467 5.5-5.5-2.468-5.5-5.5-5.5zm0 2c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5zm0 11c-6.729 0-12 2.855-12 6.5h2c0-2.128 4.106-4.5 10-4.5s10 2.372 10 4.5h2c0-3.645-5.271-6.5-12-6.5z", fill="#eee"/>
+                                <path class="icon_color" d="M16 6.25a5.507 5.507 0 00-5.5 5.5c0 3.033 2.468 5.5 5.5 5.5s5.5-2.467 5.5-5.5-2.468-5.5-5.5-5.5zm0 2c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5zm0 11c-6.729 0-12 2.855-12 6.5h2c0-2.128 4.106-4.5 10-4.5s10 2.372 10 4.5h2c0-3.645-5.271-6.5-12-6.5z" fill="#eee"/>
                             </svg>
                             <span class="link_text icon_text">Login</span>
                         </a>
@@ -124,13 +141,13 @@
                     <li class="icon mode">
                         <a class="nav_link" href="{{ url_for('change_mode') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29.614 32">
-                                {% if session.get("mode") == "Light": %}
+                                {% if session.get("color_mode") == "Lightmode" or session.get("user").color_mode == "Lightmode": %}
                                 <path class="light_moon" fill="none" stroke="#181a1b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.24" d="M15.925.62A15.38 15.38 0 00.62 16 15.38 15.38 0 0016 31.38a15.38 15.38 0 0012.995-7.153 12.113 12.113 0 01-4.752.971A12.113 12.113 0 0112.13 13.085a12.113 12.113 0 018.803-11.653A15.38 15.38 0 0016 .62a15.38 15.38 0 00-.075 0z"/>
                                 {% else: %}
                                 <path class="dark_moon" fill="#eee" stroke="#none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.24" d="M15.925.62A15.38 15.38 0 00.62 16 15.38 15.38 0 0016 31.38a15.38 15.38 0 0012.995-7.153 12.113 12.113 0 01-4.752.971A12.113 12.113 0 0112.13 13.085a12.113 12.113 0 018.803-11.653A15.38 15.38 0 0016 .62a15.38 15.38 0 00-.075 0z"/>
                                 {% endif %}
                             </svg>
-                            <span class="link_text icon_text">{{ session['mode'] }}mode</span>
+                            <span class="link_text icon_text">{{ session.get('color_mode') }}</span>
                         </a>
                     </li>
                 </ul>
@@ -139,11 +156,16 @@
         <div class="headline">
             <h1 class="header">{% block headline %}{% endblock %}</h1>
         </div>
-        <div class="bodybody">
-            <p class="simple_header" style="{% block statusstyle %}{% endblock %}">{% block statusmessage %}{% endblock %}</p>
-            {% block statuscontent %}
-            {% endblock %}
+        <div class="second_title">
+            <p>{% block second_title %}{% endblock %}</p>
         </div>
+        {% autoescape false %}
+        {% for message in msg: %}
+            <div class="messages">
+                <p class="msg" style="color: var({{ message.color }});">{{ message.content }}</p>
+            </div>
+        {% endfor %}
+        {% endautoescape %}
         {% block content %}
         {% endblock %}
     </body>

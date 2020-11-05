@@ -115,7 +115,7 @@ h2, h3 {
         text-align: left;
         font-family: var(--text-font);
         color: var(--text-color);
-        margin-left: 0rem;
+        margin-left: 0;
     }
 
     .head {

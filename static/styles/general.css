@@ -328,7 +328,7 @@ body::-webkit-scrollbar-thumb {
     width: 5rem;
 }
 
-.bodybody {
+.messages {
     align-items: center;
     justify-content: center;
     margin-top: 2rem;
@@ -375,6 +375,21 @@ body::-webkit-scrollbar-thumb {
     color: var(--text-color);
     margin: 1rem;
 }
+
+.messages {
+    font-family: var(--text-font);
+    font-size: 1rem;
+    margin: 1rem;
+    text-align: center;
+}
+
+.second_title p {
+    font-family: var(--text-font);
+    font-size: 1rem;
+    margin: 1rem;
+    text-align: center;
+}
+
 
 @media only screen and (max-width: 768px) {
     html {
@@ -425,7 +440,7 @@ body::-webkit-scrollbar-thumb {
 
     .navbar {
         bottom: 0;
-        height: 5rem;;
+        height: 5rem;
         width: -webkit-fill-available;
     }
 

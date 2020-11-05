@@ -1,3 +1,4 @@
+<!-- TODO: remove this file completely and replace with edit.html? -->
 {% extends "base.html" %}
 <!DOCTYPE html>
 {% block head %}
@@ -5,12 +6,11 @@
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/edit.css') }}">
 {% endblock %}
-
 {% block title %}Edit Berichtsheft{% endblock %}
 
 {% block headline %}Python Berichtsheft Auto Writer{% endblock %}
 
-{% block second_title %}Fill out the form below, and doublecheck if everything is correct:{% endblock %}
+{% block second_title %}Loaded Berichtsheft from Week {{ data.get('week', '') }}: {% endblock %}
 
 {% block content %}
     <form class="form" action="" method="post" id="editform">
@@ -42,23 +42,10 @@
                 </div>
             </div>
             <div class="textarea_container">
-                {% if data.get('Bcontent'): %}
-                <textarea name="Bcontent" placeholder="What did you do at the company?" rows="8" cols="100" form="editform">{{ data.get('Bcontent', '') }}</textarea>
-                {% else: %}
-                <textarea name="Bcontent" placeholder="What did you do at the company?" rows="8" cols="100" form="editform"></textarea>
-                {% endif %}
-                {% if data.get('Scontent'): %}
-                <textarea name="Scontent" placeholder="Got some further education?" rows="8" cols="100" form="editform">{{ data.get('Scontent', '') }}</textarea>
-                {% else: %}
-                <textarea name="Scontent" placeholder="Got some further education?" rows="8" cols="100" form="editform"></textarea>
-                {% endif %}
-                {% if data.get('BScontent'): %}
-                <textarea name="BScontent" placeholder="What did you do at school?" rows="8" cols="100" form="editform">{{ data.get('BScontent', '') }}</textarea>
-                {% else: %}
-                <textarea name="BScontent" placeholder="What did you do at school?" rows="8" cols="100" form="editform"></textarea>
-                {% endif %}
-                <input class="button" type="submit" name="save" value="Save" form=editform>
-                <input class="button" type="submit" name="download" value="Download" form=editform>
+                <textarea name="Bcontent" rows="8" cols="100" form="editform">{{ data.get('Bcontent', '') }}</textarea>
+                <textarea name="Scontent" rows="8" cols="100" form="editform">{{ data.get('Scontent', '') }}</textarea>
+                <textarea name="BScontent" rows="8" cols="100" form="editform">{{ data.get('BScontent', '') }}</textarea>
+                <input class="button" type="submit" name="save_custom" value="Save" form=editform>
             </div>
         </div>
     </form>

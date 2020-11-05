@@ -6,7 +6,7 @@
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/edit.css') }}">
 {% endblock %}
 
-{% block title %}Edit Berichtsheft{% endblock %}
+{% block title %}Quickedit Berichtsheft{% endblock %}
 
 {% block headline %}Python Berichtsheft Auto Writer{% endblock %}
 
@@ -25,11 +25,11 @@
                     <input class="input_field" type="text" name="surname" value="{{ data.get('surname', '') }}">
                 </div>
                 <div class="manual_input">
-                    <p class="input_hint">Week:</p>
+                    <p class="input_hint">Current Week:</p>
                     <input class="input_field" type="number" name="week" value="{{ data.get('week', '') }}">
                 </div>
                 <div class="manual_input">
-                    <p class="input_hint">Year:</p>
+                    <p class="input_hint">Current Year:</p>
                     <input class="input_field" type="number" name="year" value="{{ data.get('year', '') }}">
                 </div>
                 <div class="manual_input">
@@ -37,27 +37,27 @@
                     <input class="input_field" type="text" name="unit" value="{{ data.get('unit', '') }}">
                 </div>
                 <div class="manual_input">
-                    <p class="input_hint">Sign date:</p>
+                    <p class="input_hint">Sign Date:</p>
                     <input class="input_field" type="date" name="sign" value="{{ data.get('sign', '') }}">
                 </div>
             </div>
             <div class="textarea_container">
-                {% if data.get('Bcontent'): %}
+            <!--TODO: make ifs to data.get("Bcontent", "")-->
+                {% if data.get("Bcontent"): %}
                 <textarea name="Bcontent" placeholder="What did you do at the company?" rows="8" cols="100" form="editform">{{ data.get('Bcontent', '') }}</textarea>
                 {% else: %}
                 <textarea name="Bcontent" placeholder="What did you do at the company?" rows="8" cols="100" form="editform"></textarea>
                 {% endif %}
-                {% if data.get('Scontent'): %}
+                {% if data.get("Scontent"): %}
                 <textarea name="Scontent" placeholder="Got some further education?" rows="8" cols="100" form="editform">{{ data.get('Scontent', '') }}</textarea>
                 {% else: %}
                 <textarea name="Scontent" placeholder="Got some further education?" rows="8" cols="100" form="editform"></textarea>
                 {% endif %}
-                {% if data.get('BScontent'): %}
+                {% if data.get("BScontent"): %}
                 <textarea name="BScontent" placeholder="What did you do at school?" rows="8" cols="100" form="editform">{{ data.get('BScontent', '') }}</textarea>
                 {% else: %}
                 <textarea name="BScontent" placeholder="What did you do at school?" rows="8" cols="100" form="editform"></textarea>
                 {% endif %}
-                <input class="button" type="submit" name="save" value="Save" form=editform>
                 <input class="button" type="submit" name="download" value="Download" form=editform>
             </div>
         </div>

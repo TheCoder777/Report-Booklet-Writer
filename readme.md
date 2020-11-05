@@ -1,13 +1,12 @@
 # Python Berichtsheft Auto Writer
 
-Just let someone else write your Berichtsheft, don't do it by yourself, that's boring!
+[![CodeFactor](https://www.codefactor.io/repository/github/thecoder777/python-berichtsheft-auto-writer/badge/master)](https://www.codefactor.io/repository/github/thecoder777/python-berichtsheft-auto-writer/overview/master)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
-Start using Python Berichtsheft Auto Writer now!
+Just let python write your Berichtsheft, don't do it by yourself, that's boring!
 
 
 ## Installation
-
-**Disclaimer: You need to have python 3.8 installed, otherwise it wont work!**
 
 To use this tool, you first have to clone the Project:
 
@@ -15,59 +14,62 @@ To use this tool, you first have to clone the Project:
 git clone https://github.com/TheCoder777/Python-Berichtsheft-Auto-Writer.git
 ```
 
-Then you need to install the dependencies, like this:
+Then you need to install the dependencies:
 
 ```bash
 pip install pdfrw PyPDF2 flask gevent reportlab colored Flask-Session bcrypt pandas
 ```
 
-Finally, you can just run it:
+Finally, you can run it with:
 
 ```bash
 python server.py
+```
 
-# alternative
+or with:
 
+```bash
 ./server.py
 ```
 
 The program will mostly take care of itself during the checkup, so you have no need to worry!
 
-If you want to configure your name and personal info, checkout [`configuration`](#configuration).
-
 
 ## Usage
 
-1. If you load it up, go to [localhost:8000](localhost:8000) (current default) and click on the start button!
-2. You can enter as much information as you want, and finally click on download button!
-3. Your browser will now download a perfectly filled out pdf!
+If you load it up, go to [localhost:8000](localhost:8000) (current default) and either click on 'create account', or click the quickedit icon on sidebar (try to hover for a little bit!
+
+You can either download the single PDFs in edit mode, or export all to one PDF in the overview tab!
 
 It's as easy as that!
 
 
 ## Users
 
-You can create a user if you click on "create user" on the login page.
+Every account has a nickname that can be changed in the settings (it's pretty useless right now, but you'll use this to login later!)
 
-Email validation will come soon!
+You Email needs to be in a `name@provider.domain` format
 
-Edit your user specific settings on the settings page!
+Your password needs to have 8 characters, one capital letter, one number and one special character.
 
-You can login with either your email address or your nickname!
-
+Feel annoyed? Well at least it's for security...
 
 
 ## Configuration
 
-You can configure all settings via the web interface  on [Domain]/settings or by clicking on the settings icon in the top right of the start page!
+You can configure all settings via the web interface on /settings or by clicking on the settings icon in the sidebar!
+
+Do me a favor and be careful with some settings like `start week` and `start year`, this often gets easily messed up.
+
+
+
+If you like the extreme, or you just want to mess around, you may also edit the `defines/configs.py` file. (Do this on your own risk!)
 
 You'll be notified if everything went the correct way when you click the save button!
 
-To reset the configuration, just click the reset button!
+To reset the configuration, just click the reset button! (This is to reset the values you put in since the last refresh)
 
-The 'reset to default button' will hard reset your configuration to absolute defaults!
-
-**Be careful with that!**
+The 'reset to default button' will hard reset your configuration to absolute defaults, with **no chance to restore your data**, so please be careful with that!
 
 
 ## Debugging
@@ -80,10 +82,9 @@ python server.py --debug
 
 ## Todo
 
-- Content overview (export all PDFs at once)
 - Mail server (just wait for it, you'll see)
 - Private/Public Profile setting
-- Dashboard
+- all todos in the code (comments)
 
 
 ## License
