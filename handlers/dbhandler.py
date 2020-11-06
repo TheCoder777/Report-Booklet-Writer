@@ -330,7 +330,7 @@ class ContentDB:
         cursor, connection = self.get_cursor()
 
         # fetch everything from the database
-        query = cursor.execute("SELECT * FROM content")
+        query = cursor.execute("SELECT * FROM content ORDER BY week ASC")
         # get the names from the table headers
         colnames = [d[0] for d in query.description]
         results = []
@@ -339,7 +339,7 @@ class ContentDB:
             results.append(dict(zip(colnames, row)))
         return results
 
-    def get_content_by_id(self, cid):
+    def get_by_id(self, cid):
         # initialize cursor with a row_factory
         cursor, connection = self.get_cursor()
         del cursor
@@ -380,6 +380,11 @@ class ContentDB:
         connection.commit()
         cursor.close()
         connection.close()
+
+    def delete_by_id(self, cid):
+        cursor, connection = self.get_cursor()
+        cursor.execute("DELETE FROM content WHERE id=?", (cid,))
+        return connection.commit()
 
     def count_rows(self) -> int:
         cursor, connection = self.get_cursor()

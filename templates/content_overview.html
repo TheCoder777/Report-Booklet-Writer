@@ -18,15 +18,20 @@
     <input class="button" type="submit" name="export" value="Export all" form=contentform>
 </form>
 <section class="card_list">
+    <!-- TODO: display cards group by years  -->
     {% for cont in content: %}
-    <a class="card_link" href="/edit?id={{ cont.get('id', '') }}">
         <article class="card">
             <header class="card_head">
-                <p class="number">Week: {{ cont.get('week', '') }}</p>
-                <h2 class="card_header">Unit: {{ cont.get('unit', '') }}, Year: {{ cont.get('year', '') }}</h2>
+                <div class="left_wrapper">
+                    <a class="card_link left_item" href="/edit?id={{ cont.get('id', '') }}">Week: {{ cont.get('week', '') }}</a>
+                    <a class="left_item" href="/content-overview?delete={{ cont.get('id', '') }}&week={{ cont.get('week', '') }}">Delete</a>
+                </div>
+                <div class="right_wrapper">
+                    <h2 class="card_header">Unit: {{ cont.get('unit', '') }}</h2>
+                    <h2 class="card_header">Year: {{ cont.get('year', '') }}</h2>
+                </div>
             </header>
         </article>
-    </a>
     {% endfor %}
 </section>
 

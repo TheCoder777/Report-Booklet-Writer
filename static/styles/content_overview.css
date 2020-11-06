@@ -1,9 +1,10 @@
 .card_list {
+    overflow: hidden;
     display: flex;
     flex-flow: column;
     height: auto;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
 }
 
 .card_link {
@@ -20,7 +21,7 @@
     margin-right: auto;
     margin-bottom: -2rem;
     height: 5rem;
-    width: 50vw;
+    width: 40vw;
     padding: 1rem;
     padding-left: 2rem;
     padding-right: 2rem;
@@ -28,7 +29,7 @@
     border-radius: var(--border-radius);
     box-shadow: 0 -1rem 1.5rem #000;
     background-color: var(--background-color);
-    transform: translateY(1rem);
+    /* transform: translateY(1rem); */
     transition: .2s;
 }
 
@@ -47,17 +48,36 @@
 
 .card_head {
     display: flex;
-    flex-flow: column;
+    flex-flow: row;
+    align-items: flex-end;
 }
 
-.number {
+.left_item {
     text-align: left;
-    margin: 0.5rem;
+    margin: 0.85rem;
+    color: var(--text-color);
+    font-style: var(--text-font);
+    text-decoration: underline;
+}
+
+.left_wrapper {
+    display: flex;
+    flex-flow: column;
+    text-align: left;
+}
+
+.right_wrapper {
+    display: flex;
+    flex-flow: column;
+    align-items: flex-end;
+    text-align: right;
+    margin-left: auto;
 }
 
 .card_header {
     text-align: right;
     margin: 0.5rem;
+    width: auto;
 }
 
 @media only screen and (max-width: 768px) {

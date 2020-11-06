@@ -7,6 +7,22 @@ from models.message import MSG
 Predefined messages for the messaging system!
 """
 
+
+# custom ones
+
+
+def custom_success(content):
+    return MSG(content, MSG_SUCCESS)
+
+
+def custom_normal(content):
+    return MSG(content, MSG_NORMAL)
+
+
+def custom_warning(content):
+    return MSG(content, MSG_WARNING)
+
+
 # missing fields
 MISSING_USERNAME = MSG("Missing username!", MSG_WARNING)
 MISSING_NAME = MSG("Missing name!", MSG_WARNING)

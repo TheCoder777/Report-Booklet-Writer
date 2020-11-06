@@ -197,7 +197,7 @@ def edit():
     # if an id to a custom edit is provided:
     if request.args.get("id"):
         contentdb = dbhandler.ContentDB(session["user"].uid)
-        data = contentdb.get_content_by_id(request.args.get("id"))
+        data = contentdb.get_by_id(request.args.get("id"))
         # TODO: add a Download button to the custom page (to make single exports possible)
         # TODO: add a mask to select the weeks from which to export (custom export range)
         return render_template("customedit.html", data=data)
@@ -509,9 +509,23 @@ def todolist_save():
 @app.route("/content-overview")
 @login_required
 def content_overview():
+    if request.args.get("delete"):
+        # the delete button/link was pressed
+        data = dict(request.form.copy())
+        cid = request.args.get("delete")
+        week = request.args.get("week")
+        msg = MessageQueue()
+
+        # init contentdb
+        contentdb = dbhandler.ContentDB(session["user"].uid)
+
+        # delete row with that content id
+        if contentdb.delete_by_id(cid):
+            msg.add(messages.custom_success(f"Successfully deleted Berichtsheft from week {week}"))
+        return render_template("content_overview.html", content=contentdb.get_all(), msg=msg.get())
+
     # initialize content db with user id
     contentdb = dbhandler.ContentDB(session["user"].uid)
-
     return render_template("content_overview.html", content=contentdb.get_all())
 
 
@@ -519,7 +533,8 @@ def content_overview():
 @login_required
 def content_overview_export():
     # TODO: add a button 'continue editing' or 'edit another one to make the workflow easier
-    # TODO: add a delete button for all and one for single items
+    # TODO: add a delete button for all
+    # TODO: add a big plus button in the form of a content card at the end of the list
     if request.form.get("export"):
         contentdb = dbhandler.ContentDB(session["user"].uid)
 
