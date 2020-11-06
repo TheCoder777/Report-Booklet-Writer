@@ -269,7 +269,7 @@ class UserDB:
 
     def update_color_mode(self, colormode, user):
         cursor, connection = self.get_cursor()
-        cursor.execute(f"UPDATE users SET color_mode=? WHERE id=?", (colormode, user.uid))
+        cursor.execute("UPDATE users SET color_mode=? WHERE id=?", (colormode, user.uid))
         connection.commit()
         cursor.close()
         connection.close()
