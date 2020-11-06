@@ -72,7 +72,7 @@ def __start_date_edge_cases(start_date):
 
     # first edge case:
     # first week of apprenticeship is only 4 days long, beginning on tuesday!
-    day, month, year = start_date.split("-")
+    year, month, day = start_date.split("-")
     part_date = "-".join([month, day])
     if part_date == "08-31":
         start_date = year + "-09-01"
