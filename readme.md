@@ -3,36 +3,29 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/thecoder777/report-booklet-writer/badge)](https://www.codefactor.io/repository/github/thecoder777/report-booklet-writer)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/TheCoder777/Report-Booklet-Writer/blob/master/LICENSE)
 
-Never write a report booklet on your own, Report Booklet Writer does it for you!
+Never write a report booklet on your own again, Report Booklet Writer does it for you now!
+
 
 
 ## Installation
 
-To use this tool, you first have to clone the Project:
-
 ```bash
+# First clone the project
 git clone https://github.com/TheCoder777/Report-Booklet-Writer.git
-```
 
-Then you need to install the dependencies:
+# Change directory
+cd Report-Booklet-Writer
 
-```bash
-pip install pdfrw PyPDF2 flask gevent reportlab colored Flask-Session bcrypt pandas
-```
+# Install requirements
+pip install -r requirements.txt
 
-Finally, you can run it with:
-
-```bash
+# Finally run it
 python server.py
 ```
 
-or with:
+The program will mostly take care of itself during the checkup, so there's need to worry!
 
-```bash
-./server.py
-```
 
-The program will mostly take care of itself during the checkup, so you have no need to worry!
 
 
 ## Usage
@@ -44,6 +37,8 @@ You can either download the single PDFs in edit mode, or export all to one PDF i
 It's as easy as that!
 
 
+
+
 ## Users
 
 Every account has a nickname that can be changed in the settings (it's pretty useless right now, but you'll use this to login later!)
@@ -53,6 +48,8 @@ You Email needs to be in a `name@provider.domain` format
 Your password needs to have 8 characters, one capital letter, one number and one special character.
 
 Feel annoyed? Well at least it's for security...
+
+
 
 
 ## Configuration
@@ -72,6 +69,8 @@ To reset the configuration, just click the reset button! (This is to reset the v
 The 'reset to default button' will hard reset your configuration to absolute defaults, with **no chance to restore your data**, so please be careful with that!
 
 
+
+
 ## Debugging
 
 You can easily debug the project by using a --debug/-d flag when running:
@@ -80,6 +79,8 @@ You can easily debug the project by using a --debug/-d flag when running:
 python server.py --debug
 ```
 
+
+
 ## Todo
 
 - Mail server (just wait for it, you'll see)
@@ -87,7 +88,9 @@ python server.py --debug
 - all todos in the code (comments)
 
 
+
 ## License
+
 The project is licensed under the MIT license.
 
 ------
