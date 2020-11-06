@@ -68,7 +68,6 @@ def edit_data(year, beginning_year, week, start_week):
 class UserDB:
     # TODO: unify all comments (""" """/ #)
     def __init__(self):
-        self.table_name = "users"
         self.db_path = paths.USER_DB_PATH
         self.initialize()
 
@@ -80,7 +79,7 @@ class UserDB:
         try:
             cursor, connection = self.get_cursor()
 
-            cursor.execute(f"CREATE TABLE if not exists {self.table_name} \
+            cursor.execute("CREATE TABLE if not exists users \
             (id INTEGER PRIMARY KEY, \
             name TEXT, \
             surname TEXT, \
@@ -100,13 +99,6 @@ class UserDB:
         except FileNotFoundError:
             print(f"Database file '{self.db_path}' not found!", file=sys.stderr)
             return False
-
-    def update_custom(self, field, value, user):
-        cursor, connection = self.get_cursor()
-        cursor.execute(f"UPDATE {self.table_name} SET {field}=? WHERE id=?", (value, user.uid))
-        connection.commit()
-        cursor.close()
-        connection.close()
 
     def new_user(self, cr, pwd):
         cursor, connection = self.get_cursor()
@@ -135,7 +127,7 @@ class UserDB:
                     color_mode]
 
         # add user to db
-        cursor.execute(f"INSERT INTO {self.table_name}\
+        cursor.execute("INSERT INTO users\
         (name, surname, nickname, email, pwd_and_salt, unit, week, start_week, year, beginning_year, color_mode) \
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", db_entry)
         connection.commit()
@@ -178,7 +170,7 @@ class UserDB:
 
         cursor, connection = self.get_cursor()
 
-        cursor.execute(f"UPDATE {self.table_name} SET \
+        cursor.execute("UPDATE users SET \
         name=?, \
         surname=?, \
         nickname=?, \
@@ -203,7 +195,7 @@ class UserDB:
         Return the password hash if the email is found in the database
         """
         cursor, connection = self.get_cursor()
-        cursor.execute(f"SELECT pwd_and_salt FROM {self.table_name} WHERE email=?", (email,))
+        cursor.execute("SELECT pwd_and_salt FROM users WHERE email=?", (email,))
         return cursor.fetchone()[0]
 
     def get_user(self, email) -> object:
@@ -218,7 +210,7 @@ class UserDB:
         connection.row_factory = sqlite3.Row
 
         cursor = connection.cursor()
-        cursor.execute(f"SELECT * FROM {self.table_name} WHERE email=?", (email,))
+        cursor.execute("SELECT * FROM users WHERE email=?", (email,))
         udict = dict(cursor.fetchall()[0])
 
         del connection.row_factory
@@ -239,7 +231,7 @@ class UserDB:
         connection.row_factory = sqlite3.Row
 
         cursor = connection.cursor()
-        cursor.execute(f"SELECT * FROM {self.table_name} WHERE email=?", (email,))
+        cursor.execute("SELECT * FROM users WHERE email=?", (email,))
         udict = dict(cursor.fetchall()[0])
 
         del connection.row_factory
@@ -251,7 +243,7 @@ class UserDB:
     def email_exists(self, email):
         # check if email is already in db
         cursor, connection = self.get_cursor()
-        cursor.execute(f"SELECT email FROM {self.table_name} WHERE email=?", (email,))
+        cursor.execute("SELECT email FROM users WHERE email=?", (email,))
         return cursor.fetchone()
 
     def reset_to_default(self, user):
@@ -267,7 +259,7 @@ class UserDB:
 
         user.update_defaults(week, start_week, year, unit, color_mode)
 
-        cursor.execute(f"UPDATE {self.table_name} SET \
+        cursor.execute("UPDATE users SET \
                        unit=?, week=?, start_week=?, year=?, beginning_year=?, color_mode=? WHERE id=?",
                        (unit, week, start_week, year, beginning_year, color_mode, user.uid))
         connection.commit()
@@ -277,7 +269,7 @@ class UserDB:
 
     def update_color_mode(self, colormode, user):
         cursor, connection = self.get_cursor()
-        cursor.execute(f"UPDATE {self.table_name} SET color_mode=? WHERE id=?", (colormode, user.uid))
+        cursor.execute(f"UPDATE users SET color_mode=? WHERE id=?", (colormode, user.uid))
         connection.commit()
         cursor.close()
         connection.close()
@@ -285,7 +277,6 @@ class UserDB:
 
 class ContentDB:
     def __init__(self, uid):
-        self.table_name = "content"
         self.uid = uid
         # ever user has his own contentdb
         self.db_path = os.path.join(paths.USER_PATH, str(uid), paths.CONTENT_DB_PATH)
@@ -298,7 +289,7 @@ class ContentDB:
     def initialize(self):
         try:
             cursor, connection = self.get_cursor()
-            cursor.execute(f"CREATE TABLE if not exists {self.table_name} \
+            cursor.execute("CREATE TABLE if not exists content \
             (id INTEGER PRIMARY KEY, \
             name TEXT, surname TEXT, \
             week INTEGER, \
@@ -319,7 +310,7 @@ class ContentDB:
     def add_record(self, data):
         cursor, connection = self.get_cursor()
 
-        cursor.execute(f"INSERT INTO {self.table_name}\
+        cursor.execute("INSERT INTO content \
         (name, surname, week, year, unit, sign, Bcontent, Scontent, BScontent) \
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", (
             data["name"],
@@ -339,7 +330,7 @@ class ContentDB:
         cursor, connection = self.get_cursor()
 
         # fetch everything from the database
-        query = cursor.execute(f"SELECT * FROM {self.table_name}")
+        query = cursor.execute("SELECT * FROM content")
         # get the names from the table headers
         colnames = [d[0] for d in query.description]
         results = []
@@ -355,7 +346,7 @@ class ContentDB:
         connection.row_factory = sqlite3.Row
         cursor = connection.cursor()
         # get specified record from db using content id
-        cursor.execute(f"SELECT * FROM {self.table_name} WHERE id=?", (cid,))
+        cursor.execute("SELECT * FROM content WHERE id=?", (cid,))
         content = dict(cursor.fetchall()[0])
         cursor.close()
         connection.close()
@@ -375,7 +366,7 @@ class ContentDB:
             data["BScontent"],
             cid]
 
-        cursor.execute(f"UPDATE {self.table_name} SET \
+        cursor.execute("UPDATE content SET \
         name=?, \
         surname=?, \
         week=?, \
@@ -392,7 +383,7 @@ class ContentDB:
 
     def count_rows(self) -> int:
         cursor, connection = self.get_cursor()
-        cursor.execute(f"SELECT id from {self.table_name} ORDER BY id DESC LIMIT 1")
+        cursor.execute("SELECT id from content ORDER BY id DESC LIMIT 1")
         res = cursor.fetchone()
         if res:
             return res[0]
