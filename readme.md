@@ -1,9 +1,9 @@
-# Python Report Booklet Writer
+# Report Booklet Writer
 
-[![CodeFactor](https://www.codefactor.io/repository/github/thecoder777/python-report-booklet-writer/badge)](https://www.codefactor.io/repository/github/thecoder777/python-report-booklet-writer)
-[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/TheCoder777/Python-Report-Booklet-Writer/blob/master/LICENSE)
+[![CodeFactor](https://www.codefactor.io/repository/github/thecoder777/report-booklet-writer/badge)](https://www.codefactor.io/repository/github/thecoder777/report-booklet-writer)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/TheCoder777/Report-Booklet-Writer/blob/master/LICENSE)
 
-Just let python write your report booklet, don't do it by yourself, that's boring!
+Never write a report booklet on your own, Report Booklet Writer does it for you!
 
 
 ## Installation
@@ -11,7 +11,7 @@ Just let python write your report booklet, don't do it by yourself, that's borin
 To use this tool, you first have to clone the Project:
 
 ```bash
-git clone https://github.com/TheCoder777/Python-Report-Booklet-Writer.git
+git clone https://github.com/TheCoder777/Report-Booklet-Writer.git
 ```
 
 Then you need to install the dependencies:
