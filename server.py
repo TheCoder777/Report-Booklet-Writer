@@ -140,6 +140,49 @@ def index():
     return render_template("index.html")
 
 
+@app.before_request
+def set_color_mode():
+    # setting default colormode for new users if not already set
+    if not session.get("color_mode") and not session.get("user"):
+        session["color_mode"] = Colormode.DARK
+
+
+@app.route("/change-mode")
+def change_mode():
+    """
+    This function switches between the Dark and the Light color mode.
+    (Defaults to Darkmode)
+    """
+    if session.get("user"):
+        # delete color cookie if he exists
+        if session.get("color_mode"):
+            del session["color_mode"]
+
+        # if user is logged in and colormode is DARK
+        if session["user"].color_mode == Colormode.DARK:
+            # update database
+            UserDB.update_color_mode(Colormode.LIGHT, session.get("user"))
+            # update user
+            session["user"].update_color_mode(Colormode.LIGHT)
+            return redirect(request.referrer)
+
+        # if user is logged in and colormode is LIGHT
+        if session["user"].color_mode == Colormode.LIGHT:
+            # update database
+            UserDB.update_color_mode(Colormode.DARK, session.get("user"))
+            # update user
+            session["user"].update_color_mode(Colormode.DARK)
+            return redirect(request.referrer)
+
+    # user isn't logged in and colormode is DARK
+    elif session.get("color_mode") == Colormode.DARK:
+        session["color_mode"] = Colormode.LIGHT
+        return redirect(request.referrer)
+    else:
+        session["color_mode"] = Colormode.DARK
+        return redirect(request.referrer)
+
+
 @app.route("/quickedit")
 def quickedit():
     # Check if user is logged in (maybe somehow?)
@@ -174,107 +217,6 @@ def quickedit_reload():
     # TODO: make a defines.errors.py (name ok?) with NOT_IMPLEMENTED / BAD_REQUEST enums
     # raise 'not implemented' error on bad request (or maybe 400 for bad request?)
     abort(501)
-
-
-@app.route("/edit")
-@login_required
-def edit():
-    # get all user data that's available
-    data = UserDB.get_dict(session["user"].email)
-    # get dynamic content (year, sign date)
-    calculated = dbhandler.edit_defaults(data.get("year"))
-
-    contentdb = dbhandler.ContentDB(session["user"].uid)
-
-    # calculate week and make a dict out of it
-    week = {"week": contentdb.count_rows() + data.get("week")}
-
-    # merge them together
-    # this merges data, the new calculated data and the precalculated week
-    data = {**data, **calculated, **week}
-
-    # this is for custom edits (db entries from contentdb)
-    # if an id to a custom edit is provided:
-    if request.args.get("id"):
-        contentdb = dbhandler.ContentDB(session["user"].uid)
-        data = contentdb.get_by_id(request.args.get("id"))
-        # TODO: add a Download button to the custom page (to make single exports possible)
-        # TODO: add a mask to select the weeks from which to export (custom export range)
-        return render_template("customedit.html", data=data)
-
-    return render_template("edit.html", data=data)
-
-
-@app.route("/edit", methods=["POST"])
-@login_required
-def edit_reload():
-    # TODO: add checkups for date vailidation and stuff like 'if name given' (/edit)
-    if request.form.get("download"):
-        data = dict(request.form.copy())
-
-        contentdb = dbhandler.ContentDB(session["user"].uid)
-        contentdb.add_record(data)
-
-        data = {**data, **dbhandler.edit_data(data.get("year"),
-                                              session["user"].beginning_year,
-                                              data.get("week"),
-                                              session["user"].start_week)}
-
-        return send_file(pdfhandler.writepdf(data),
-                         mimetype="application/pdf",
-                         attachment_filename="save.pdf",
-                         as_attachment=True)
-
-    elif request.form.get("save"):
-        # only save the record to contentdb, but don't download or export anything to PDF
-        data = dict(request.form.copy())
-
-        contentdb = dbhandler.ContentDB(session["user"].uid)
-        contentdb.add_record(data)
-        return redirect(url_for("content_overview"))
-
-    # we'll find out what to do about this here later:
-    elif request.form.get("save_custom"):
-        # only update the record in the contentdb
-        data = dict(request.form.copy())
-        contentdb = dbhandler.ContentDB(session["user"].uid)
-        contentdb.update(data, request.args.get("id"))
-        return redirect(url_for("content_overview"))
-
-    else:
-        # raise 'not implemented' error on bad request (or maybe 400 for bad request?)
-        abort(501)
-
-
-def validate_settings(data):
-    msg = MessageQueue()
-    # TODO: validate date format, email change, ...
-    return msg
-
-
-@app.route("/settings")
-@login_required
-def settings():
-    return render_template("settings.html", user=session.get("user"))
-
-
-@app.route("/settings", methods=["POST"])
-@login_required
-def update_settings():
-    if request.form.get("save"):
-        data = dict(request.form.copy())
-        msg = validate_settings(data)
-        if msg.is_empty():
-            del data["save"]
-            UserDB.update_user_config(session.get("user"), data)
-            msg.add(messages.SAVED_SETTINGS)
-            return render_template("settings.html", user=session.get("user"), msg=msg.get())
-        # TODO: add render_template if settings not validate (some wrong email entered)
-    elif request.form.get("hard_reset"):
-        msg = MessageQueue()
-        UserDB.reset_to_default(session.get("user"))
-        msg.add(messages.RESET_USER_TO_DEFAULT)
-        return render_template("settings.html", user=session.get("user"), msg=msg.get())
 
 
 # Login/Register related functions
@@ -425,12 +367,6 @@ def user_login():
         return redirect(url_for("forgot_password"))
 
 
-@app.route("/user")
-@login_required
-def user():
-    return render_template("user.html")
-
-
 @app.route("/logout")
 # can only logout if logged in
 @login_required
@@ -440,50 +376,123 @@ def logout():
     return redirect(url_for("index"))
 
 
+@app.route("/user")
+@login_required
+def user():
+    return render_template("user.html")
+
+
+@app.route("/edit")
+@login_required
+def edit():
+    # get all user data that's available
+    data = UserDB.get_dict(session["user"].email)
+    # get dynamic content (year, sign date)
+    calculated = dbhandler.edit_defaults(data.get("year"))
+
+    contentdb = dbhandler.ContentDB(session["user"].uid)
+
+    # calculate week and make a dict out of it
+    week = {"week": contentdb.count_rows() + data.get("week")}
+
+    # merge them together
+    # this merges data, the new calculated data and the precalculated week
+    data = {**data, **calculated, **week}
+
+    # this is for custom edits (db entries from contentdb)
+    # if an id to a custom edit is provided:
+    if request.args.get("id"):
+        contentdb = dbhandler.ContentDB(session["user"].uid)
+        data = contentdb.get_by_id(request.args.get("id"))
+        # TODO: add a Download button to the custom page (to make single exports possible)
+        # TODO: add a mask to select the weeks from which to export (custom export range)
+        return render_template("customedit.html", data=data)
+
+    return render_template("edit.html", data=data)
+
+
+@app.route("/edit", methods=["POST"])
+@login_required
+def edit_reload():
+    # TODO: add checkups for date vailidation and stuff like 'if name given' (/edit)
+    if request.form.get("download"):
+        data = dict(request.form.copy())
+
+        contentdb = dbhandler.ContentDB(session["user"].uid)
+        contentdb.add_record(data)
+
+        data = {**data, **dbhandler.edit_data(data.get("year"),
+                                              session["user"].beginning_year,
+                                              data.get("week"),
+                                              session["user"].start_week)}
+
+        return send_file(pdfhandler.writepdf(data),
+                         mimetype="application/pdf",
+                         attachment_filename="save.pdf",
+                         as_attachment=True)
+
+    elif request.form.get("save"):
+        # only save the record to contentdb, but don't download or export anything to PDF
+        data = dict(request.form.copy())
+
+        contentdb = dbhandler.ContentDB(session["user"].uid)
+        contentdb.add_record(data)
+        return redirect(url_for("content_overview"))
+
+    # we'll find out what to do about this here later:
+    elif request.form.get("save_custom"):
+        # only update the record in the contentdb
+        data = dict(request.form.copy())
+        contentdb = dbhandler.ContentDB(session["user"].uid)
+        contentdb.update(data, request.args.get("id"))
+        return redirect(url_for("content_overview"))
+
+    else:
+        # raise 'not implemented' error on bad request (or maybe 400 for bad request?)
+        abort(501)
+
+
+def validate_settings(data):
+    msg = MessageQueue()
+    # TODO: validate date format, email change, ...
+    return msg
+
+
+@app.route("/settings")
+@login_required
+def settings():
+    return render_template("settings.html", user=session.get("user"))
+
+
+@app.route("/settings", methods=["POST"])
+@login_required
+def update_settings():
+    if request.form.get("save"):
+        data = dict(request.form.copy())
+        msg = validate_settings(data)
+        if msg.is_empty():
+            del data["save"]
+            UserDB.update_user_config(session.get("user"), data)
+            msg.add(messages.SAVED_SETTINGS)
+            return render_template("settings.html", user=session.get("user"), msg=msg.get())
+        # TODO: add render_template if settings not validate (some wrong email entered)
+    elif request.form.get("hard_reset"):
+        msg = MessageQueue()
+        UserDB.reset_to_default(session.get("user"))
+        msg.add(messages.RESET_USER_TO_DEFAULT)
+        return render_template("settings.html", user=session.get("user"), msg=msg.get())
+
+
 @app.route("/forgot-password")
+@login_required
 def forgot_password():
     return render_template("security/forgot_password.html")
 
 
 @app.route("/change-password")
+@login_required
 def change_password():
     return render_template("security/change_password.html")
-
-
-@app.route("/change-mode")
-def change_mode():
-    """
-    This function switches between the Dark and the Light color mode.
-    (Defaults to Darkmode)
-    """
-    if session.get("user"):
-        # delete color cookie if he exists
-        if session.get("color_mode"):
-            del session["color_mode"]
-
-        # if user is logged in and colormode is DARK
-        if session["user"].color_mode == Colormode.DARK:
-            # update database
-            UserDB.update_color_mode(Colormode.LIGHT, session.get("user"))
-            # update user
-            session["user"].update_color_mode(Colormode.LIGHT)
-            return redirect(request.referrer)
-
-        # if user is logged in and colormode is LIGHT
-        if session["user"].color_mode == Colormode.LIGHT:
-            # update database
-            UserDB.update_color_mode(Colormode.DARK, session.get("user"))
-            # update user
-            session["user"].update_color_mode(Colormode.DARK)
-            return redirect(request.referrer)
-
-    # user isn't logged in and colormode is DARK
-    elif session.get("color_mode") == Colormode.DARK:
-        session["color_mode"] = Colormode.LIGHT
-        return redirect(request.referrer)
-    else:
-        session["color_mode"] = Colormode.DARK
-        return redirect(request.referrer)
 
 
 @app.route("/todolist")
@@ -511,7 +520,6 @@ def todolist_save():
 def content_overview():
     if request.args.get("delete"):
         # the delete button/link was pressed
-        data = dict(request.form.copy())
         cid = request.args.get("delete")
         week = request.args.get("week")
         msg = MessageQueue()
@@ -556,13 +564,6 @@ def content_overview_export():
 
 
 # TODO: add a @app.errorhandler(404) page
-
-
-@app.before_request
-def set_color_mode():
-    # setting default colormode for new users if not already set
-    if not session.get("color_mode") and not session.get("user"):
-        session["color_mode"] = Colormode.DARK
 
 
 if __name__ == "__main__":
