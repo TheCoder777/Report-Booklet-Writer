@@ -328,14 +328,6 @@ body::-webkit-scrollbar-thumb {
     width: 5rem;
 }
 
-.messages {
-    align-items: center;
-    justify-content: center;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    width: auto;
-}
-
 .text_links {
     font-family: var(--text-font);
     font-size: 1rem;
@@ -381,6 +373,9 @@ body::-webkit-scrollbar-thumb {
     font-size: 1rem;
     margin: 1rem;
     text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: auto;
 }
 
 .second_title p {
