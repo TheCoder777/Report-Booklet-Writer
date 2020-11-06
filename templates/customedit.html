@@ -6,11 +6,11 @@
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/general.css') }}">
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/edit.css') }}">
 {% endblock %}
-{% block title %}Edit Berichtsheft{% endblock %}
+{% block title %}Edit report booklet{% endblock %}
 
-{% block headline %}Python Berichtsheft Auto Writer{% endblock %}
+{% block headline %}Python report booklet Auto Writer{% endblock %}
 
-{% block second_title %}Loaded Berichtsheft from Week {{ data.get('week', '') }}: {% endblock %}
+{% block second_title %}Loaded report booklet from Week {{ data.get('week', '') }}: {% endblock %}
 
 {% block content %}
     <form class="form" action="" method="post" id="editform">

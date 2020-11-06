@@ -62,7 +62,7 @@ def __calc_year(entered_year: int, beginning_year: int) -> int:
 
 def __calc_nr(entered_week: int, beginning_week: int, year: int) -> int:
     """
-    Calculates the nr (number). This is more or less the count of how many Berichtshefte are done!
+    Calculates the nr (number). This is more or less the count of how many report booklets are done!
     (+1 because it's also zero indexed)
     """
     return (year - 1) * 52 + entered_week - beginning_week + 1

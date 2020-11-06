@@ -11,7 +11,7 @@ COOKIE_PATH = "./cookie"
 USER_PATH = f"{DB_PATH}/users"
 
 TEMPLATE_PREFIX = "./templates/default/"
-PDF_TEMPLATE_PATH = f"{TEMPLATE_PREFIX}Berichtsheft_template.pdf"
+PDF_TEMPLATE_PATH = f"{TEMPLATE_PREFIX}report_booklet_template_de.pdf"
 TODOLIST_TEMPLATE_PATH = f"{TEMPLATE_PREFIX}todolist_template.json"
 
 # relative from user directory:

@@ -529,7 +529,7 @@ def content_overview():
 
         # delete row with that content id
         if contentdb.delete_by_id(cid):
-            msg.add(messages.custom_success(f"Successfully deleted Berichtsheft from week {week}"))
+            msg.add(messages.custom_success(f"Successfully deleted report booklet from week {week}"))
         return render_template("content_overview.html", content=contentdb.get_all(), msg=msg.get())
 
     # initialize content db with user id
