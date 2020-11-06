@@ -1,9 +1,9 @@
-# Python Berichtsheft Auto Writer
+# Python Report Booklet Writer
 
-[![CodeFactor](https://www.codefactor.io/repository/github/thecoder777/python-berichtsheft-auto-writer/badge/master)](https://www.codefactor.io/repository/github/thecoder777/python-berichtsheft-auto-writer/overview/master)
-[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/TheCoder777/Python-Berichtsheft-Auto-Writer/blob/master/LICENSE)
+[![CodeFactor](https://www.codefactor.io/repository/github/thecoder777/python-report-booklet-writer/badge)](https://www.codefactor.io/repository/github/thecoder777/python-report-booklet-writer)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/TheCoder777/Python-Report-Booklet-Writer/blob/master/LICENSE)
 
-Just let python write your Berichtsheft, don't do it by yourself, that's boring!
+Just let python write your report booklet, don't do it by yourself, that's boring!
 
 
 ## Installation
@@ -11,7 +11,7 @@ Just let python write your Berichtsheft, don't do it by yourself, that's boring!
 To use this tool, you first have to clone the Project:
 
 ```bash
-git clone https://github.com/TheCoder777/Python-Berichtsheft-Auto-Writer.git
+git clone https://github.com/TheCoder777/Python-Report-Booklet-Writer.git
 ```
 
 Then you need to install the dependencies:
