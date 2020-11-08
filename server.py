@@ -23,26 +23,23 @@
 # SOFTWARE.
 
 
-# load system modules
+# system modules
 import bcrypt
+import functools
 import os
 import re
 import sys
 import time
-import functools
 
-#  flask modules and extensions
+# external modules
 from flask import Flask, render_template, request, redirect, send_file, session, url_for, abort
 from flask_session import Session
-
-#  WSGI server for better performance
 from gevent.pywsgi import WSGIServer
 
-# load internal modules
+# internal modules
 from defines.colors import RESET, BOLD, ERROR, WARNING, SUCCESS
 from defines.colormode import Colormode
-from defines import paths
-from defines import messages
+from defines import messages, paths
 from handlers import pdfhandler, todolisthandler, dbhandler
 from models.messagequeue import MessageQueue
 

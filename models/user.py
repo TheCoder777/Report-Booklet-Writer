@@ -20,14 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
-# load system modules
+# system modules
 import os
 import shutil
-from defines.colors import RESET, BOLD, ERROR, SUCCESS
 
-# load internal modules
+# internal modules
 from defines import paths
+from defines.colors import RESET, BOLD, ERROR, SUCCESS
 
 
 class User:

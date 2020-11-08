@@ -20,12 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
-# load system modules
-import time
+# system modules
 import datetime
+import time
 
-# load internal config
+# internal modules
 from defines import configs
 
 

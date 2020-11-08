@@ -20,18 +20,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
-# load system modules
+# system modules
 import os
 import sqlite3
 import sys
 
-# load internal modules
-from defines import configs
-from defines import paths
+# internal modules
+from defines import configs, paths
 from defines.colormode import Colormode
-from models.user import User
 from handlers import datecalc
+from models.user import User
 
 
 def quickedit_defaults():

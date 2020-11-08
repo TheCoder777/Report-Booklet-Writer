@@ -1,6 +1,7 @@
 
 """
 Global config for Filepaths and Directories
+TODO: move paths into defines/configs.py
 """
 
 DB_PATH = "./db"

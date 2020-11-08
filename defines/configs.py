@@ -1,7 +1,6 @@
 
 """
 Global default config
-(This replaced the config.ini file and confighandler.py)
 """
 
 START_WEEK = 36

@@ -20,15 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
-# load system modules
+# system modules
 import os
 import pandas as pd
 
-# load internal modules
-from defines import paths
+# internal modules
+from defines import messages, paths
 from models.messagequeue import MessageQueue
-from defines import messages
 
 
 def open_todolist(uid):

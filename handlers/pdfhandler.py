@@ -20,18 +20,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
-# load system modules
+# system modules
 import io
 import re
 from textwrap import wrap
 
-# load external modules
+# external modules
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
-# load internal modules
+# internal modules
 from defines import paths
 from defines.configs import LINE_DISTANCE
 
