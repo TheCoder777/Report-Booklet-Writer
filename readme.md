@@ -3,7 +3,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/thecoder777/report-booklet-writer/badge)](https://www.codefactor.io/repository/github/thecoder777/report-booklet-writer)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/TheCoder777/Report-Booklet-Writer/blob/master/LICENSE)
 
-Never write a report booklet on your own again, Report Booklet Writer does it for you now!
+Never write a report booklet on your own again, Report Booklet Writer does it for you!
 
 
 
@@ -30,7 +30,7 @@ The program will mostly take care of itself during the checkup, so there's need 
 
 ## Usage
 
-If you load it up, go to [localhost:8000](localhost:8000) (current default) and either click on 'create account', or click the quickedit icon on sidebar (try to hover for a little bit!
+If you load it up, go to [localhost:8000](localhost:8000) (current default) and either click on 'create account', or click the quickedit icon on sidebar (try to hover for a little bit!)
 
 You can either download the single PDFs in edit mode, or export all to one PDF in the overview tab!
 
@@ -85,7 +85,7 @@ python server.py --debug
 
 - Mail server (just wait for it, you'll see)
 - Private/Public Profile setting
-- all todos in the code (comments)
+- all TODOs in the code (`# TODO: ...`)
 
 
 
@@ -93,10 +93,15 @@ python server.py --debug
 
 The project is licensed under the MIT license.
 
+
+
 ------
 
-Have fun!
+This project follows these guidelines for:
 
-Support is always appreciated!
+- [Code of Conduct](https://github.com/TheCoder777/Report-Booklet-Writer/blob/master/CODE_OF_CONDUCT.md) 
+- [Contributing](https://github.com/TheCoder777/Report-Booklet-Writer/blob/master/CONTRIBUTING.md) 
 
-[@TheCoder777](https://github.com/thecoder777)
+
+
+Current maintainer and owner: [TheCoder777](https://github.com/thecoder777)
