@@ -4,7 +4,7 @@
 
 > Your contribution means a lot for us and the growth of the project! It's people like you that make tools like the report booklet writer great!
 >
-> Long story short, [here](#tl-dr) is our TL;DR.
+> Long story short, [here](#tldr) is our TL;DR.
 
 ### Code of Conduct
 
