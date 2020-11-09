@@ -1,0 +1,5 @@
+#!/bin/env bash
+
+export FLASK_APP=rbwriter
+
+flask run
