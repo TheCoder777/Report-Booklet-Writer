@@ -28,6 +28,11 @@ __author__ = "Paul S."
 __copyright__ = "Copyright (c) 2020, TheCoder777"
 __license__ = "MIT"
 
+# pre-checkup to create necessary directories
+from rbwriter.checks import checkup
+
+checkup()
+
 # system modules
 import sys
 
@@ -37,7 +42,6 @@ from flask_session import Session
 
 # internal modules
 from rbwriter.defines import paths
-from rbwriter.checks import checkup
 from rbwriter import views
 
 
@@ -48,11 +52,10 @@ def create_app():
     # TODO: maybe add a --reload flag to load cookies, and make it standard to delete cookies at startup?
 
     app = Flask(__name__)
-    HOST = 'localhost'
+    HOST = "localhost"
     PORT = 8000
-    SESSION_TYPE = "filesystem"
-    SESSION_FILE_DIR = paths.COOKIE_PATH
-    SECRET_KEY = "dev"
+    DEBUG = False
+    FLASK_ENV = "production"
 
     print(f"\nRunning on http://{HOST}:{PORT}/\n", file=sys.stderr)
 
@@ -62,7 +65,16 @@ def create_app():
             DEBUG = True
 
     app.register_blueprint(views.bp)
-    app.config.from_object(__name__)
+
+    app.config.from_mapping(
+        HOST=HOST,
+        PORT=PORT,
+        DEBUG=DEBUG,
+        FLASK_ENV=FLASK_ENV,
+        SESSION_TYPE="filesystem",
+        SESSION_FILE_DIR=paths.COOKIE_PATH,
+        SECRET_KEY="dev",
+    )
     Session(app)
-    checkup()
+
     return app
