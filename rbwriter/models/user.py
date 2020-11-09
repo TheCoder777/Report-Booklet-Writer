@@ -64,8 +64,8 @@ class User:
         else:
             print(console + SUCCESS + "User directory found!" + RESET)
 
-    def update_all(self, vals):
-        self.uid, self.name, self.surname, self.nickname, self.email, self.unit, self.week, self.start_week, self.year, self.beginning_year, self.color_mode = vals
+    def update_all(self, values):
+        self.uid, self.name, self.surname, self.nickname, self.email, self.unit, self.week, self.start_week, self.year, self.beginning_year, self.color_mode = values
 
     def update_defaults(self, week, start_week, year, unit, color_mode):
         self.week = week
