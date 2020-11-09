@@ -36,7 +36,9 @@ from .handlers import pdfhandler, todolisthandler, dbhandler
 from .models.messagequeue import MessageQueue
 
 UserDB = dbhandler.UserDB()
-bp = Blueprint("index", __name__)
+std_bp = Blueprint("std", __name__)
+sec_bp = Blueprint("sec", __name__)
+user_bp = Blueprint("user", __name__)
 
 
 def login_required(func):
@@ -48,13 +50,13 @@ def login_required(func):
     @functools.wraps(func)
     def login_wrapper(*args, **kwargs):
         if not session.get("user"):
-            return redirect(url_for("login"))
+            return redirect(url_for("sec.login"))
         return func(*args, **kwargs)
 
     return login_wrapper
 
 
-@bp.route("/")
+@std_bp.route("/")
 def index():
     if session.get("user"):
         return redirect("user")
@@ -62,14 +64,16 @@ def index():
     return render_template("index.html")
 
 
-@bp.before_request
+@std_bp.before_request
+@sec_bp.before_request
+@user_bp.before_request
 def set_color_mode():
     # setting default colormode for new users if not already set
     if not session.get("color_mode") and not session.get("user"):
         session["color_mode"] = Colormode.DARK
 
 
-@bp.route("/change-mode")
+@std_bp.route("/change-mode")
 def change_mode():
     """
     This function switches between the Dark and the Light color mode.
@@ -105,18 +109,18 @@ def change_mode():
         return redirect(request.referrer)
 
 
-@bp.route("/quickedit")
+@std_bp.route("/quickedit")
 def quickedit():
     # Check if user is logged in (maybe somehow?)
     if session.get("user"):
-        redirect(url_for("edit"))
+        redirect(url_for("user.edit"))
     # calls a db function that returns the values from defines.configs
     # as dict (also calculates current week and so on)
     defaults = dbhandler.quickedit_defaults()
     return render_template("quickedit.html", data=defaults)
 
 
-@bp.route("/quickedit", methods=["POST"])
+@std_bp.route("/quickedit", methods=["POST"])
 # TODO: add checkups for date validation and stuff like 'if name given' (/quickedit)
 def quickedit_reload():
     if request.form.get("download"):
@@ -230,12 +234,12 @@ def check_login_credentials(credentials):
 # REGISTER
 
 
-@bp.route("/register")
+@sec_bp.route("/register")
 def register():
     return render_template("security/register.html")
 
 
-@bp.route("/register", methods=["POST"])
+@sec_bp.route("/register", methods=["POST"])
 # TODO: strip whitespace before and after usernames (also in login)
 def get_user():
     # Check if the register button is pressed (this will be a 'next' button soon)
@@ -247,23 +251,23 @@ def get_user():
             # create a password hash
             pwd_and_salt = hashpw(request.form["password"])
             session["user"] = UserDB.new_user(credentials, pwd_and_salt)
-            return redirect(url_for("user"))
+            return redirect(url_for("user.user"))
         else:
             return render_template("security/register.html", data=credentials, msg=msg.get())
     # Check if the "Use as guest" button is pressed
     elif request.form.get("use_as_guest"):
-        return redirect(url_for("edit"))
+        return redirect(url_for("user.edit"))
 
 
 # LOGIN
 
 
-@bp.route("/login")
+@sec_bp.route("/login")
 def login():
     return render_template("security/login.html")
 
 
-@bp.route("/login", methods=["POST"])
+@sec_bp.route("/login", methods=["POST"])
 def user_login():
     # Check if the Login Button is pressed
     if request.form.get("login"):
@@ -278,33 +282,33 @@ def user_login():
                 return render_template("security/login.html", data=credentials, msg=msg.get())
             # Login user
             session["user"] = UserDB.get_user(credentials["email"])
-            return redirect(url_for("user"))
+            return redirect(url_for("user.user"))
         print(credentials)
         return render_template("security/login.html", data=credentials, msg=msg.get())
     # Check if the "Use as guest" button is pressed
     elif request.form.get("use_as_guest"):
-        return redirect(url_for("edit"))
+        return redirect(url_for("user.edit"))
     # Check if the "Forgot password" button is pressed
     elif request.form.get("forgot_password"):
-        return redirect(url_for("forgot_password"))
+        return redirect(url_for("sec.forgot_password"))
 
 
-@bp.route("/logout")
+@sec_bp.route("/logout")
 # can only logout if logged in
 @login_required
 def logout():
     # Logout user
     del session["user"]
-    return redirect(url_for("index"))
+    return redirect(url_for("std.index"))
 
 
-@bp.route("/user")
+@user_bp.route("/user")
 @login_required
 def user():
     return render_template("user.html")
 
 
-@bp.route("/edit")
+@user_bp.route("/edit")
 @login_required
 def edit():
     # get all user data that's available
@@ -333,7 +337,7 @@ def edit():
     return render_template("edit.html", data=data)
 
 
-@bp.route("/edit", methods=["POST"])
+@user_bp.route("/edit", methods=["POST"])
 @login_required
 def edit_reload():
     # TODO: add checkups for date vailidation and stuff like 'if name given' (/edit)
@@ -359,7 +363,7 @@ def edit_reload():
 
         contentdb = dbhandler.ContentDB(session["user"].uid)
         contentdb.add_record(data)
-        return redirect(url_for("content_overview"))
+        return redirect(url_for("user.content_overview"))
 
     # we'll find out what to do about this here later:
     elif request.form.get("save_custom"):
@@ -367,7 +371,7 @@ def edit_reload():
         data = dict(request.form.copy())
         contentdb = dbhandler.ContentDB(session["user"].uid)
         contentdb.update(data, request.args.get("id"))
-        return redirect(url_for("content_overview"))
+        return redirect(url_for("user.content_overview"))
 
     else:
         # raise 'not implemented' error on bad request (or maybe 400 for bad request?)
@@ -380,13 +384,13 @@ def validate_settings(data):
     return msg
 
 
-@bp.route("/settings")
+@user_bp.route("/settings")
 @login_required
 def settings():
     return render_template("settings.html", user=session.get("user"))
 
 
-@bp.route("/settings", methods=["POST"])
+@user_bp.route("/settings", methods=["POST"])
 @login_required
 def update_settings():
     if request.form.get("save"):
@@ -405,25 +409,24 @@ def update_settings():
         return render_template("settings.html", user=session.get("user"), msg=msg.get())
 
 
-@bp.route("/forgot-password")
-@login_required
+@sec_bp.route("/forgot-password")
 def forgot_password():
     return render_template("security/forgot_password.html")
 
 
-@bp.route("/change-password")
+@sec_bp.route("/change-password")
 @login_required
 def change_password():
     return render_template("security/change_password.html")
 
 
-@bp.route("/todolist")
+@sec_bp.route("/todolist")
 @login_required
 def todolist():
     return render_template("todolist.html", data=todolisthandler.open_todolist(session["user"].uid))
 
 
-@bp.route("/todolist", methods=["POST"])
+@user_bp.route("/todolist", methods=["POST"])
 @login_required
 def todolist_save():
     df = todolisthandler.open_todolist(session["user"].uid)
@@ -437,7 +440,7 @@ def todolist_save():
     abort(501)
 
 
-@bp.route("/content-overview")
+@user_bp.route("/content-overview")
 @login_required
 def content_overview():
     if request.args.get("delete"):
@@ -459,7 +462,7 @@ def content_overview():
     return render_template("content_overview.html", content=contentdb.get_all())
 
 
-@bp.route("/content-overview", methods=["POST"])
+@user_bp.route("/content-overview", methods=["POST"])
 @login_required
 def content_overview_export():
     # TODO: add a button 'continue editing' or 'edit another one to make the workflow easier

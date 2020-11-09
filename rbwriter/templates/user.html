@@ -13,10 +13,10 @@
 {% block second_title %}Welcome, {{ session["user"].name }}{% endblock %}
 
 {% block content %}
-    <a class="button" href="{{ url_for('edit') }}">Edit</a>
-    <a class="button" href="{{ url_for('todolist') }}">Todolist</a>
-    <a class="button" href="{{ url_for('settings') }}">Settings</a>
-    <a class="button" href="{{ url_for('logout') }}">Logout</a>
+    <a class="button" href="{{ url_for('user.edit') }}">Edit</a>
+    <a class="button" href="{{ url_for('user.todolist') }}">Todolist</a>
+    <a class="button" href="{{ url_for('user.settings') }}">Settings</a>
+    <a class="button" href="{{ url_for('sec.logout') }}">Logout</a>
     <div class="watermark_container">
         <a href="https://github.com/thecoder777" class="watermark">Design by @TheCoder777</a>
     </div>

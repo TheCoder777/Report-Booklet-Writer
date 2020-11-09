@@ -47,7 +47,6 @@ from rbwriter import views
 
 def create_app():
     # TODO: make a server config file in root for HOST and PORT (and maybe debug ?)
-    # TODO: make a installer to install deps on server start (if not found)
     # TODO: add --clean/-c flag to delete all db/user/tmp files at startup, but ask for confirmation
     # TODO: maybe add a --reload flag to load cookies, and make it standard to delete cookies at startup?
 
@@ -64,7 +63,9 @@ def create_app():
             FLASK_ENV = "development"
             DEBUG = True
 
-    app.register_blueprint(views.bp)
+    app.register_blueprint(views.std_bp)
+    app.register_blueprint(views.sec_bp)
+    app.register_blueprint(views.user_bp)
 
     app.config.from_mapping(
         HOST=HOST,
