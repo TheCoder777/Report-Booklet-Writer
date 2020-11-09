@@ -37,11 +37,11 @@ from flask_session import Session
 from gevent.pywsgi import WSGIServer
 
 # internal modules
-from defines.colors import RESET, BOLD, ERROR, WARNING, SUCCESS
-from defines.colormode import Colormode
-from defines import messages, paths
-from handlers import pdfhandler, todolisthandler, dbhandler
-from models.messagequeue import MessageQueue
+from .defines.colors import RESET, BOLD, ERROR, WARNING, SUCCESS
+from .defines.colormode import Colormode
+from .defines import messages, paths
+from .handlers import pdfhandler, todolisthandler, dbhandler
+from .models.messagequeue import MessageQueue
 
 
 def checkup():

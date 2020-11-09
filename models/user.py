@@ -25,8 +25,8 @@ import os
 import shutil
 
 # internal modules
-from defines import paths
-from defines.colors import RESET, BOLD, ERROR, SUCCESS
+from ..defines import paths
+from ..defines.colors import RESET, BOLD, ERROR, SUCCESS
 
 
 class User:

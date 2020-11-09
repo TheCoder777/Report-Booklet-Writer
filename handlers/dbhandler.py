@@ -26,10 +26,10 @@ import sqlite3
 import sys
 
 # internal modules
-from defines import configs, paths
-from defines.colormode import Colormode
-from handlers import datecalc
-from models.user import User
+from . import datecalc
+from ..defines import configs, paths
+from ..defines.colormode import Colormode
+from ..models.user import User
 
 
 def quickedit_defaults():

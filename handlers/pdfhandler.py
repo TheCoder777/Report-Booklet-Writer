@@ -31,8 +31,8 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
 # internal modules
-from defines import paths
-from defines.configs import LINE_DISTANCE
+from ..defines import paths
+from ..defines.configs import LINE_DISTANCE
 
 
 def validate_html_date(html_date):
