@@ -1,5 +1,3 @@
-#!/usr/bin/env python3.8
-
 # MIT License
 #
 # Copyright (c) 2020 TheCoder777
@@ -26,92 +24,22 @@
 # system modules
 import bcrypt
 import functools
-import os
 import re
-import sys
-import time
 
 # external modules
-from flask import Flask, render_template, request, redirect, send_file, session, url_for, abort
-from flask_session import Session
-from gevent.pywsgi import WSGIServer
+from flask import render_template, request, redirect, send_file, session, url_for, abort, Blueprint
 
 # internal modules
-from defines.colors import RESET, BOLD, ERROR, WARNING, SUCCESS
-from defines.colormode import Colormode
-from defines import messages, paths
-from handlers import pdfhandler, todolisthandler, dbhandler
-from models.messagequeue import MessageQueue
+from .defines.colormode import Colormode
+from .defines import messages
+from .handlers import pdfhandler, todolisthandler, dbhandler
+from .models.messagequeue import MessageQueue
 
+std_bp = Blueprint("std", __name__)
+sec_bp = Blueprint("sec", __name__)
+user_bp = Blueprint("user", __name__)
 
-def checkup():
-    """
-    Global checkup for all files and dirs
-    If this doesn't succeed, the server will NOT start!
-    """
-
-    start_time = time.time()
-    console = BOLD + "[CHECKUP] " + RESET
-    print()
-
-    if not os.path.isdir(paths.TMP_PATH):
-        print(console + f"Temporary save directory {paths.TMP_PATH} doesn't exist...", end="")
-        os.mkdir(paths.TMP_PATH)
-        print(SUCCESS + "created!" + RESET)
-    else:
-        print(console + SUCCESS + "Temporary directory found!" + RESET)
-
-    if not os.path.isdir(paths.COOKIE_PATH):
-        print(console + f"Cookie directory {paths.COOKIE_PATH} doesn't exist...", end="")
-        os.mkdir(paths.COOKIE_PATH)
-        print(SUCCESS + "created!" + RESET)
-    else:
-        print(console + SUCCESS + "Cookie directory found!" + RESET)
-
-    if not os.path.isdir(paths.DB_PATH):
-        print(console + f"DB directory {paths.DB_PATH} doesn't exist...", end="")
-        os.mkdir(paths.DB_PATH)
-        print(SUCCESS + "created!" + RESET)
-    else:
-        print(console + SUCCESS + "DB directory found!" + RESET)
-
-    if not os.path.isdir(paths.USER_PATH):
-        print(console + f"User directory {paths.USER_PATH} doesn't exist...", end="")
-        os.mkdir(paths.USER_PATH)
-        print(SUCCESS + "created!" + RESET)
-    else:
-        print(console + SUCCESS + "User directory found!" + RESET)
-
-    if not os.path.exists(paths.PDF_TEMPLATE_PATH):
-        print(console + ERROR + "PDF Template not found! Please add a pdf template!" + RESET)
-        sys.exit(1)
-    else:
-        print(console + SUCCESS + "PDF Template found!" + RESET)
-
-    if not os.path.exists(paths.TODOLIST_TEMPLATE_PATH):
-        print(console + ERROR + "Todolist template not found! Please add a todolist template!" + RESET)
-        sys.exit(1)
-    else:
-        print(console + SUCCESS + "Todolist template found!" + RESET)
-
-    # garbage cleaning (delete all pdf in tmp file)
-    filelist = [f for f in os.listdir(paths.TMP_PATH) if f.endswith(".pdf")]
-    if filelist:
-        print(console + "Cleaning cache...")
-        for f in filelist:
-            print(WARNING + "\tremoving: " + os.path.join(paths.TMP_PATH, f) + "..." + RESET, end="")
-            os.remove(os.path.join(paths.TMP_PATH, f))
-            print(SUCCESS + "done!" + RESET)
-    else:
-        print(console + SUCCESS + "Cache is clean!" + RESET)
-
-    # Calculate time difference (just because we can)
-    diff = time.time() - start_time
-
-    print(console + BOLD + SUCCESS + f"Checkup finished successfully in {diff:.4f} seconds!\n" + RESET)
-
-
-app = Flask(__name__)
+UserDB = dbhandler.UserDB()
 
 
 def login_required(func):
@@ -123,13 +51,13 @@ def login_required(func):
     @functools.wraps(func)
     def login_wrapper(*args, **kwargs):
         if not session.get("user"):
-            return redirect(url_for("login"))
+            return redirect(url_for("sec.login"))
         return func(*args, **kwargs)
 
     return login_wrapper
 
 
-@app.route("/")
+@std_bp.route("/")
 def index():
     if session.get("user"):
         return redirect("user")
@@ -137,14 +65,16 @@ def index():
     return render_template("index.html")
 
 
-@app.before_request
+@std_bp.before_request
+@sec_bp.before_request
+@user_bp.before_request
 def set_color_mode():
     # setting default colormode for new users if not already set
     if not session.get("color_mode") and not session.get("user"):
         session["color_mode"] = Colormode.DARK
 
 
-@app.route("/change-mode")
+@std_bp.route("/change-mode")
 def change_mode():
     """
     This function switches between the Dark and the Light color mode.
@@ -180,18 +110,18 @@ def change_mode():
         return redirect(request.referrer)
 
 
-@app.route("/quickedit")
+@std_bp.route("/quickedit")
 def quickedit():
     # Check if user is logged in (maybe somehow?)
     if session.get("user"):
-        redirect(url_for("edit"))
+        redirect(url_for("user.edit"))
     # calls a db function that returns the values from defines.configs
     # as dict (also calculates current week and so on)
     defaults = dbhandler.quickedit_defaults()
     return render_template("quickedit.html", data=defaults)
 
 
-@app.route("/quickedit", methods=["POST"])
+@std_bp.route("/quickedit", methods=["POST"])
 # TODO: add checkups for date validation and stuff like 'if name given' (/quickedit)
 def quickedit_reload():
     if request.form.get("download"):
@@ -305,12 +235,12 @@ def check_login_credentials(credentials):
 # REGISTER
 
 
-@app.route("/register")
+@sec_bp.route("/register")
 def register():
     return render_template("security/register.html")
 
 
-@app.route("/register", methods=["POST"])
+@sec_bp.route("/register", methods=["POST"])
 # TODO: strip whitespace before and after usernames (also in login)
 def get_user():
     # Check if the register button is pressed (this will be a 'next' button soon)
@@ -322,23 +252,23 @@ def get_user():
             # create a password hash
             pwd_and_salt = hashpw(request.form["password"])
             session["user"] = UserDB.new_user(credentials, pwd_and_salt)
-            return redirect(url_for("user"))
+            return redirect(url_for("user.user"))
         else:
             return render_template("security/register.html", data=credentials, msg=msg.get())
     # Check if the "Use as guest" button is pressed
     elif request.form.get("use_as_guest"):
-        return redirect(url_for("edit"))
+        return redirect(url_for("user.edit"))
 
 
 # LOGIN
 
 
-@app.route("/login")
+@sec_bp.route("/login")
 def login():
     return render_template("security/login.html")
 
 
-@app.route("/login", methods=["POST"])
+@sec_bp.route("/login", methods=["POST"])
 def user_login():
     # Check if the Login Button is pressed
     if request.form.get("login"):
@@ -353,33 +283,33 @@ def user_login():
                 return render_template("security/login.html", data=credentials, msg=msg.get())
             # Login user
             session["user"] = UserDB.get_user(credentials["email"])
-            return redirect(url_for("user"))
+            return redirect(url_for("user.user"))
         print(credentials)
         return render_template("security/login.html", data=credentials, msg=msg.get())
     # Check if the "Use as guest" button is pressed
     elif request.form.get("use_as_guest"):
-        return redirect(url_for("edit"))
+        return redirect(url_for("user.edit"))
     # Check if the "Forgot password" button is pressed
     elif request.form.get("forgot_password"):
-        return redirect(url_for("forgot_password"))
+        return redirect(url_for("sec.forgot_password"))
 
 
-@app.route("/logout")
+@sec_bp.route("/logout")
 # can only logout if logged in
 @login_required
 def logout():
     # Logout user
     del session["user"]
-    return redirect(url_for("index"))
+    return redirect(url_for("std.index"))
 
 
-@app.route("/user")
+@user_bp.route("/user")
 @login_required
 def user():
     return render_template("user.html")
 
 
-@app.route("/edit")
+@user_bp.route("/edit")
 @login_required
 def edit():
     # get all user data that's available
@@ -408,7 +338,7 @@ def edit():
     return render_template("edit.html", data=data)
 
 
-@app.route("/edit", methods=["POST"])
+@user_bp.route("/edit", methods=["POST"])
 @login_required
 def edit_reload():
     # TODO: add checkups for date vailidation and stuff like 'if name given' (/edit)
@@ -434,7 +364,7 @@ def edit_reload():
 
         contentdb = dbhandler.ContentDB(session["user"].uid)
         contentdb.add_record(data)
-        return redirect(url_for("content_overview"))
+        return redirect(url_for("user.content_overview"))
 
     # we'll find out what to do about this here later:
     elif request.form.get("save_custom"):
@@ -442,7 +372,7 @@ def edit_reload():
         data = dict(request.form.copy())
         contentdb = dbhandler.ContentDB(session["user"].uid)
         contentdb.update(data, request.args.get("id"))
-        return redirect(url_for("content_overview"))
+        return redirect(url_for("user.content_overview"))
 
     else:
         # raise 'not implemented' error on bad request (or maybe 400 for bad request?)
@@ -455,13 +385,13 @@ def validate_settings(data):
     return msg
 
 
-@app.route("/settings")
+@user_bp.route("/settings")
 @login_required
 def settings():
     return render_template("settings.html", user=session.get("user"))
 
 
-@app.route("/settings", methods=["POST"])
+@user_bp.route("/settings", methods=["POST"])
 @login_required
 def update_settings():
     if request.form.get("save"):
@@ -480,25 +410,24 @@ def update_settings():
         return render_template("settings.html", user=session.get("user"), msg=msg.get())
 
 
-@app.route("/forgot-password")
-@login_required
+@sec_bp.route("/forgot-password")
 def forgot_password():
     return render_template("security/forgot_password.html")
 
 
-@app.route("/change-password")
+@sec_bp.route("/change-password")
 @login_required
 def change_password():
     return render_template("security/change_password.html")
 
 
-@app.route("/todolist")
+@user_bp.route("/todolist")
 @login_required
 def todolist():
     return render_template("todolist.html", data=todolisthandler.open_todolist(session["user"].uid))
 
 
-@app.route("/todolist", methods=["POST"])
+@user_bp.route("/todolist", methods=["POST"])
 @login_required
 def todolist_save():
     df = todolisthandler.open_todolist(session["user"].uid)
@@ -512,7 +441,7 @@ def todolist_save():
     abort(501)
 
 
-@app.route("/content-overview")
+@user_bp.route("/content-overview")
 @login_required
 def content_overview():
     if request.args.get("delete"):
@@ -534,7 +463,7 @@ def content_overview():
     return render_template("content_overview.html", content=contentdb.get_all())
 
 
-@app.route("/content-overview", methods=["POST"])
+@user_bp.route("/content-overview", methods=["POST"])
 @login_required
 def content_overview_export():
     # TODO: add a button 'continue editing' or 'edit another one to make the workflow easier
@@ -561,25 +490,3 @@ def content_overview_export():
 
 
 # TODO: add a @app.errorhandler(404) page
-
-
-if __name__ == "__main__":
-    # TODO: make a server config file in root for HOST and PORT (and maybe debug ?)
-    # TODO: make a installer to install deps on server start (if not found)
-    # TODO: add --clean/-c flag to delete all db/user/tmp files at startup, but ask for confirmation
-    # TODO: maybe add a --reload flag to load cookies, and make it standard to delete cookies at startup?
-    HOST = 'localhost'
-    PORT = 8000
-    SESSION_TYPE = "filesystem"
-    SESSION_FILE_DIR = paths.COOKIE_PATH
-    app.config.from_object(__name__)
-    Session(app)
-    checkup()
-    UserDB = dbhandler.UserDB()
-    if len(sys.argv) > 1:
-        if sys.argv[1] in ["--debug", "debug", "-d", "d"]:
-            app.run(host=HOST, port=PORT, debug=True)  # for debugging
-    else:
-        print(f"\nRunning on http://{HOST}:{PORT}/\n")
-        server = WSGIServer((HOST, PORT), app)
-        server.serve_forever()

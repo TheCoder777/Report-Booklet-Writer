@@ -26,10 +26,10 @@ import sqlite3
 import sys
 
 # internal modules
-from defines import configs, paths
-from defines.colormode import Colormode
-from handlers import datecalc
-from models.user import User
+from . import datehandler
+from ..defines import configs, paths
+from ..defines.colormode import Colormode
+from ..models.user import User
 
 
 def quickedit_defaults():
@@ -38,29 +38,29 @@ def quickedit_defaults():
     """
     return {
         # calculate start/end with given values for anonymous user
-        "sign": datecalc.calc_sign_date(),
-        "year": datecalc.get_current_year(),
-        "week": datecalc.get_current_week(),
+        "sign": datehandler.calc_sign_date(),
+        "year": datehandler.get_current_year(),
+        "week": datehandler.get_current_week(),
         "unit": configs.UNIT
     }
 
 
 def edit_defaults(year):
-    return datecalc.calc_user_defaults(int(year))
+    return datehandler.calc_user_defaults(int(year))
 
 
 def quickedit_data(year, week):
     """
     Calculates all values needed to export the final pdf
     """
-    return datecalc.calc_all(int(year), int(week))
+    return datehandler.calc_all(int(year), int(week))
 
 
 def edit_data(year, beginning_year, week, start_week):
     """
     Calculates /edit values for logged in users
     """
-    return datecalc.calc_all(int(year), int(week), int(beginning_year), int(start_week))
+    return datehandler.calc_all(int(year), int(week), int(beginning_year), int(start_week))
 
 
 class UserDB:
@@ -107,7 +107,7 @@ class UserDB:
         week = configs.START_WEEK
         start_week = configs.START_WEEK
         year = configs.YEAR
-        beginning_year = datecalc.calc_beginning_year()
+        beginning_year = datehandler.calc_beginning_year()
         unit = configs.UNIT
         color_mode = Colormode.DARK
 
@@ -251,7 +251,7 @@ class UserDB:
         start_week = configs.START_WEEK
         year = configs.YEAR
         # This only resets beginning_year to the current year
-        beginning_year = datecalc.calc_beginning_year()
+        beginning_year = datehandler.calc_beginning_year()
         unit = configs.UNIT
         color_mode = Colormode.DARK
 

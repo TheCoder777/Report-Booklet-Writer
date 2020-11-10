@@ -25,7 +25,7 @@ import datetime
 import time
 
 # internal modules
-from defines import configs
+from ..defines import configs
 
 
 def __current_year():
