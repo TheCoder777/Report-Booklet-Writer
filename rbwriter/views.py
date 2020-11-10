@@ -421,7 +421,7 @@ def change_password():
     return render_template("security/change_password.html")
 
 
-@sec_bp.route("/todolist")
+@user_bp.route("/todolist")
 @login_required
 def todolist():
     return render_template("todolist.html", data=todolisthandler.open_todolist(session["user"].uid))
