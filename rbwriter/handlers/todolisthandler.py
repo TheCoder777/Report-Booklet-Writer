@@ -25,8 +25,8 @@ import os
 import pandas as pd
 
 # internal modules
-from defines import messages, paths
-from models.messagequeue import MessageQueue
+from ..defines import messages, paths
+from ..models.messagequeue import MessageQueue
 
 
 def open_todolist(uid):
