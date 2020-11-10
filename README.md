@@ -2,12 +2,36 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/thecoder777/report-booklet-writer/badge)](https://www.codefactor.io/repository/github/thecoder777/report-booklet-writer)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/TheCoder777/Report-Booklet-Writer/blob/master/LICENSE)
+[![PyPI version](https://badge.fury.io/py/rbwriter.svg)](https://badge.fury.io/py/rbwriter)
 
 Never write a report booklet on your own again, Report Booklet Writer does it for you!
+
+[Only supports German (DE) standard report booklets right now]
+
+
+
+## About
+
+This Project let's you save all your reports from single weeks into one big database, and when you feel like it, you can export all weeks correctly ordered and pixel perfect aligned into one PDF. Isn't that awesome?
+
+### Warning:
+
+The current default server is the flask development server! This is not recommended for a productive environment with more users!
 
 
 
 ## Installation
+
+### From PyPI (recommended):
+
+```bash
+pip install rbwriter
+
+# Run it (make sure ~/.local/bin is on your PATH)
+rbwriter
+```
+
+### From GitHub (build from source):
 
 ```bash
 # First clone the project
@@ -17,14 +41,17 @@ git clone https://github.com/TheCoder777/Report-Booklet-Writer.git
 cd Report-Booklet-Writer
 
 # Install requirements
-pip install -r requirements.txt
+pip install .
 
-# Finally run it
-python server.py
+# Finally run it (make sure ~/.local/bin is on your PATH)
+rbwriter
 ```
 
-The program will mostly take care of itself during the checkup, so there's need to worry!
+### From GitHub releases:
 
+- [Download](https://github.com/TheCoder777/Report-Booklet-Writer/releases) the wheel (.whl) file from the releases section  (get the release you want)
+- install with `pip install *.whl`
+- run with `rbwriter`
 
 
 
@@ -45,9 +72,14 @@ Every account has a nickname that can be changed in the settings (it's pretty us
 
 You Email needs to be in a `name@provider.domain` format
 
-Your password needs to have 8 characters, one capital letter, one number and one special character.
+Your password needs to have:
 
-Feel annoyed? Well at least it's for security...
+- 8 characters
+- one capital letter
+- one number
+- one special character
+
+Now you're logged in! **Congratulations!**
 
 
 
@@ -70,14 +102,28 @@ The 'reset to default button' will hard reset your configuration to absolute def
 
 
 
+## Troubleshooting
+
+### The `rbwriter` command doesn't exist:
+
+ If the `rbwriter` command doesn't exist, you probably haven't set up your PATH correctly.
+
+Make sure that `~/.local/bin` (local installation) and `/usr/lib/pythonx.x/site-packages/` (global installation) are both on your PATH!
+
+
+
 
 ## Debugging
 
 You can easily debug the project by using a --debug/-d flag when running:
 
 ```bash
-python server.py --debug
+rbwriter --debug
 ```
+
+#### Flask flags:
+
+All flags given to `rbwriter` will be handed over directly to the `flask run` command!
 
 
 
@@ -97,7 +143,7 @@ The project is licensed under the MIT license.
 
 ------
 
-This project follows these guidelines for:
+This project has guidelines for:
 
 - [Code of Conduct](https://github.com/TheCoder777/Report-Booklet-Writer/blob/master/CODE_OF_CONDUCT.md) 
 - [Contributing](https://github.com/TheCoder777/Report-Booklet-Writer/blob/master/CONTRIBUTING.md) 
@@ -105,3 +151,6 @@ This project follows these guidelines for:
 
 
 Current maintainer and owner: [TheCoder777](https://github.com/thecoder777)
+
+**Cheers!**
+
