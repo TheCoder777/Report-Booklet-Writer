@@ -110,6 +110,8 @@ The 'reset to default button' will hard reset your configuration to absolute def
 
 Make sure that `~/.local/bin` (local installation) and `/usr/lib/pythonx.x/site-packages/` (global installation) are both on your PATH!
 
+You can check your path with `echo $PATH`.
+
 
 
 
