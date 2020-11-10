@@ -1,5 +1,6 @@
 #!/bin/env bash
 
 export FLASK_APP=rbwriter
+export FLASK_ENV=production
 
-flask run
+flask run $@

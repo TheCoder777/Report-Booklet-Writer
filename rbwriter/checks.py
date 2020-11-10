@@ -15,9 +15,9 @@ def checkup():
     If this doesn't succeed, the server will NOT start!
     """
     # TODO: make a proper checkup, not like this one here...
-    # checklist = [] (append true/false everytime and check with if all())
+    # -> checklist = [] (append true/false everytime and check with if all())
     start_time = time.time()
-    console = BOLD + "[CHECKUP]" + RESET
+    console = BOLD + "[CHECKUP] " + RESET
     print()
     print(console + "--- START ---", file=sys.stderr)
 
@@ -35,12 +35,12 @@ def checkup():
     else:
         print(console + SUCCESS + "DB directory found!" + RESET, file=sys.stderr)
 
-    if not os.path.isdir(paths.DB_PATH):
-        print(console + f"DB directory {paths.DB_PATH} doesn't exist, creating...", end="", file=sys.stderr)
-        os.mkdir(paths.DB_PATH)
+    if not os.path.isdir(paths.TEMPLATE_PREFIX):
+        print(console + f"Template directory {paths.TEMPLATE_PREFIX.absolute()} doesn't exist, creating...", end="", file=sys.stderr)
+        paths.TEMPLATE_PREFIX.mkdir(parents=True, exist_ok=True)
         print(SUCCESS + "done!" + RESET, file=sys.stderr)
     else:
-        print(console + SUCCESS + "DB directory found!" + RESET, file=sys.stderr)
+        print(console + SUCCESS + "Template directory found!" + RESET, file=sys.stderr)
 
     if not os.path.isdir(paths.USER_PATH):
         print(console + f"User directory {paths.USER_PATH} doesn't exist, creating...", end="", file=sys.stderr)
@@ -67,6 +67,6 @@ def checkup():
     # Calculate time difference (just because we can)
     diff = time.time() - start_time
 
-    print(console + BOLD + SUCCESS + f"Checkup finished successfully in {diff:.4f} seconds!\n\n" + RESET,
+    print(console + "--- END ---\n", file=sys.stderr)
+    print(console + BOLD + SUCCESS + f"Checkup finished successfully in {diff:.4f} seconds!\n" + RESET,
           file=sys.stderr)
-    print(console + "--- END ---", file=sys.stderr)

@@ -35,10 +35,11 @@ from .defines import messages
 from .handlers import pdfhandler, todolisthandler, dbhandler
 from .models.messagequeue import MessageQueue
 
-UserDB = dbhandler.UserDB()
 std_bp = Blueprint("std", __name__)
 sec_bp = Blueprint("sec", __name__)
 user_bp = Blueprint("user", __name__)
+
+UserDB = dbhandler.UserDB()
 
 
 def login_required(func):

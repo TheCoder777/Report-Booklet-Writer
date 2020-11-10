@@ -25,6 +25,7 @@
 # SOFTWARE.
 
 __author__ = "Paul S."
+__email__ = "thecoder777.github@gmail.com"
 __copyright__ = "Copyright (c) 2020, TheCoder777"
 __license__ = "MIT"
 
@@ -33,47 +34,29 @@ from rbwriter.checks import checkup
 
 checkup()
 
-# system modules
-import sys
-
 # external modules
 from flask import Flask
 from flask_session import Session
 
 # internal modules
-from rbwriter.defines import paths
-from rbwriter import views
+from rbwriter.defines.paths import COOKIE_PATH
+from rbwriter.views import sec_bp, std_bp, user_bp
 
 
 def create_app():
-    # TODO: make a server config file in root for HOST and PORT (and maybe debug ?)
-    # TODO: add --clean/-c flag to delete all db/user/tmp files at startup, but ask for confirmation
-    # TODO: maybe add a --reload flag to load cookies, and make it standard to delete cookies at startup?
+    # TODO: add --clean/-c flag/click command to delete all db/user/tmp files at startup, but ask for confirmation
+    # TODO: maybe add a --reload flag/click command to load cookies, and make it standard to delete cookies at startup?
 
     app = Flask(__name__)
-    HOST = "localhost"
-    PORT = 8000
-    DEBUG = False
-    FLASK_ENV = "production"
 
-    print(f"\nRunning on http://{HOST}:{PORT}/\n", file=sys.stderr)
-
-    if len(sys.argv) > 1:
-        if sys.argv[1] in ["--debug", "debug", "-d", "d"]:
-            FLASK_ENV = "development"
-            DEBUG = True
-
-    app.register_blueprint(views.std_bp)
-    app.register_blueprint(views.sec_bp)
-    app.register_blueprint(views.user_bp)
+    app.register_blueprint(std_bp)
+    app.register_blueprint(sec_bp)
+    app.register_blueprint(user_bp)
 
     app.config.from_mapping(
-        HOST=HOST,
-        PORT=PORT,
-        DEBUG=DEBUG,
-        FLASK_ENV=FLASK_ENV,
         SESSION_TYPE="filesystem",
-        SESSION_FILE_DIR=paths.COOKIE_PATH,
+        SESSION_FILE_DIR=COOKIE_PATH,
+        # TODO: add proper SECRET_KEY generation
         SECRET_KEY="dev",
     )
     Session(app)
