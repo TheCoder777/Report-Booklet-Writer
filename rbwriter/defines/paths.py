@@ -30,3 +30,18 @@ TODOLIST_TEMPLATE_PATH = TEMPLATE_PREFIX / "todolist_template.json"
 # relative from user directory:
 CONTENT_DB_PATH = "content.db"
 TODOLIST_PATH = "todolist.json"
+
+# Server prefix directory
+SERVER_PREFIX = pathlib.Path("templates/config")
+
+# Server config files
+NGINX_CONFIG_NAME = "rbwriter_nginx"
+UWSGI_CONFIG_NAME = "rbwriter_uwsgi.ini"
+
+# absolute paths
+NGINX_CONFIG_ORIGIN = pathlib.Path(ROOT / SERVER_PREFIX / NGINX_CONFIG_NAME).absolute()
+UWSGI_CONFIG_ORIGIN = pathlib.Path(ROOT / SERVER_PREFIX / UWSGI_CONFIG_NAME).absolute()
+
+# relative paths
+NGINX_CONFIG_AIM = pathlib.Path("/etc/nginx/sites-enabled/") / NGINX_CONFIG_NAME
+UWSGI_CONFIG_AIM = UWSGI_CONFIG_NAME
