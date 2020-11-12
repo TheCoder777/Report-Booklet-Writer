@@ -1,6 +1,8 @@
 #!/bin/env bash
 
+# set environment variables
 export FLASK_APP=rbwriter
 export FLASK_ENV=production
 
+# hand over everything (cmd options) to flask
 flask run $@

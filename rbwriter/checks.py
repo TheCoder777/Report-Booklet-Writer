@@ -11,7 +11,8 @@ from .defines.colors import BOLD, ERROR, SUCCESS, RESET, WARNING
 
 def checkup():
     """
-    Global checkup for all files and dirs
+    Global checkup for all files and directories.
+    This also creates and/or copies missing files!
     If this doesn't succeed, the server will NOT start!
     """
     # TODO: make a proper checkup, not like this one here...
