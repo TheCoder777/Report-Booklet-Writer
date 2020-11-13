@@ -44,15 +44,14 @@ flask run --debug
 
 .. seealso:: Flask app factories https://flask.palletsprojects.com/en/1.1.x/patterns/appfactories/
 """
-import rbwriter.wsgi
+
 __author__ = "Paul S."
 __email__ = "thecoder777.github@gmail.com"
 __copyright__ = "Copyright (c) 2020, TheCoder777"
 __license__ = "MIT"
 
-# pre-checkup to create necessary directories
+# pre-checkup to create necessary directories for db initialization
 from rbwriter.checks import checkup
-
 checkup()
 
 # external modules
@@ -63,6 +62,60 @@ from flask_session import Session
 # internal modules
 from rbwriter.defines.paths import COOKIE_PATH
 from rbwriter.views import sec_bp, std_bp, user_bp
+
+
+def __is_root():
+    from os import geteuid
+    return geteuid() == 0
+
+
+@click.command("init")
+def init_server():
+    import sys
+
+    # system modules
+    import shutil
+    import subprocess
+
+    # internal modules
+    from rbwriter.defines import paths
+
+    if not shutil.which("nginx"):
+        print("Nginx could not be found! Please install it to run Report-Booklet-Writer!")
+        sys.exit(1)
+    print("Found nginx installed!")
+
+    sudo = "sudo "
+
+    if __is_root():
+        print("Detected root access")
+        sudo = ""
+    print("No root access detected!")
+
+    print("enabling Report-Booklet-Writer in nginx config")
+    subprocess.Popen(f"{sudo}cp {paths.NGINX_CONFIG_ORIGIN} {paths.NGINX_CONFIG_DEST}".split()).wait()
+
+    print("copying uwsgi config")
+    subprocess.Popen(f"cp {paths.UWSGI_CONFIG_ORIGIN} {paths.UWSGI_CONFIG_DEST}".split()).wait()
+
+
+@click.command("start")
+def start_server():
+    import subprocess
+    from rbwriter.defines import paths
+
+    sudo = "sudo "
+
+    if __is_root():
+        sudo = ""
+
+    # nginx checks
+    if subprocess.Popen(f"{sudo}systemctl is-active --quiet nginx".split()).wait() > 0:
+        print("Nginx is not running! Starting it!")
+        subprocess.Popen(f"{sudo}systemctl start nginx".split()).wait()
+
+    # finally running server (with sudo forced)
+    subprocess.Popen(f"sudo uwsgi --ini {paths.UWSGI_CONFIG_NAME}".split())
 
 
 def create_app():
@@ -83,47 +136,7 @@ def create_app():
     )
     Session(app)
 
+    app.cli.add_command(init_server)
+    app.cli.add_command(start_server)
+
     return app
-
-
-@click.command("init")
-def init_server():
-    # system modules
-    import os
-    import shutil
-    import subprocess
-    import sys
-
-    # internal modules
-    from rbwriter.checks import checkup
-    from rbwriter.defines import paths
-
-    if not shutil.which("nginx"):
-        print("Nginx could not be found! Please install it to run Report-Booklet-Writer!")
-        sys.exit(1)
-    print("Found nginx installed!")
-
-    checkup()
-
-    sudo = ""
-
-    # if user == root
-    if os.geteuid() == 0:
-        sudo = "sudo "
-        print("Executing with root access!", file=sys.stderr)
-
-    if not os.path.isdir("/etc/nginx/sites-enabled"):
-        subprocess.Popen(f"{sudo}mkdir /etc/nginx/sites-enabled".split()).wait()
-
-    print("copying nginx config")
-    subprocess.Popen(f"{sudo}cp {paths.NGINX_CONFIG_ORIGIN} {paths.NGINX_CONFIG_AIM}".split()).wait()
-
-    print("copying uwsgi config")
-    subprocess.Popen(f"{sudo}cp {paths.UWSGI_CONFIG_ORIGIN} {paths.UWSGI_CONFIG_AIM}".split()).wait()
-
-    if subprocess.Popen(f"{sudo}systemctl is-active --quiet nginx".split()).wait() > 0:
-        print("Nginx is not running! Starting it!")
-        subprocess.Popen(f"{sudo}systemctl start nginx".split()).wait()
-
-    # finally running server
-    subprocess.Popen(f"uwsgi --ini {paths.UWSGI_CONFIG_NAME}".split()).wait()

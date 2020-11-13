@@ -35,7 +35,7 @@ TODOLIST_PATH = "todolist.json"
 SERVER_PREFIX = pathlib.Path("templates/config")
 
 # Server config files
-NGINX_CONFIG_NAME = "rbwriter_nginx"
+NGINX_CONFIG_NAME = "nginx.conf"
 UWSGI_CONFIG_NAME = "rbwriter_uwsgi.ini"
 
 # absolute paths
@@ -43,5 +43,5 @@ NGINX_CONFIG_ORIGIN = pathlib.Path(ROOT / SERVER_PREFIX / NGINX_CONFIG_NAME).abs
 UWSGI_CONFIG_ORIGIN = pathlib.Path(ROOT / SERVER_PREFIX / UWSGI_CONFIG_NAME).absolute()
 
 # relative paths
-NGINX_CONFIG_AIM = pathlib.Path("/etc/nginx/sites-enabled/") / NGINX_CONFIG_NAME
-UWSGI_CONFIG_AIM = UWSGI_CONFIG_NAME
+NGINX_CONFIG_DEST = pathlib.Path("/etc/nginx/") / NGINX_CONFIG_NAME
+UWSGI_CONFIG_DEST = UWSGI_CONFIG_NAME

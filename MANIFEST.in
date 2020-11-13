@@ -7,8 +7,10 @@ recursive-include rbwriter/static *.css
 recursive-include rbwriter/static/color *.css
 recursive-include rbwriter/static/security *.css
 
-recursive-include rbwriter/templates *.html
+recursive-include rbwriter/templates/config *
 recursive-include rbwriter/templates/default *
+
+recursive-include rbwriter/templates *.html
 recursive-include rbwriter/templates/security *.html
 
 recursive-include scripts *
