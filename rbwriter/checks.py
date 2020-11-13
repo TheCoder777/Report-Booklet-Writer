@@ -5,6 +5,7 @@ import sys
 import time
 
 # internal modules
+from .defines.configs import SECRET_KEY_SIZE
 from .defines import paths
 from .defines.colors import BOLD, ERROR, SUCCESS, RESET, WARNING
 
@@ -22,6 +23,19 @@ def checkup():
     print()
     print(console + "--- START ---", file=sys.stderr)
 
+    if not os.path.isfile(paths.SECRET_KEY):
+        print(console + f"Secret key doesn't exist, generating...", end="", file=sys.stderr)
+        with open(paths.SECRET_KEY, "wb") as f:
+            f.write(os.urandom(SECRET_KEY_SIZE))
+        if not os.path.isfile(paths.SECRET_KEY):
+            print(ERROR + "failed!" + RESET, sys.stderr)
+            print(console + ERROR + f"Unable to write secret key to {paths.SECRET_KEY}!" + RESET, sys.stderr)
+            print(console + ERROR + "Application is unusable without a secret key, check your read/write policies!",
+                  file=sys.stderr)
+            sys.exit(1)
+    else:
+        print(console + SUCCESS + "Secret key found at {paths.SECRET_KEY}!" + RESET, file=sys.stderr)
+
     if not os.path.isdir(paths.COOKIE_PATH):
         print(console + f"Cookie directory {paths.COOKIE_PATH} doesn't exist, creating...", end="", file=sys.stderr)
         os.mkdir(paths.COOKIE_PATH)
@@ -37,7 +51,8 @@ def checkup():
         print(console + SUCCESS + "DB directory found!" + RESET, file=sys.stderr)
 
     if not os.path.isdir(paths.TEMPLATE_PREFIX):
-        print(console + f"Template directory {paths.TEMPLATE_PREFIX.absolute()} doesn't exist, creating...", end="", file=sys.stderr)
+        print(console + f"Template directory {paths.TEMPLATE_PREFIX.absolute()} doesn't exist, creating...", end="",
+              file=sys.stderr)
         paths.TEMPLATE_PREFIX.mkdir(parents=True, exist_ok=True)
         print(SUCCESS + "done!" + RESET, file=sys.stderr)
     else:

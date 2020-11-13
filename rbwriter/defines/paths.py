@@ -45,3 +45,7 @@ UWSGI_CONFIG_ORIGIN = pathlib.Path(ROOT / SERVER_PREFIX / UWSGI_CONFIG_NAME).abs
 # relative paths
 NGINX_CONFIG_DEST = pathlib.Path("/etc/nginx/") / NGINX_CONFIG_NAME
 UWSGI_CONFIG_DEST = UWSGI_CONFIG_NAME
+
+
+# SECRET_KEY path
+SECRET_KEY = pathlib.Path("secret.key")

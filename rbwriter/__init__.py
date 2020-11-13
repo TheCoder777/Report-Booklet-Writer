@@ -60,13 +60,18 @@ from flask import Flask
 from flask_session import Session
 
 # internal modules
-from rbwriter.defines.paths import COOKIE_PATH
+from rbwriter.defines.paths import COOKIE_PATH, SECRET_KEY
 from rbwriter.views import sec_bp, std_bp, user_bp
 
 
 def __is_root():
     from os import geteuid
     return geteuid() == 0
+
+
+def __read_secret_key():
+    with open(SECRET_KEY, "rb") as f:
+        return f.read()
 
 
 @click.command("init")
@@ -132,7 +137,7 @@ def create_app():
         SESSION_TYPE="filesystem",
         SESSION_FILE_DIR=COOKIE_PATH,
         # TODO: add proper SECRET_KEY generation
-        SECRET_KEY="dev",
+        SECRET_KEY=__read_secret_key(),
     )
     Session(app)
 
