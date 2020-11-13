@@ -7,7 +7,8 @@ import time
 # internal modules
 from .defines.configs import SECRET_KEY_SIZE
 from .defines import paths
-from .defines.colors import BOLD, ERROR, SUCCESS, RESET, WARNING
+# available colors are BOLD, ERROR, SUCCESS, RESET, WARNING
+from .defines.colors import BOLD, ERROR, SUCCESS, RESET
 
 
 def checkup():

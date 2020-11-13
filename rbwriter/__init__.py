@@ -136,7 +136,6 @@ def create_app():
     app.config.from_mapping(
         SESSION_TYPE="filesystem",
         SESSION_FILE_DIR=COOKIE_PATH,
-        # TODO: add proper SECRET_KEY generation
         SECRET_KEY=__read_secret_key(),
     )
     Session(app)
