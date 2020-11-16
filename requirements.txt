@@ -1,21 +1,45 @@
+# Dependencies
+
+# Password hashing
 bcrypt==3.2.0
-cachelib==0.1.1
-cffi==1.14.3
-click==7.1.2
+    # cffi==1.14.3
+    # pycparser==2.20
+    # six==1.15.0
+
+# colored terminal output
 colored==1.4.2
+
+# Flask itself
 Flask==1.1.2
+    # Flask command line interaction (init command)
+    # click==7.1.2
+
+    # security lib for Flask
+    # itsdangerous==1.1.0
+
+    # rendering engine for Flask
+    # Jinja2==2.11.2
+        # MarkupSafe==1.1.1
+
+    # backend for Flask
+    # Werkzeug==1.0.1
+
+
+# Better cookie support
 Flask-Session==0.3.2
-itsdangerous==1.1.0
-Jinja2==2.11.2
-MarkupSafe==1.1.1
-numpy==1.19.4
+    # cachelib==0.1.1
+
+# Data handling (todolist)
 pandas==1.1.4
-pdfrw==0.4
-Pillow==8.0.1
-pycparser==2.20
+    # numpy==1.19.4
+
+# PDF handling
 PyPDF2==1.26.0
-python-dateutil==2.8.1
-pytz==2020.4
+
+# PDF generation
 reportlab==3.5.55
-six==1.15.0
-Werkzeug==1.0.1
+    # pdf generation backend
+    # Pillow==8.0.1
+
+# uWSGI server for communication with Nginx
+uWSGI==2.0.19.1
