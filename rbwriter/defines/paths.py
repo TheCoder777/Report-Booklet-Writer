@@ -32,7 +32,7 @@ CONTENT_DB_PATH = "content.db"
 TODOLIST_PATH = "todolist.json"
 
 # Server prefix directory
-SERVER_PREFIX = Path("templates/config")
+SERVER_PREFIX = Path("templates/config/")
 
 # Server config files
 NGINX_CONFIG_NAME = "nginx.conf"
@@ -49,3 +49,10 @@ UWSGI_CONFIG_DEST = UWSGI_CONFIG_NAME
 
 # SECRET_KEY path
 SECRET_KEY = Path("secret.key")
+
+
+# Docker paths
+BUILDFILES = Path("buildfiles/")
+DOCKERFILE_NAME = "Dockerfile"
+DOCKERFILE_ORIGIN = Path(ROOT / BUILDFILES / DOCKERFILE_NAME)
+DOCKERFILE_DEST = Path(BUILDFILES / DOCKERFILE_NAME)

@@ -11,6 +11,17 @@ from .defines import paths
 from .defines.colors import BOLD, ERROR, SUCCESS, RESET
 
 
+console = BOLD + "[CHECKUP] " + RESET
+
+
+def __start(name=""):
+    print("\n" + console + f"--- {name} START ---", file=sys.stderr)
+
+
+def __end(name=""):
+    print(console + f"--- {name} END ---\n", file=sys.stderr)
+
+
 def checkup():
     """
     Global checkup for all files and directories.
@@ -20,9 +31,8 @@ def checkup():
     # TODO: make a proper checkup, not like this one here...
     # -> checklist = [] (append true/false everytime and check with if all())
     start_time = time.time()
-    console = BOLD + "[CHECKUP] " + RESET
-    print()
-    print(console + "--- START ---", file=sys.stderr)
+
+    __start("SERVER")
 
     if not os.path.isfile(paths.SECRET_KEY):
         print(console + f"Secret key doesn't exist, generating...", end="", file=sys.stderr)
@@ -84,6 +94,24 @@ def checkup():
     # Calculate time difference (just because we can)
     diff = time.time() - start_time
 
-    print(console + "--- END ---\n", file=sys.stderr)
+    __end("SERVER")
     print(console + BOLD + SUCCESS + f"Checkup finished successfully in {diff:.4f} seconds!\n" + RESET,
           file=sys.stderr)
+
+
+def docker_checkup():
+    __start("DOCKER")
+
+    if not os.path.isdir(paths.BUILDFILES):
+        print(console + f"Buildfiles directory {paths.BUILDFILES} doesn't exist, creating...", end="", file=sys.stderr)
+        os.mkdir(paths.BUILDFILES)
+        print(SUCCESS + "done!" + RESET, file=sys.stderr)
+    else:
+        print(console + SUCCESS + f"Buildfiles directory {paths.BUILDFILES} found!" + RESET, file=sys.stderr)
+
+    if not os.path.exists(paths.DOCKERFILE_DEST):
+        print(console + "Dockerfile not found! Copying..." + RESET, end="", file=sys.stderr)
+        shutil.copy2(paths.DOCKERFILE_ORIGIN, paths.DOCKERFILE_DEST)
+        print(SUCCESS + "done!" + RESET, file=sys.stderr)
+    else:
+        print(console + SUCCESS + "Dockerfile found!" + RESET, file=sys.stderr)

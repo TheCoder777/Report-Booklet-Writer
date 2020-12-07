@@ -76,14 +76,14 @@ def __read_secret_key():
 
 @click.command("init")
 def init_server():
-    import sys
 
     # system modules
+    import sys
     import shutil
     import subprocess
 
     # internal modules
-    from rbwriter.defines import paths
+    from rbwriter.defines.paths import NGINX_CONFIG_ORIGIN, NGINX_CONFIG_DEST, UWSGI_CONFIG_ORIGIN, UWSGI_CONFIG_DEST
 
     if not shutil.which("nginx"):
         print("Nginx could not be found! Please install it to run Report-Booklet-Writer!")
@@ -98,10 +98,27 @@ def init_server():
     print("No root access detected!")
 
     print("enabling Report-Booklet-Writer in nginx config")
-    subprocess.Popen(f"{sudo}cp {paths.NGINX_CONFIG_ORIGIN} {paths.NGINX_CONFIG_DEST}".split()).wait()
+    subprocess.Popen(f"{sudo}cp {NGINX_CONFIG_ORIGIN} {NGINX_CONFIG_DEST}".split()).wait()
 
     print("copying uwsgi config")
-    subprocess.Popen(f"cp {paths.UWSGI_CONFIG_ORIGIN} {paths.UWSGI_CONFIG_DEST}".split()).wait()
+    subprocess.Popen(f"cp {UWSGI_CONFIG_ORIGIN} {UWSGI_CONFIG_DEST}".split()).wait()
+
+
+@click.command("docker-init")
+def docker_init():
+
+    # system modules
+    from os.path import exists
+    from shutil import copy2
+
+    # internal modules
+    from rbwriter.defines.paths import DOCKERFILE_ORIGIN, DOCKERFILE_DEST, BUILDFILES
+    from rbwriter.checks import console
+
+    init_server()
+    if not exists(DOCKERFILE_ORIGIN):
+
+        copy2(DOCKERFILE_ORIGIN, DOCKERFILE_DEST)
 
 
 @click.command("start")
