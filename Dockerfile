@@ -7,5 +7,6 @@ RUN chmod 777 /app
 
 RUN rbwriter docker-init
 
-CMD ["rbwriter start"]
 EXPOSE 8000
+
+CMD ["rbwriter start"]

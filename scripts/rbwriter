@@ -9,7 +9,7 @@ if [ "$1" == "debug" ]; then
     export FLASK_ENV=development
     flask run --debug
     exit
+else
+  # hand over everything (cmd options) to flask
+  flask "$@"
 fi
-
-# hand over everything (cmd options) to flask
-flask "$@"
