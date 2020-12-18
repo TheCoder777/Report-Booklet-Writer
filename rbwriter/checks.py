@@ -54,6 +54,10 @@ def _secret_key_check():
 
 
 def checkup():
+    """
+    This checkup makes sure that everything is in place when the server starts
+    and also fixes it, if anything goes wrong!
+    """
     start_time = time.time()
 
     print("\n" + console + "--- CHECKUP START ---\n", file=sys.stderr)

@@ -45,11 +45,6 @@ flask run --debug
 .. seealso:: Flask app factories https://flask.palletsprojects.com/en/1.1.x/patterns/appfactories/
 """
 
-__author__ = "Paul S."
-__email__ = "thecoder777.github@gmail.com"
-__copyright__ = "Copyright (c) 2020, TheCoder777"
-__license__ = "MIT"
-
 # pre-checkup to create necessary directories for db initialization
 from rbwriter.checks import checkup
 
@@ -59,6 +54,7 @@ from flask import Flask
 from flask_session import Session
 
 # internal modules
+from .meta import *
 from rbwriter.defines.paths import COOKIE_PATH, SECRET_KEY
 from rbwriter.views import sec_bp, std_bp, user_bp
 
