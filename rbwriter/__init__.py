@@ -63,62 +63,19 @@ from rbwriter.defines.paths import COOKIE_PATH, SECRET_KEY
 from rbwriter.views import sec_bp, std_bp, user_bp
 
 
-def __is_root():
-    from os import geteuid
-    return geteuid() == 0
-
-
 def __read_secret_key():
     with open(SECRET_KEY, "rb") as f:
         return f.read()
 
 
-def init_server():
-
-    # system modules
-    import sys
-    import shutil
-    import subprocess
-
-    # internal modules
-    from rbwriter.defines.paths import NGINX_CONFIG_ORIGIN, NGINX_CONFIG_DEST, UWSGI_CONFIG_ORIGIN, UWSGI_CONFIG_DEST
-
-    if not shutil.which("nginx"):
-        print("Nginx could not be found! Please install it to run Report-Booklet-Writer!")
-        sys.exit(1)
-    print("Found nginx installed!")
-
-    sudo = "sudo "
-
-    if __is_root():
-        print("Detected root access")
-        sudo = ""
-    print("No root access detected!")
-
-    print("enabling Report-Booklet-Writer in nginx config")
-    subprocess.Popen(f"{sudo}cp {NGINX_CONFIG_ORIGIN} {NGINX_CONFIG_DEST}".split()).wait()
-
-
 @click.command("start")
 def start_server():
-
-    init_server()
 
     import subprocess
     from rbwriter.defines import paths
 
-    sudo = "sudo "
-
-    if __is_root():
-        sudo = ""
-
-    # nginx checks
-    if subprocess.Popen(f"{sudo}systemctl is-active --quiet nginx".split()).wait() > 0:
-        print("Nginx is not running! Starting it!")
-        subprocess.Popen(f"{sudo}systemctl start nginx".split()).wait()
-
-    # finally running server (with sudo forced)
-    subprocess.Popen(f"sudo uwsgi --ini {paths.UWSGI_CONFIG_NAME}".split())
+    # running server (needs sudo to change socket permissions)
+    subprocess.Popen(f"sudo uwsgi --ini {paths.UWSGI_CONFIG_DEST}".split())
 
 
 def create_app():
