@@ -83,7 +83,8 @@ def checkup():
                 print(BOLD + SUCCESS + "done!" + RESET, file=sys.stderr)
             except PermissionError as e:
                 raise PermissionError(e.strerror + BOLD + ERROR
-                                      + f"\nUnable to create directory at '{directory.absolute()}'!"
+                                      + f"\nUnable to copy file from \
+                                        '{file_pair[0].absolute()}' to '{file_pair[1].absolute()}'!"
                                       + "\nPlease check your read/write policies!"
                                       + RESET)
             except Exception:
