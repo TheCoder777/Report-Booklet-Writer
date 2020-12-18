@@ -24,20 +24,27 @@ def _secret_key_check():
     if not os.path.isfile(SECRET_KEY):
         print(WARNING + "not found!" + RESET, file=sys.stderr)
         print(intend + f"Secret key doesn't exist, generating...", end="", file=sys.stderr)
-        _gen_secret_key()
-        # TODO: add proper error catching
-        if not os.path.isfile(SECRET_KEY):
-            print(ERROR + "failed!" + RESET, file=sys.stderr)
-            print(console + ERROR + f"Unable to write secret key to {SECRET_KEY.absolute()}!" + RESET, file=sys.stderr)
-            print(console + ERROR + "Application is unusable without a secret key, check your read/write policies!",
-                  file=sys.stderr)
-            sys.exit(1)
-        else:
+        try:
+            _gen_secret_key()
             print(BOLD + SUCCESS + "done!" + RESET, file=sys.stderr)
+        except PermissionError as e:
+            print(BOLD + ERROR + "failed!" + RESET, file=sys.stderr)
+            raise PermissionError(e.strerror + BOLD + ERROR
+                                  + f"\nUnable to write secret key to '{SECRET_KEY.absolute()}'!\n"
+                                  + "Application is unusable without a secret key, check your read/write policies!"
+                                  + RESET)
+        # except anything else (has to be some IO stuff):
+        except Exception:
+            print(BOLD + ERROR + "failed!" + RESET, file=sys.stderr)
+            raise IOError(BOLD + ERROR
+                          + f"\nUnable to write secret key to '{SECRET_KEY.absolute()}'!\n"
+                          + "Application is unusable without a secret key, check your read/write policies!"
+                          + RESET)
+    else:
+        print(BOLD + SUCCESS + "OK!" + RESET, file=sys.stderr)
 
 
 def checkup():
-
     start_time = time.time()
 
     print("\n" + console + "--- START ---\n", file=sys.stderr)
@@ -48,16 +55,22 @@ def checkup():
         if not os.path.isdir(directory):
             print(WARNING + f"doesn't exist!" + RESET, file=sys.stderr)
             print(intend + "Creating directory ...", end="", file=sys.stderr)
-            os.makedirs(directory, exist_ok=True)
-            # recheck after creating
-            if not os.path.isdir(directory):
-                print(BOLD + ERROR + "failed!" + RESET, file=sys.stderr)
-                # TODO: display a proper help msg
-                sys.exit(1)
-            else:
+            try:
+                os.makedirs(directory, exist_ok=True)
                 print(BOLD + SUCCESS + "done!" + RESET, file=sys.stderr)
+            except PermissionError as e:
+                raise PermissionError(e.strerror + BOLD + ERROR
+                                      + f"\nUnable to create directory at '{directory.absolute()}'!"
+                                      + "\nPlease check your read/write policies!"
+                                      + RESET)
+            except Exception:
+                print(BOLD + ERROR + "failed!" + RESET, file=sys.stderr)
+                raise IOError(+ BOLD + ERROR
+                              + f"\nUnable to create directory at '{directory.absolute()}'!"
+                              + "\nPlease check your read/write policies!"
+                              + RESET)
         else:
-            print(BOLD + SUCCESS + "done!" + RESET, file=sys.stderr)
+            print(BOLD + SUCCESS + "OK!" + RESET, file=sys.stderr)
 
     # FILES
     for file_pair in FILES:
@@ -65,16 +78,23 @@ def checkup():
         if not os.path.exists(file_pair[1]):
             print(WARNING + f"doesn't exist!" + RESET, file=sys.stderr)
             print(intend + f"Copying file ...", end="", file=sys.stderr)
-            shutil.copy2(file_pair[0], file_pair[1])
-            # TODO: add proper error catching for copy process
-            # recheck after copying
-            if not os.path.exists(file_pair[1]):
-                print(BOLD + ERROR + "failed!" + RESET, file=sys.stderr)
-                sys.exit(1)
-            else:
+            try:
+                shutil.copy2(file_pair[0], file_pair[1])
                 print(BOLD + SUCCESS + "done!" + RESET, file=sys.stderr)
+            except PermissionError as e:
+                raise PermissionError(e.strerror + BOLD + ERROR
+                                      + f"\nUnable to create directory at '{directory.absolute()}'!"
+                                      + "\nPlease check your read/write policies!"
+                                      + RESET)
+            except Exception:
+                print(BOLD + ERROR + "failed!" + RESET, file=sys.stderr)
+                raise IOError(+ BOLD + ERROR
+                              + f"\nUnable to copy file from \
+                                '{file_pair[0].absolute()}' to '{file_pair[1].absolute()}'!"
+                              + "\nPlease check your read/write policies!"
+                              + RESET)
         else:
-            print(BOLD + SUCCESS + "done!" + RESET, file=sys.stderr)
+            print(BOLD + SUCCESS + "OK!" + RESET, file=sys.stderr)
 
     _secret_key_check()
 
@@ -83,3 +103,6 @@ def checkup():
           file=sys.stderr)
 
     print(console + "--- END ---\n", file=sys.stderr)
+
+
+checkup()

@@ -52,7 +52,6 @@ __license__ = "MIT"
 
 # pre-checkup to create necessary directories for db initialization
 from rbwriter.checks import checkup
-checkup()
 
 # external modules
 import click
@@ -98,9 +97,6 @@ def init_server():
 
     print("enabling Report-Booklet-Writer in nginx config")
     subprocess.Popen(f"{sudo}cp {NGINX_CONFIG_ORIGIN} {NGINX_CONFIG_DEST}".split()).wait()
-
-    print("copying uwsgi config")
-    subprocess.Popen(f"cp {UWSGI_CONFIG_ORIGIN} {UWSGI_CONFIG_DEST}".split()).wait()
 
 
 @click.command("start")
