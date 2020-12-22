@@ -29,8 +29,7 @@ SOFTWARE.
 Debugging
 ---------
 
-Do not use this for debugging!
-For debugging you need to set environment variables:
+For debugging you need to set environment variables like this:
 ```
 FLASK_APP=rbwriter
 FLASK_ENV=development
@@ -39,7 +38,7 @@ FLASK_ENV=development
 and start like this:
 
 ```
-flask run --debug
+flask run debug
 ```
 
 .. seealso:: Flask app factories https://flask.palletsprojects.com/en/1.1.x/patterns/appfactories/
@@ -55,28 +54,32 @@ from flask_session import Session
 
 # internal modules
 from .meta import *
-from rbwriter.defines.paths import COOKIE_PATH, SECRET_KEY
-from rbwriter.views import sec_bp, std_bp, user_bp
 
 
-def __read_secret_key():
-    with open(SECRET_KEY, "rb") as f:
+def __read_secret_key(key):
+    with open(key, "rb") as f:
         return f.read()
 
 
 @click.command("start")
 def start_server():
-
+    # external modules
     import subprocess
-    from rbwriter.defines import paths
+
+    # internal modules
+    from rbwriter.defines.paths import UWSGI_CONFIG_DEST
 
     # running server (needs sudo to change socket permissions)
-    subprocess.Popen(f"sudo uwsgi --ini {paths.UWSGI_CONFIG_DEST}".split())
+    subprocess.Popen(f"sudo uwsgi --ini {UWSGI_CONFIG_DEST}".split())
 
 
 def create_app():
     # TODO: add --clean/-c flag/click command to delete all db/user/tmp files at startup, but ask for confirmation
     # TODO: maybe add a --reload flag/click command to load cookies, and make it standard to delete cookies at startup?
+
+    from rbwriter.defines.configs import SESSION_TYPE
+    from rbwriter.defines.paths import COOKIE_PATH, SECRET_KEY
+    from rbwriter.views import sec_bp, std_bp, user_bp
 
     app = Flask(__name__)
 
@@ -85,9 +88,9 @@ def create_app():
     app.register_blueprint(user_bp)
 
     app.config.from_mapping(
-        SESSION_TYPE="filesystem",
+        SESSION_TYPE=SESSION_TYPE,
         SESSION_FILE_DIR=COOKIE_PATH,
-        SECRET_KEY=__read_secret_key(),
+        SECRET_KEY=__read_secret_key(SECRET_KEY)
     )
     Session(app)
 

@@ -11,3 +11,4 @@ LINE_DISTANCE = 30
 UNIT = "Ausbildung"
 
 SECRET_KEY_SIZE = 24
+SESSION_TYPE = "filesystem"
