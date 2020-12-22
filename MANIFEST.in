@@ -14,6 +14,7 @@ recursive-include scripts *
 
 include CODE_OF_CONDUCT.md CONTRIBUTING.md
 include README.md
+include LICENSE
 include requirements.txt
 
 exclude Dockerfile
