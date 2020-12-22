@@ -55,7 +55,7 @@ setup(
         "Issues": "https://github.com/TheCoder777/Report-Booklet-Writer/issues"
     },
     # major.minor alpha/beta
-    version="0.1a1",
+    version="0.1a2",
     packages=["rbwriter"],
     include_package_data=True,
     install_requirements=REQUIREMENTS,
