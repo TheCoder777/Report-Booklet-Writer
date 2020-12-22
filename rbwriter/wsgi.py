@@ -10,5 +10,5 @@ To make it still work, this interface imports the app_factory and creates a appl
 Note that this is only for running from the rbwriter script!
 """
 
-# by default, uwsgi reads 'application instead of 'app'
+# by default, uwsgi reads 'application' instead of 'app'
 application = create_app()
