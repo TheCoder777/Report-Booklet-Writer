@@ -1,6 +1,21 @@
 #!/bin/env bash
 
+# output to stderr and stdout
+echoerr() {
+  echo "$@" 1>&2;
+  echo "$@";
+}
+
+# set environment variables
 export FLASK_APP=rbwriter
 export FLASK_ENV=production
 
-flask run $@
+if [ "$1" == "debug" ]; then
+    echoerr "Running in debug mode!"
+    export FLASK_ENV=development
+    flask run --debugger
+    exit $?
+else
+  # hand over everything (cmd options) to flask
+  flask "$@"
+fi

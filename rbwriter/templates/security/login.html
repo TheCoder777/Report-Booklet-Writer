@@ -42,7 +42,7 @@
         </div>
         <div class="buttons">
             <input class="button" type="submit" name="login" value="Login" form=loginform>
-            <input class="secondary_button" type="submit" name="use_as_guest" value="Use as Guest" form=loginform>
+            <a class="secondary_button" href="{{ url_for('std.quickedit') }}">Use as Guest</a>
         </div>
     </form>
 {% endblock %}
